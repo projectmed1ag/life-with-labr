@@ -9,3 +9,7 @@ dialog{border:0;padding:0}dialog::backdrop{background:#09150fbd;backdrop-filter:
 @media(max-width:1100px){.desktop-nav{gap:18px}.brand span{letter-spacing:.06em}.hero-bottom>span:not(.hero-page){font-size:10px}.section-heading>p{font-size:15px}}
 @media(max-width:700px){.header-contact{display:none}.brand{font-size:29px}.brand span{font-size:11px;letter-spacing:.08em}.hero .eyebrow,.hero-bottom{font-size:11px;letter-spacing:.05em}.signature span{font-size:11px}.dog-meta{font-size:11px;letter-spacing:0}.photo-label{font-size:11px}.puppy-caption>span:first-child{font-size:10px}.gallery-bottom>span:first-child,.gallery-bottom>span:last-child{font-size:11px}.contact-person span{font-size:12px}footer .brand span{font-size:10px}footer>span{font-size:12px}.profile-facts dd{font-size:14px}}
 @media(max-width:700px){.hero-image{inset:45% 0 0}.hero-image img{object-position:40% 50%}.hero:before{background:linear-gradient(180deg,#172b24 0%,#172b24 41%,#172b2499 56%,#172b2400 73%,#172b24dd 100%)}.hero-content{padding-top:42px}.hero h1{margin-top:29px}.hero-description{font-size:15px;line-height:1.75;max-width:290px}.hero .button{margin-top:24px}}
+
+/* Fade the actual image boundary, so no cropped edge is exposed by the overlay. */
+.hero-image{-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 26%);mask-image:linear-gradient(90deg,transparent 0%,#000 26%)}
+@media(max-width:700px){.hero-image{-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 28%);mask-image:linear-gradient(180deg,transparent 0%,#000 28%)}}
