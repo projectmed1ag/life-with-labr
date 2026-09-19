@@ -5,10 +5,7 @@
 .living-pup-visual{position:relative;aspect-ratio:480/306}
 .living-puppies--play{width:280px;max-width:100%;margin:0 auto}
 .living-puppies--play .living-pup-visual{aspect-ratio:3/2}
-.living-pup img,.living-pup video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.living-pup video{opacity:0;pointer-events:none}
-.living-pup.is-playing video{opacity:1}
-.living-pup.is-playing img{opacity:0}
+.living-pup img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .living-cta--sitting{width:350px;max-width:100%;margin-top:28px}
 .about-life .living-cta--sitting>.button{margin:0;width:100%;padding-left:14px;padding-right:14px}
 .living-puppies--sitting{height:auto;display:block;width:280px;max-width:100%;padding-top:12px;margin:0 auto}
@@ -27,4 +24,3 @@
   .home-page .hero-image{inset:63% 0 0}
   .home-page .hero:before{background:linear-gradient(180deg,#172b24 0%,#172b24 50%,#172b2499 66%,#172b2400 81%,#172b24dd 100%)}
 }
-@media(prefers-reduced-motion:reduce){.living-pup video{display:none}}
