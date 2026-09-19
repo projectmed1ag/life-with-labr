@@ -20,7 +20,7 @@
         "2",
         0
       ],
-      "text": "In a static wide studio shot, one real cream Labrador puppy plays with the single small orange rubber ball beside its front paws. The puppy paws the ball, lowers its shoulder to the ground, then rolls playfully onto its back with its belly up and four paws curled in the air. It wriggles on its back, rolls onto its side and pushes itself back into the original playful bow beside the ball. A cute natural sideways puppy tumble, not a walk cycle. The one orange ball moves slightly when touched and always stays on the ground next to the puppy, never in its mouth. The puppy stays in the center of the frame, full body and tail visible with wide clear margins. No other dogs. Realistic detailed cream fur, natural anatomy, floppy ears and wagging tail. The entire background and ground are uniformly bright chroma key green without texture or shadow. The camera is fixed, no zoom, no camera movement. One continuous shot, natural moderate speed, gentle playful motion. Finish in the initial play bow beside the orange ball. Photorealistic. Silent."
+      "text": "A locked-off wide studio shot of ONE real cream Labrador puppy gently playing with ONE orange rubber ball. The puppy remains upright on its paws for the entire shot, facing right in a stable three-quarter side view. Its head and neck always remain naturally aligned with its shoulders and spine. The puppy stays low in a playful bow, gently touches the ball with its nose and rolls it a short distance to the right along the floor. It takes one small real step forward, places a front paw on top of the ball to stop it, then softly draws the ball back toward its paws. It returns to the original playful bow beside the ball and wags its tail. Quiet deliberate playful action, natural weight, lifelike anatomy, gentle ear movement. The muzzle continues pointing right throughout, only small up-and-down head movements. No rolling over, no somersault, no spinning, no sudden head turns. Four correct legs and one tail; the single ball remains separate, round and continuously visible on the floor. The entire puppy, tail, paws and ball stay fully in frame. Static camera, consistent subject size, soft studio lighting, detailed cream fur. Background AND ground remain perfectly flat uniform vivid chroma green, without shadows or textures. Begin and end in the same relaxed play bow, with the ball at the initial position. Silent photorealistic animal footage."
     }
   },
   "4": {
@@ -30,7 +30,7 @@
         "2",
         0
       ],
-      "text": "walking in place, running in place, extra balls, duplicate ball, two balls, extra dogs, ball in mouth, cropped body, deformed anatomy, extra paws, disappearing ball, camera motion, zoom, cartoon, text, changing background"
+      "text": "rolling over, tumbling, spinning, twisted neck, rotating head, head backwards, broken anatomy, extra limbs, multiple balls, duplicate puppy, ball in mouth, levitating ball, body morphing, cartoon, green fur, shadows, cropped paws, camera movement, text"
     }
   },
   "5": {
@@ -119,7 +119,7 @@
     "inputs": {
       "width": 768,
       "height": 512,
-      "length": 193,
+      "length": 145,
       "batch_size": 1
     }
   },
@@ -186,7 +186,7 @@
   "16": {
     "class_type": "LTXVEmptyLatentAudio",
     "inputs": {
-      "frames_number": 193,
+      "frames_number": 145,
       "frame_rate": 24,
       "batch_size": 1,
       "audio_vae": [
@@ -229,7 +229,7 @@
   "19": {
     "class_type": "RandomNoise",
     "inputs": {
-      "noise_seed": 619202620
+      "noise_seed": 619202672
     }
   },
   "20": {
@@ -330,7 +330,7 @@
         "26",
         0
       ],
-      "filename_prefix": "life-with-labr/puppy-ball-v3",
+      "filename_prefix": "life-with-labr/puppy-ball-v4",
       "format": "mp4",
       "codec": "auto"
     }
@@ -342,7 +342,7 @@
         "10",
         0
       ],
-      "filename_prefix": "life-with-labr/puppy-ball-source-v3"
+      "filename_prefix": "life-with-labr/puppy-ball-source-v4"
     }
   }
 }
