@@ -74,8 +74,9 @@
   .moments-grid .gallery-item>span:not(.image-expand){bottom:12px;left:12px;right:10px;text-align:left;font-size:11px;line-height:1.5}
   .album-signature{font-size:29px;padding-top:30px}
   .discover-grid{gap:40px}
+  .discover-card{display:flex;flex-direction:column}
   .discover-card:nth-child(even){transform:none}
-  .discover-copy{padding-top:20px}
+  .discover-copy{order:-1;padding:0 0 24px}
   .discover-copy h3{font-size:36px}
   .discover-copy p{font-size:14px}
   .home-discover{padding-bottom:65px}
