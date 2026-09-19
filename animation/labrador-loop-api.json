@@ -1,0 +1,348 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LTXAVTextEncoderLoader",
+    "inputs": {
+      "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "A locked-off studio side-view shot of a single real pale yellow Labrador puppy. The puppy remains centered in exactly the same place, facing right, and does a continuous gentle playful trot in place, like a realistic animal animation walk-cycle. All four paws step in a natural coordinated diagonal gait, legs bend correctly, the body bounces subtly, floppy ears bounce softly, the thick tail wags gently, and the puppy breathes and blinks naturally. Fine fluffy cream fur, a moist black nose and a lively tender expression remain completely photorealistic and consistent. The whole puppy, including tail and all paws, stays fully inside the frame throughout. Strict side profile throughout. The vivid solid chroma key green background and ground remain completely flat, uniform and unchanged. Static camera, constant framing, constant scale, constant soft white studio lighting. Finish in the identical standing pose as the beginning for a seamless loop. No sound needed."
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "cartoon, illustration, plastic toy, deformed anatomy, extra legs, missing paws, flicker, changing background, camera movement, zoom, cropped tail, green fur, text, watermark"
+    }
+  },
+  "5": {
+    "class_type": "LTXVConditioning",
+    "inputs": {
+      "positive": [
+        "3",
+        0
+      ],
+      "negative": [
+        "4",
+        0
+      ],
+      "frame_rate": 24
+    }
+  },
+  "6": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "life-with-labr-puppy-v1.png"
+    }
+  },
+  "7": {
+    "class_type": "EmptyImage",
+    "inputs": {
+      "width": 1536,
+      "height": 1024,
+      "batch_size": 1,
+      "color": 65280
+    }
+  },
+  "8": {
+    "class_type": "InvertMask",
+    "inputs": {
+      "mask": [
+        "6",
+        1
+      ]
+    }
+  },
+  "9": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": [
+        "7",
+        0
+      ],
+      "source": [
+        "6",
+        0
+      ],
+      "mask": [
+        "8",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "resize_source": false
+    }
+  },
+  "10": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": [
+        "9",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "width": 768,
+      "height": 512,
+      "crop": "disabled"
+    }
+  },
+  "11": {
+    "class_type": "LTXVPreprocess",
+    "inputs": {
+      "image": [
+        "10",
+        0
+      ],
+      "img_compression": 18
+    }
+  },
+  "12": {
+    "class_type": "EmptyLTXVLatentVideo",
+    "inputs": {
+      "width": 768,
+      "height": 512,
+      "length": 97,
+      "batch_size": 1
+    }
+  },
+  "13": {
+    "class_type": "LTXVAddGuide",
+    "inputs": {
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "5",
+        1
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "latent": [
+        "12",
+        0
+      ],
+      "image": [
+        "11",
+        0
+      ],
+      "frame_idx": 0,
+      "strength": 0.9
+    }
+  },
+  "14": {
+    "class_type": "LTXVAddGuide",
+    "inputs": {
+      "positive": [
+        "13",
+        0
+      ],
+      "negative": [
+        "13",
+        1
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "latent": [
+        "13",
+        2
+      ],
+      "image": [
+        "11",
+        0
+      ],
+      "frame_idx": -1,
+      "strength": 0.9
+    }
+  },
+  "15": {
+    "class_type": "LTXVAudioVAELoader",
+    "inputs": {
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors"
+    }
+  },
+  "16": {
+    "class_type": "LTXVEmptyLatentAudio",
+    "inputs": {
+      "frames_number": 97,
+      "frame_rate": 24,
+      "batch_size": 1,
+      "audio_vae": [
+        "15",
+        0
+      ]
+    }
+  },
+  "17": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "video_latent": [
+        "14",
+        2
+      ],
+      "audio_latent": [
+        "16",
+        0
+      ]
+    }
+  },
+  "18": {
+    "class_type": "CFGGuider",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "14",
+        0
+      ],
+      "negative": [
+        "14",
+        1
+      ],
+      "cfg": 1
+    }
+  },
+  "19": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 274901991
+    }
+  },
+  "20": {
+    "class_type": "SamplerEulerAncestral",
+    "inputs": {
+      "eta": 0,
+      "s_noise": 1
+    }
+  },
+  "21": {
+    "class_type": "ManualSigmas",
+    "inputs": {
+      "sigmas": "1., 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+    }
+  },
+  "22": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": [
+        "19",
+        0
+      ],
+      "guider": [
+        "18",
+        0
+      ],
+      "sampler": [
+        "20",
+        0
+      ],
+      "sigmas": [
+        "21",
+        0
+      ],
+      "latent_image": [
+        "17",
+        0
+      ]
+    }
+  },
+  "23": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": {
+      "av_latent": [
+        "22",
+        1
+      ]
+    }
+  },
+  "24": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "positive": [
+        "14",
+        0
+      ],
+      "negative": [
+        "14",
+        1
+      ],
+      "latent": [
+        "23",
+        0
+      ]
+    }
+  },
+  "25": {
+    "class_type": "VAEDecodeTiled",
+    "inputs": {
+      "samples": [
+        "24",
+        2
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "tile_size": 768,
+      "overlap": 64,
+      "temporal_size": 4096,
+      "temporal_overlap": 64
+    }
+  },
+  "26": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "25",
+        0
+      ],
+      "fps": 24
+    }
+  },
+  "27": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "26",
+        0
+      ],
+      "filename_prefix": "life-with-labr/puppy-trot-v1",
+      "format": "mp4",
+      "codec": "auto"
+    }
+  },
+  "28": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "10",
+        0
+      ],
+      "filename_prefix": "life-with-labr/source-green-v1"
+    }
+  }
+}
