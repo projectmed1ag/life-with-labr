@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172b24"><meta name="description" content="{{description}}">
+  <title>{{title}}</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23172b24'/%3E%3Ctext x='32' y='45' font-family='Georgia' font-size='46' text-anchor='middle' fill='%23ddc397'%3EL%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./fonts.css">
+  <link rel="stylesheet" href="./style.css?v=hero-blend-2">
+  <link rel="stylesheet" href="./pages.css?v=pages-1">
+  <link rel="canonical" href="{{canonical}}">
+</head>
+<body class="{{page}}-page" data-page="{{page}}">
+<a class="skip-link" href="#main">К содержанию</a>
+<header class="header" id="top">
+  <a class="brand" href="./" aria-label="Life with Labr — на главную">Life <i>with</i> Labr<span>LABRADOR RETRIEVER KENNEL</span></a>
+  <nav class="desktop-nav" aria-label="Главная навигация">{{nav}}</nav>
+  <a class="header-contact" href="#contacts">Связаться</a>
+  <button class="menu-toggle" aria-label="Открыть меню" aria-controls="mobile-menu" aria-expanded="false"><span></span><span></span></button>
+</header>
+<dialog class="mobile-menu" id="mobile-menu" aria-label="Навигация"><button class="dialog-close" data-close aria-label="Закрыть меню">×</button><span class="brand">Life <i>with</i> Labr</span><nav aria-label="Мобильная навигация">{{mobileNav}}<a href="#contacts">Контакты</a></nav><a class="menu-phone" href="tel:+79251448648">+7 (925) 144-86-48</a><p>Евгения Скобликова · Москва</p></dialog>
+<main id="main">
+{{content}}
+<section class="contacts section" id="contacts" aria-labelledby="contacts-title"><div class="contact-heading" data-reveal><p class="eyebrow">ДАВАЙТЕ ЗНАКОМИТЬСЯ</p><h2 id="contacts-title">Ваш лабрадор<br>где-то <em>совсем рядом.</em></h2><p>Напишите нам. Возможно, именно с этого<br>сообщения начнётся ваша большая история.</p></div><div class="contact-details" data-reveal><p class="contact-person">Евгения Скобликова<span>Заводчик Life with Labr · Москва, Россия</span></p><a class="contact-phone" href="tel:+79251448648">+7 (925) 144-86-48</a><div class="contact-links"><a href="https://t.me/+79251448648" target="_blank" rel="noopener noreferrer">Telegram</a><a href="https://wa.me/79251448648" target="_blank" rel="noopener noreferrer">WhatsApp</a></div><p class="contact-small">Расскажем о щенках, ответим на вопросы<br>и договоримся о знакомстве.</p></div></section>
+</main>
+<footer><a class="brand" href="./" aria-label="Life with Labr — на главную">Life <i>with</i> Labr<span>LABRADOR RETRIEVER KENNEL</span></a><span>© <span id="year">2026</span> Life with Labr</span><a class="back-top" href="#top">К началу <span aria-hidden="true">↑</span></a></footer>
+<dialog class="dog-dialog" id="dog-dialog" aria-labelledby="dog-dialog-title"><button class="dialog-close" data-close aria-label="Закрыть профиль">×</button><div id="dog-dialog-content"></div></dialog>
+<dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-title"><button class="dialog-close" data-close aria-label="Закрыть фотографию">×</button><figure><img id="lightbox-image" alt=""><figcaption><span id="lightbox-title"></span><span id="lightbox-count"></span></figcaption></figure><button class="lightbox-prev" aria-label="Предыдущая фотография">←</button><button class="lightbox-next" aria-label="Следующая фотография">→</button></dialog>
+<div class="reading-progress" aria-hidden="true"></div>
+<script type="module" src="./app.js?v=pages-1"></script>
+</body>
+</html>

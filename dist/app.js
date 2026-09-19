@@ -9,18 +9,19 @@ document.querySelectorAll('[data-reveal]').forEach(el => {
 document.documentElement.classList.add('enhanced');
 document.querySelector('#year').textContent = new Date().getFullYear();
 
+const heroImage = document.querySelector('.hero-image img');
 let framePending = false;
 const updateScroll = () => {
   const maxScroll = document.documentElement.scrollHeight - innerHeight;
   document.querySelector('.reading-progress').style.transform = `scaleX(${maxScroll > 0 ? scrollY / maxScroll : 0})`;
-  if (!motion.matches && innerWidth > 700 && scrollY < innerHeight) {
-    document.querySelector('.hero-image img').style.transform = `translateY(${scrollY * .16}px) scale(1.025)`;
+  if (heroImage && !motion.matches && innerWidth > 700 && scrollY < innerHeight) {
+    heroImage.style.transform = `translateY(${scrollY * .16}px) scale(1.025)`;
   }
   framePending = false;
 };
 addEventListener('scroll', () => { if (!framePending) { requestAnimationFrame(updateScroll); framePending = true; } }, { passive: true });
 motion.addEventListener('change', () => {
-  if (motion.matches) { document.querySelector('.hero-image img').style.transform = ''; document.querySelectorAll('.reveal-ready').forEach(el => el.classList.add('is-visible')); }
+  if (motion.matches) { if (heroImage) heroImage.style.transform = ''; document.querySelectorAll('.reveal-ready').forEach(el => el.classList.add('is-visible')); }
 });
 
 const mobileMenu = document.querySelector('#mobile-menu');
@@ -106,12 +107,13 @@ lightbox.addEventListener('touchend', event => {
   const distance = event.changedTouches[0].clientX - touchStart;
   if (Math.abs(distance) > 65) showPhoto(galleryIndex + (distance < 0 ? 1 : -1));
 }, {passive:true});
-const track = document.querySelector('#gallery-track');
-const previous = document.querySelector('#gallery-prev');
-const next = document.querySelector('#gallery-next');
-const updateGalleryButtons = () => { previous.disabled = track.scrollLeft < 5; next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 5; };
-previous.addEventListener('click', () => track.scrollBy({left:-track.clientWidth*.75, behavior:motion.matches?'instant':'smooth'}));
-next.addEventListener('click', () => track.scrollBy({left:track.clientWidth*.75, behavior:motion.matches?'instant':'smooth'}));
-track.addEventListener('scroll', updateGalleryButtons, {passive:true});
-addEventListener('resize', updateGalleryButtons);
-updateGalleryButtons();
+// Keep links to the former home-page sections working after the move to pages.
+if (document.body.dataset.page === 'home') {
+  const legacyPages = {about:'about.html',dogs:'dogs.html',puppies:'puppies.html',moments:'moments.html'};
+  const followLegacyLink = () => {
+    const target = legacyPages[location.hash.slice(1)];
+    if (target) location.replace(new URL(target, location.href));
+  };
+  followLegacyLink();
+  addEventListener('hashchange', followLegacyLink);
+}

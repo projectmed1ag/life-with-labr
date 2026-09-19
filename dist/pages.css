@@ -1,0 +1,83 @@
+/* Shared navigation and independent page layouts. */
+.desktop-nav a[aria-current="page"]{color:var(--gold)}
+.desktop-nav a[aria-current="page"]:after{transform:scaleX(1)}
+.mobile-menu nav a[aria-current="page"]{color:var(--gold)}
+.mobile-menu nav{gap:14px;margin-top:45px}
+.mobile-menu nav a{font-size:clamp(31px,5vw,43px)}
+.breadcrumbs{display:flex;align-items:center;gap:13px;padding:32px 7% 0;font-size:12px;color:var(--muted)}
+.breadcrumbs a{border-bottom:1px solid var(--line)}
+.breadcrumbs>span[aria-hidden]{opacity:.55}
+.page-primary{padding-top:60px}
+.page-primary h1{font-size:clamp(54px,5.7vw,88px);line-height:1.04;letter-spacing:-.025em;max-width:none;margin:0}
+.page-primary h1 em{font-size:1em;line-height:1.05;color:#718062;white-space:normal;display:inline}
+.intro.page-primary h1{margin-bottom:30px}
+.intro.page-primary{padding-bottom:85px}
+.about-life{display:grid;grid-template-columns:1.1fr 1fr;gap:10%;padding-top:30px;align-items:center}
+.about-life figure{margin:0}
+.about-life img{aspect-ratio:1;object-position:43% 50%}
+.about-life figcaption{font-family:var(--serif);font-style:italic;font-size:26px;margin-top:18px;color:var(--muted)}
+.about-life .eyebrow{margin-bottom:26px}
+.about-life h2{font-size:clamp(48px,4.6vw,70px);margin-bottom:26px}
+.about-life p:not(.eyebrow){font-size:16px;color:var(--muted);margin-top:16px}
+.about-life .button{font-size:13px}
+.dogs-page .dog-card:nth-child(2){padding-top:65px}
+.page-invitation{padding-top:60px;padding-bottom:85px;text-align:center;border-top:1px solid var(--line)}
+.page-invitation .eyebrow{margin-bottom:24px}
+.page-invitation h2{font-size:clamp(48px,5vw,70px)}
+.puppies-page .breadcrumbs{background:var(--green);color:#b3beb0}
+.puppies-page .breadcrumbs a{border-color:#b3beb055}
+.puppies-page .puppy-story h1{font-size:clamp(70px,7.5vw,110px);margin-bottom:32px}
+.puppies-page .puppy-story h1 em{color:var(--gold)}
+.puppies-page .care{padding-bottom:95px}
+.inline-link{text-decoration:underline;text-underline-offset:4px;text-decoration-color:#dec39680}
+.inline-link:hover{color:var(--gold)}
+.moments-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-items:start}
+.moments-grid .gallery-item,.moments-grid .gallery-item.tall{width:100%;height:auto;aspect-ratio:.86;display:block}
+.moments-grid .gallery-item:nth-child(3n + 2){margin-top:60px}
+.moments-grid .gallery-item:last-child{grid-column:1/-1;aspect-ratio:2.5}
+.album-signature{text-align:center;font-family:var(--serif);font-style:italic;font-size:clamp(26px,3vw,40px);color:var(--muted);padding-top:42px}
+.discover-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:65px 45px}
+.discover-card{display:block;min-width:0}
+.discover-card:nth-child(even){transform:translateY(50px)}
+.discover-image{aspect-ratio:1.5;overflow:hidden;background:#e9e6dc}
+.discover-image img{transition:transform 1s cubic-bezier(.2,.65,.3,1)}
+.discover-card:first-child .discover-image img{object-position:50% 49%}
+.discover-card:hover .discover-image img{transform:scale(1.04)}
+.discover-copy{padding:25px 0 0}
+.discover-copy .eyebrow{font-size:11px;color:var(--muted)}
+.discover-copy h3{font-size:42px;line-height:1.2;margin:9px 0 12px}
+.discover-copy p{font-size:15px;color:var(--muted);max-width:420px}
+.discover-link{display:inline-block;padding:0 0 9px;margin-top:20px;border-bottom:1px solid var(--line);font-size:13px;transition:border-color .3s}
+.discover-card:hover .discover-link{border-color:var(--green)}
+.home-discover{padding-bottom:155px}
+@media(min-width:1700px){.breadcrumbs{padding-left:max(7%,calc((100vw - 1460px)/2));padding-right:max(7%,calc((100vw - 1460px)/2))}}
+@media(min-width:701px) and (max-width:1000px){.header .brand{font-size:29px}.header .brand span{font-size:10px}.header .desktop-nav{gap:15px;font-size:12px}.header-contact{font-size:12px}.about-life{gap:6%}.moments-grid{gap:18px}.moments-grid .gallery-item>span:not(.image-expand){left:15px;font-size:12px}}
+@media(max-width:700px){
+  .breadcrumbs{padding:25px 6% 0;font-size:11px}
+  .page-primary{padding-top:38px}
+  .page-primary h1{font-size:clamp(43px,9.8vw,65px)}
+  .intro.page-primary{padding-bottom:55px}
+  .about-life{display:block;padding-top:0;padding-bottom:65px}
+  .about-life figure{margin-bottom:44px}
+  .about-life figcaption{font-size:23px}
+  .about-life .button{width:100%;font-size:12px;padding-left:14px;padding-right:14px}
+  .dogs-page .dog-card:nth-child(2){padding-top:50px}
+  .page-invitation{padding-top:55px;padding-bottom:65px}
+  .puppies-page .puppy-story h1{font-size:clamp(61px,14vw,78px)}
+  .puppies-page .puppy-story .eyebrow{font-size:10px;letter-spacing:.09em}
+  .puppies-page .care{padding-bottom:55px}
+  .moments-page .section-heading{padding-right:0}
+  .moments-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .moments-grid .gallery-item:nth-child(3n + 2){margin-top:0}
+  .moments-grid .gallery-item:nth-child(even){margin-top:28px}
+  .moments-grid .gallery-item:last-child{aspect-ratio:1.5}
+  .moments-grid .gallery-item>span:not(.image-expand){bottom:12px;left:12px;right:10px;text-align:left;font-size:11px;line-height:1.5}
+  .album-signature{font-size:29px;padding-top:30px}
+  .discover-grid{gap:40px}
+  .discover-card:nth-child(even){transform:none}
+  .discover-copy{padding-top:20px}
+  .discover-copy h3{font-size:36px}
+  .discover-copy p{font-size:14px}
+  .home-discover{padding-bottom:65px}
+}
+@media(max-width:520px){.discover-grid{grid-template-columns:1fr}}
