@@ -1,0 +1,348 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LTXAVTextEncoderLoader",
+    "inputs": {
+      "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "In a static wide studio shot, one real cream Labrador puppy plays with the single small orange rubber ball beside its front paws. The puppy paws the ball, lowers its shoulder to the ground, then rolls playfully onto its back with its belly up and four paws curled in the air. It wriggles on its back, rolls onto its side and pushes itself back into the original playful bow beside the ball. A cute natural sideways puppy tumble, not a walk cycle. The one orange ball moves slightly when touched and always stays on the ground next to the puppy, never in its mouth. The puppy stays in the center of the frame, full body and tail visible with wide clear margins. No other dogs. Realistic detailed cream fur, natural anatomy, floppy ears and wagging tail. The entire background and ground are uniformly bright chroma key green without texture or shadow. The camera is fixed, no zoom, no camera movement. One continuous shot, natural moderate speed, gentle playful motion. Finish in the initial play bow beside the orange ball. Photorealistic. Silent."
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "walking in place, running in place, extra balls, duplicate ball, two balls, extra dogs, ball in mouth, cropped body, deformed anatomy, extra paws, disappearing ball, camera motion, zoom, cartoon, text, changing background"
+    }
+  },
+  "5": {
+    "class_type": "LTXVConditioning",
+    "inputs": {
+      "positive": [
+        "3",
+        0
+      ],
+      "negative": [
+        "4",
+        0
+      ],
+      "frame_rate": 24
+    }
+  },
+  "6": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "life-with-labr-puppy-ball-v1.png"
+    }
+  },
+  "7": {
+    "class_type": "EmptyImage",
+    "inputs": {
+      "width": 1536,
+      "height": 1024,
+      "batch_size": 1,
+      "color": 65280
+    }
+  },
+  "8": {
+    "class_type": "InvertMask",
+    "inputs": {
+      "mask": [
+        "6",
+        1
+      ]
+    }
+  },
+  "9": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": [
+        "7",
+        0
+      ],
+      "source": [
+        "6",
+        0
+      ],
+      "mask": [
+        "8",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "resize_source": false
+    }
+  },
+  "10": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": [
+        "9",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "width": 768,
+      "height": 512,
+      "crop": "disabled"
+    }
+  },
+  "11": {
+    "class_type": "LTXVPreprocess",
+    "inputs": {
+      "image": [
+        "10",
+        0
+      ],
+      "img_compression": 18
+    }
+  },
+  "12": {
+    "class_type": "EmptyLTXVLatentVideo",
+    "inputs": {
+      "width": 768,
+      "height": 512,
+      "length": 193,
+      "batch_size": 1
+    }
+  },
+  "13": {
+    "class_type": "LTXVAddGuide",
+    "inputs": {
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "5",
+        1
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "latent": [
+        "12",
+        0
+      ],
+      "image": [
+        "11",
+        0
+      ],
+      "frame_idx": 0,
+      "strength": 0.9
+    }
+  },
+  "14": {
+    "class_type": "LTXVAddGuide",
+    "inputs": {
+      "positive": [
+        "13",
+        0
+      ],
+      "negative": [
+        "13",
+        1
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "latent": [
+        "13",
+        2
+      ],
+      "image": [
+        "11",
+        0
+      ],
+      "frame_idx": -1,
+      "strength": 0.9
+    }
+  },
+  "15": {
+    "class_type": "LTXVAudioVAELoader",
+    "inputs": {
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors"
+    }
+  },
+  "16": {
+    "class_type": "LTXVEmptyLatentAudio",
+    "inputs": {
+      "frames_number": 193,
+      "frame_rate": 24,
+      "batch_size": 1,
+      "audio_vae": [
+        "15",
+        0
+      ]
+    }
+  },
+  "17": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "video_latent": [
+        "14",
+        2
+      ],
+      "audio_latent": [
+        "16",
+        0
+      ]
+    }
+  },
+  "18": {
+    "class_type": "CFGGuider",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "14",
+        0
+      ],
+      "negative": [
+        "14",
+        1
+      ],
+      "cfg": 1
+    }
+  },
+  "19": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 619202620
+    }
+  },
+  "20": {
+    "class_type": "SamplerEulerAncestral",
+    "inputs": {
+      "eta": 0,
+      "s_noise": 1
+    }
+  },
+  "21": {
+    "class_type": "ManualSigmas",
+    "inputs": {
+      "sigmas": "1., 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+    }
+  },
+  "22": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": [
+        "19",
+        0
+      ],
+      "guider": [
+        "18",
+        0
+      ],
+      "sampler": [
+        "20",
+        0
+      ],
+      "sigmas": [
+        "21",
+        0
+      ],
+      "latent_image": [
+        "17",
+        0
+      ]
+    }
+  },
+  "23": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": {
+      "av_latent": [
+        "22",
+        1
+      ]
+    }
+  },
+  "24": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "positive": [
+        "14",
+        0
+      ],
+      "negative": [
+        "14",
+        1
+      ],
+      "latent": [
+        "23",
+        0
+      ]
+    }
+  },
+  "25": {
+    "class_type": "VAEDecodeTiled",
+    "inputs": {
+      "samples": [
+        "24",
+        2
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "tile_size": 768,
+      "overlap": 64,
+      "temporal_size": 4096,
+      "temporal_overlap": 64
+    }
+  },
+  "26": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "25",
+        0
+      ],
+      "fps": 24
+    }
+  },
+  "27": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "26",
+        0
+      ],
+      "filename_prefix": "life-with-labr/puppy-ball-v3",
+      "format": "mp4",
+      "codec": "auto"
+    }
+  },
+  "28": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "10",
+        0
+      ],
+      "filename_prefix": "life-with-labr/puppy-ball-source-v3"
+    }
+  }
+}

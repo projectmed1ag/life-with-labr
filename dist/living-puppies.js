@@ -21,7 +21,7 @@ export function initLivingPuppies(motion) {
   });
   videos.forEach(video => {
     video.addEventListener('loadedmetadata', () => {
-      video.currentTime = Math.min(Number(video.dataset.start), Math.max(0,video.duration-.1));
+      if (video.dataset.start) video.currentTime = Math.min(Number(video.dataset.start), Math.max(0,video.duration-.1));
     }, {once:true});
     video.addEventListener('playing', () => {
       if (shouldPlay()) video.closest('.living-pup').classList.add('is-playing');
@@ -30,7 +30,7 @@ export function initLivingPuppies(motion) {
     video.addEventListener('error', () => video.closest('.living-pup').classList.remove('is-playing'));
   });
   const seated = group.classList.contains('living-cta--sitting');
-  const setPlayful = on => videos.forEach((video,index) => {video.playbackRate=on ? (seated ? 1.08 : 1.3+index*.05) : 1;});
+  const setPlayful = on => videos.forEach((video,index) => {video.playbackRate=on && !seated ? 1.3+index*.05 : 1;});
   group.addEventListener('pointermove', event => {
     if (event.pointerType==='touch' || motion.matches) return;
     const box=group.getBoundingClientRect();

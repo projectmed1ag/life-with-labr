@@ -1,6 +1,6 @@
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 if (document.querySelector('.living-cta')) {
-  import('./living-puppies.js?v=1').then(({initLivingPuppies})=>initLivingPuppies(motion));
+  import('./living-puppies.js?v=2').then(({initLivingPuppies})=>initLivingPuppies(motion));
 }
 const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
   if (entry.isIntersecting) { entry.target.classList.add('is-visible'); revealObserver.unobserve(entry.target); }
@@ -82,10 +82,10 @@ document.querySelectorAll('[data-dog]').forEach(button => button.addEventListene
 }));
 
 const gallery = [
-  ['puppy-garden.jpg', 'Первые прогулки'], ['puppy-profile-1.jpg', 'Маленькая модель'],
-  ['puppy-portrait-2.jpg', 'Тот самый взгляд'], ['puppy-rest.jpg', 'Минутка отдыха'],
-  ['puppy-portrait-1.jpg', 'Знакомимся с миром'], ['puppy-profile-2.jpg', 'Первый выход'],
-  ['edel-together.jpg', 'Вместе с Эдель']
+  ['puppy-garden.jpg', 'Палевый щенок на траве'], ['puppy-profile-1.jpg', 'Щенок лабрадора в стойке'],
+  ['puppy-portrait-2.jpg', 'Портрет палевого щенка'], ['puppy-rest.jpg', 'Щенок лежит на зелёном столе'],
+  ['puppy-portrait-1.jpg', 'Палевый щенок сидит на столе'], ['puppy-profile-2.jpg', 'Щенок в стойке на открытом воздухе'],
+  ['edel-together.jpg', 'Эдель рядом с женщиной на фоне гор']
 ];
 let galleryIndex = 0;
 const lightbox = document.querySelector('#lightbox');
@@ -94,7 +94,6 @@ const showPhoto = index => {
   const [src, title] = gallery[galleryIndex];
   document.querySelector('#lightbox-image').src = `./assets/${src}`;
   document.querySelector('#lightbox-image').alt = title;
-  document.querySelector('#lightbox-title').textContent = title;
   document.querySelector('#lightbox-count').textContent = `${String(galleryIndex + 1).padStart(2, '0')} / ${String(gallery.length).padStart(2, '0')}`;
 };
 document.querySelectorAll('[data-gallery]').forEach(button => button.addEventListener('click', () => { showPhoto(Number(button.dataset.gallery)); lightbox.showModal(); }));
