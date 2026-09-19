@@ -18,7 +18,7 @@ for (const page of pages) {
     content:(await readFile(`src/pages/${page.key}.html`, 'utf8'))
       .replace('{{livingPuppies}}', page.key === 'home' ? await readFile('src/living-puppies.html','utf8') : '')
       .replace('{{sittingLabradors}}', page.key === 'about' ? await readFile('src/sitting-labradors.html','utf8') : ''),
-    pageAssets:['home','about'].includes(page.key) ? '<link rel="stylesheet" href="./living-puppies.css?v=2">' : ''
+    pageAssets:['home','about'].includes(page.key) ? '<link rel="stylesheet" href="./living-puppies.css?v=3">' : ''
   };
   const html = layout.replace(/\{\{(\w+)\}\}/g, (_, key) => {
     if (!(key in values)) throw new Error(`Unknown layout slot ${key}`);

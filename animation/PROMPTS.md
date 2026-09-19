@@ -4,7 +4,7 @@
 
 ## Щенок с мячом — source-puppy-ball-v1.png
 
-Исходник для следующей анимации. Генерация видео отложена до освобождения GPU; на сайте пока не используется.
+Исходник анимации щенка с мячом на главной странице. Движение задано в узле 3 схемы `puppy-ball-api.json`.
 
 Use case: photorealistic-natural. Asset type: first frame for a premium Labrador kennel website's small seamless animated scene. Create a photorealistic full-body pale cream Labrador puppy, around 10 weeks old, in a playful low bow, front paws on the ground, rump up, head looking with interest at ONE small matte coral-orange rubber ball just ahead of its paws. Three-quarter side view facing right. Real anatomy, soft detailed cream fur, black nose, floppy ears, happy playful expression. The full puppy including tail and paws and the entire ball must be visible. Landscape 1536x1024, puppy and ball occupy only the central 55% width and 45% height, with generous empty space on EVERY side for animated movement. Level camera at puppy chest height, soft neutral studio lighting. Background genuinely transparent with an alpha channel, no ground plane, no drop shadow, no scenery. Exactly one puppy and one ball. No text, no people, no other toys, no logos. Looks like a beautiful real puppy photograph, not an illustration or plastic toy.
 
