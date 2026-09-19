@@ -1,5 +1,11 @@
 # Исходные изображения
 
+## Щенок с игрушкой — source-puppy-toy-v1.png
+
+Метод: встроенный ImageGen. Отдельный персонаж для кнопки «Узнать о щенках»; запрос движения — в узле 3 `puppy-toy-api.json`.
+
+Use case: photorealistic-natural. Asset type: first/last frame of a realistic looping Labrador puppy website mascot animation. Create ONE charming pale golden Labrador retriever puppy, about 11 weeks old, sitting facing the viewer at a slight three-quarter angle. A DIFFERENT character from the cream puppy with a ball: rounder stocky body, broad round muzzle, warmer honey-colored floppy ears and soft golden-cream short fur. Lifelike, anatomically accurate Labrador, glossy black nose, kind dark eyes. The puppy gently holds exactly ONE small soft dusty-blue plush duck toy in its mouth; the plush duck has visible stitched fabric, a short ochre beak, no realistic feathers, clearly a little stuffed toy. Entire seated puppy, paws, curved resting tail and toy visible. Full-body landscape composition 1536x1024, centrally placed, occupying about 58% width and 65% height, generous empty margins on all sides for slight head motion. Extremely realistic puppy photography, soft neutral studio lighting, crisp natural fur detail. Genuinely transparent background with alpha channel. No ground plane, no cast shadow, no scenery, no glow. No ball, no other animals, no collar, no text, no logos, no people. Sweet curious playful expression, premium visual quality, not cartoon, not plastic toy dog.
+
 Метод: встроенный ImageGen. PNG сохранены рядом с этим файлом. Прозрачность сохранена; зелёная подложка добавлялась только внутри схемы генерации видео.
 
 ## Щенок с мячом — source-puppy-ball-v1.png

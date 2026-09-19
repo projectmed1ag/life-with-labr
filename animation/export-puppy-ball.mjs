@@ -24,4 +24,6 @@ run(['-i',source,'-filter_complex',loop,'-map','[out]','-an',
 // Extract the actual opening frame, so loading/reduced-motion uses the same pose.
 run(['-c:v','libvpx-vp9','-i',output('puppy-ball-v1.webm'),'-frames:v','1',
   '-c:v','libwebp','-quality','90',output('puppy-ball-still-v1.webp')]);
-console.log('Exported puppy-ball-v1.webm and puppy-ball-still-v1.webp');
+run(['-c:v','libvpx-vp9','-i',output('puppy-ball-v1.webm'),'-an',
+  '-c:v','libwebp_anim','-q:v','78','-loop','0',output('puppy-ball-v2.webp')]);
+console.log('Exported puppy-ball-v2.webp, its still and the intermediate WebM');

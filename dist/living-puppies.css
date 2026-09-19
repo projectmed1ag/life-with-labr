@@ -9,6 +9,10 @@
 .living-cta--sitting{width:350px;max-width:100%;margin-top:28px}
 .about-life .living-cta--sitting>.button{margin:0;width:100%;padding-left:14px;padding-right:14px}
 .living-puppies--sitting{height:auto;display:block;width:280px;max-width:100%;padding-top:12px;margin:0 auto}
+.living-cta--toy{margin-top:32px}
+.puppy-story .living-cta--toy>.button{margin:0;width:100%;min-width:0}
+.living-puppies--toy{width:240px;max-width:100%;margin:0 auto;padding-top:10px}
+.living-puppies--toy .living-pup-visual{aspect-ratio:1}
 .home-page .hero{height:auto;min-height:max(700px,calc(100svh - 105px));max-height:none}
 .home-page .hero-content{padding-top:42px}
 .home-page .hero-content h1{margin-top:27px;margin-bottom:20px}
