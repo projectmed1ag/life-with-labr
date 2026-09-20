@@ -4,7 +4,7 @@
 
 Предпросмотр: https://projectmed1ag.github.io/life-with-labr/
 
-Для основного домена `lifewithlabr.ru` подготовлена [конфигурация Timeweb](deploy/timeweb.md): HTML/CSS/JS, ветка `main`, директория проекта `dist`.
+Для основного домена `lifewithlabr.ru` подготовлена [конфигурация Timeweb](deploy/timeweb.md): HTML/CSS/JS, ветка `main`, директория сборки `dist`, путь проекта — корень репозитория.
 
 Репозиторий: https://github.com/projectmed1ag/life-with-labr
 
