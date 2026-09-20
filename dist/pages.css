@@ -4,6 +4,7 @@
 .mobile-menu nav a[aria-current="page"]{color:var(--gold)}
 .mobile-menu nav{gap:14px;margin-top:45px}
 .mobile-menu nav a{font-size:clamp(31px,5vw,43px)}
+.menu-labradors{display:none}
 .breadcrumbs{display:flex;align-items:center;gap:13px;padding:32px 7% 0;font-size:12px;color:var(--muted)}
 .breadcrumbs a{border-bottom:1px solid var(--line)}
 .breadcrumbs>span[aria-hidden]{opacity:.55}
@@ -53,6 +54,19 @@
 @media(min-width:1700px){.breadcrumbs{padding-left:max(7%,calc((100vw - 1460px)/2));padding-right:max(7%,calc((100vw - 1460px)/2))}}
 @media(min-width:701px) and (max-width:1000px){.header .brand{font-size:29px}.header .brand span{font-size:10px}.header .desktop-nav{gap:15px;font-size:12px}.header-contact{font-size:12px}.about-life{gap:6%}.moments-grid{gap:18px}.moments-grid .gallery-item>span:not(.image-expand){left:15px;font-size:12px}}
 @media(max-width:700px){
+  .button,.text-button,.discover-link,.contact-links a{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:15px 22px;border:1px solid #ecd2a6;border-radius:12px;background:linear-gradient(110deg,#d9bc88,#e3cba3 55%,#d9bc88);color:var(--green);box-shadow:inset 0 1px 0 #fff5;font-family:var(--serif);font-size:22px;font-weight:500;line-height:1.2;text-align:center}
+  .button:hover,.text-button:hover,.discover-card:hover .discover-link,.contact-links a:hover{background:linear-gradient(110deg,#e5cca2,#efdbb8 55%,#e5cca2);border-color:#f2dfbd;color:var(--green);transform:none}
+  .button:active,.text-button:active,.discover-card:active .discover-link{transform:translateY(1px)}
+  .discover-copy{display:flex;flex-direction:column;align-items:flex-start}
+  .discover-link{align-self:center;width:100%;max-width:320px;margin-top:22px}
+  .text-button{width:100%;max-width:350px}
+  .contact-links a{min-width:0;flex:1;padding-left:12px;padding-right:12px}
+  .dialog-close,.circle-button,.lightbox-prev,.lightbox-next{border:1px solid #ecd2a6;border-radius:12px;background:var(--gold);color:var(--green);box-shadow:inset 0 1px 0 #fff5}
+  .mobile-menu[open]{display:flex;flex-direction:column;min-height:100svh;height:100dvh;padding-bottom:max(22px,env(safe-area-inset-bottom))}
+  .mobile-menu>.brand,.mobile-menu>nav,.mobile-menu>.menu-phone,.mobile-menu>p{flex-shrink:0}
+  .menu-labradors{display:block;flex-shrink:0;width:min(240px,85%);margin:auto auto 0;padding-top:24px;pointer-events:none}
+  .menu-labradors picture{display:block}
+  .menu-labradors img{height:auto;aspect-ratio:480/306;object-fit:contain}
   .breadcrumbs{padding:25px 6% 0;font-size:11px}
   .page-primary{padding-top:38px}
   .page-primary h1{font-size:clamp(43px,9.8vw,65px)}
@@ -60,7 +74,7 @@
   .about-life{display:block;padding-top:0;padding-bottom:65px}
   .about-life figure{margin-bottom:44px}
   .about-life figcaption{font-size:23px}
-  .about-life .button{width:100%;font-size:12px;padding-left:14px;padding-right:14px}
+  .about-life .button{width:100%;font-size:21px;padding-left:14px;padding-right:14px}
   .dogs-page .dog-card:nth-child(2){padding-top:50px}
   .page-invitation{padding-top:55px;padding-bottom:65px}
   .puppies-page .puppy-story h1{font-size:clamp(61px,14vw,78px)}
@@ -76,6 +90,8 @@
   .discover-grid{gap:40px}
   .discover-card{display:flex;flex-direction:column}
   .discover-card:nth-child(even){transform:none}
+  .discover-card:first-child .discover-image{aspect-ratio:auto}
+  .discover-card:first-child .discover-image img{height:auto;object-fit:contain;transform:none}
   .discover-copy{order:-1;padding:0 0 24px}
   .discover-copy h3{font-size:36px}
   .discover-copy p{font-size:14px}

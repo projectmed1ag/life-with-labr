@@ -18,7 +18,7 @@
 .home-page .hero-content h1{margin-top:27px;margin-bottom:20px}
 @media(min-width:1600px){.home-page .hero-content{padding-top:76px}}
 @media(max-width:700px){
-  .living-cta{width:280px;margin-top:24px}
+  .living-cta{width:320px;margin:26px auto 0}
   .hero .living-cta>.button{margin:0}
   .living-puppies--play{width:250px}
   .living-cta--sitting{width:100%;margin-top:28px}
