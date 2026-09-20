@@ -23,8 +23,9 @@
   .living-puppies--play{width:250px}
   .living-cta--sitting{width:100%;margin-top:28px}
   .living-puppies--sitting{height:auto;width:270px}
-  .home-page .hero{min-height:860px}
-  .home-page .hero-content{padding-top:40px}
-  .home-page .hero-image{inset:63% 0 0}
-  .home-page .hero:before{background:linear-gradient(180deg,#172b24 0%,#172b24 50%,#172b2499 66%,#172b2400 81%,#172b24dd 100%)}
+  .home-page .hero{display:flex;flex-direction:column;min-height:0;height:auto}
+  .home-page .hero-content{order:0;padding:40px 6% 16px}
+  .home-page .hero-image{position:relative;inset:auto;order:1;width:100%;aspect-ratio:1.4;margin-top:-6px;-webkit-mask-image:linear-gradient(180deg,transparent,#000 15%,#000 83%,transparent);mask-image:linear-gradient(180deg,transparent,#000 15%,#000 83%,transparent)}
+  .home-page .hero:before{background:none}
+  .home-page .hero-bottom{position:relative;order:2;inset:auto;padding:12px 6% 28px;gap:16px}
 }

@@ -1,0 +1,310 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LTXAVTextEncoderLoader",
+    "inputs": {
+      "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "A photorealistic living portrait of the exact same pale cream Labrador puppy in the reference photograph. Locked-off vertical camera. The puppy remains sitting in precisely the same position on the green fabric-covered table, all four paws resting in the same places. A very small, slow curious head tilt to its right, only about five degrees, while looking affectionately toward the camera. Its head moves gently as one solid anatomically correct unit, with subtle soft ear movement. Subtle relaxed breathing in the chest. The mouth stays closed. The puppy keeps its original face, eye shape, short muzzle, fluffy pale fur, body proportions and seated posture. Minimal restrained lifelike motion, as if the original photograph has quietly come to life. No walking, no standing, no large turns, no toys. The table, green fabric, original small photographer signature in the lower left, blurred garden background, framing and daylight remain completely fixed. No camera movement, no zoom, no change of focus. All paws remain visible. At the end gently return to the exact original front-facing pose. A quiet elegant portrait, slow movement suitable for forward-and-backward playback."
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "camera motion, zoom, pan, shifting background, new objects, toys, ball, open mouth, tongue, head spin, twisted neck, looking behind, standing, walking, crawling, large movement, changing face, changing eye shape, extra limbs, extra dog, deformed paws, morphing, deformed nose, changing fur color, cartoon, flicker, blur"
+    }
+  },
+  "5": {
+    "class_type": "LTXVConditioning",
+    "inputs": {
+      "positive": [
+        "3",
+        0
+      ],
+      "negative": [
+        "4",
+        0
+      ],
+      "frame_rate": 24
+    }
+  },
+  "6": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "life-with-labr-portrait-v1.jpg"
+    }
+  },
+  "10": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": [
+        "6",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "width": 512,
+      "height": 768,
+      "crop": "disabled"
+    }
+  },
+  "11": {
+    "class_type": "LTXVPreprocess",
+    "inputs": {
+      "image": [
+        "10",
+        0
+      ],
+      "img_compression": 12
+    }
+  },
+  "12": {
+    "class_type": "EmptyLTXVLatentVideo",
+    "inputs": {
+      "width": 512,
+      "height": 768,
+      "length": 121,
+      "batch_size": 1
+    }
+  },
+  "13": {
+    "class_type": "LTXVAddGuide",
+    "inputs": {
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "5",
+        1
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "latent": [
+        "12",
+        0
+      ],
+      "image": [
+        "11",
+        0
+      ],
+      "frame_idx": 0,
+      "strength": 1
+    }
+  },
+  "14": {
+    "class_type": "LTXVAddGuide",
+    "inputs": {
+      "positive": [
+        "13",
+        0
+      ],
+      "negative": [
+        "13",
+        1
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "latent": [
+        "13",
+        2
+      ],
+      "image": [
+        "11",
+        0
+      ],
+      "frame_idx": -1,
+      "strength": 1
+    }
+  },
+  "15": {
+    "class_type": "LTXVAudioVAELoader",
+    "inputs": {
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors"
+    }
+  },
+  "16": {
+    "class_type": "LTXVEmptyLatentAudio",
+    "inputs": {
+      "frames_number": 121,
+      "frame_rate": 24,
+      "batch_size": 1,
+      "audio_vae": [
+        "15",
+        0
+      ]
+    }
+  },
+  "17": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "video_latent": [
+        "14",
+        2
+      ],
+      "audio_latent": [
+        "16",
+        0
+      ]
+    }
+  },
+  "18": {
+    "class_type": "CFGGuider",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "14",
+        0
+      ],
+      "negative": [
+        "14",
+        1
+      ],
+      "cfg": 1
+    }
+  },
+  "19": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 920202681
+    }
+  },
+  "20": {
+    "class_type": "SamplerEulerAncestral",
+    "inputs": {
+      "eta": 0,
+      "s_noise": 1
+    }
+  },
+  "21": {
+    "class_type": "ManualSigmas",
+    "inputs": {
+      "sigmas": "1., 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+    }
+  },
+  "22": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": [
+        "19",
+        0
+      ],
+      "guider": [
+        "18",
+        0
+      ],
+      "sampler": [
+        "20",
+        0
+      ],
+      "sigmas": [
+        "21",
+        0
+      ],
+      "latent_image": [
+        "17",
+        0
+      ]
+    }
+  },
+  "23": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": {
+      "av_latent": [
+        "22",
+        1
+      ]
+    }
+  },
+  "24": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "positive": [
+        "14",
+        0
+      ],
+      "negative": [
+        "14",
+        1
+      ],
+      "latent": [
+        "23",
+        0
+      ]
+    }
+  },
+  "25": {
+    "class_type": "VAEDecodeTiled",
+    "inputs": {
+      "samples": [
+        "24",
+        2
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "tile_size": 768,
+      "overlap": 64,
+      "temporal_size": 4096,
+      "temporal_overlap": 64
+    }
+  },
+  "26": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "25",
+        0
+      ],
+      "fps": 24
+    }
+  },
+  "27": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "26",
+        0
+      ],
+      "filename_prefix": "life-with-labr/portrait-puppy-v1",
+      "format": "mp4",
+      "codec": "auto"
+    }
+  },
+  "28": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "10",
+        0
+      ],
+      "filename_prefix": "life-with-labr/portrait-puppy-source-v1"
+    }
+  }
+}

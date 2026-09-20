@@ -9,7 +9,7 @@ document.querySelectorAll('[data-reveal]').forEach(el => {
 document.documentElement.classList.add('enhanced');
 document.querySelector('#year').textContent = new Date().getFullYear();
 
-const heroImage = document.querySelector('.hero-image img');
+const heroImage = document.querySelector('.hero-image .photo-loop') ? null : document.querySelector('.hero-image img');
 let framePending = false;
 const updateScroll = () => {
   const maxScroll = document.documentElement.scrollHeight - innerHeight;
@@ -23,6 +23,31 @@ addEventListener('scroll', () => { if (!framePending) { requestAnimationFrame(up
 motion.addEventListener('change', () => {
   if (motion.matches) { if (heroImage) heroImage.style.transform = ''; document.querySelectorAll('.reveal-ready').forEach(el => el.classList.add('is-visible')); }
 });
+
+// These opaque H.264 portraits need no alpha decoding. The original photograph
+// remains visible if autoplay is blocked or the visitor requests less motion.
+const photoLoops = [...document.querySelectorAll('.photo-loop')];
+const visibleLoops = new Set();
+const syncPhotoLoop = video => {
+  if (motion.matches || document.hidden || !visibleLoops.has(video)) {
+    video.pause();
+    return;
+  }
+  if (!video.getAttribute('src')) video.src = video.dataset.loopSrc;
+  video.muted = true;
+  video.play().catch(() => video.classList.remove('is-playing'));
+};
+const photoObserver = new IntersectionObserver(entries => entries.forEach(({target,isIntersecting}) => {
+  if (isIntersecting) visibleLoops.add(target); else visibleLoops.delete(target);
+  syncPhotoLoop(target);
+}), {threshold:0.05});
+photoLoops.forEach(video => {
+  video.addEventListener('playing', () => video.classList.add('is-playing'));
+  video.addEventListener('error', () => video.classList.remove('is-playing'));
+  photoObserver.observe(video);
+});
+motion.addEventListener('change', () => photoLoops.forEach(syncPhotoLoop));
+document.addEventListener('visibilitychange', () => photoLoops.forEach(syncPhotoLoop));
 
 const mobileMenu = document.querySelector('#mobile-menu');
 const menuToggle = document.querySelector('.menu-toggle');
