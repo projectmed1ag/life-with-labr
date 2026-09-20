@@ -1,6 +1,6 @@
 import {readFile, writeFile} from 'node:fs/promises';
 
-const origin = 'https://projectmed1ag.github.io/life-with-labr/';
+const origin = 'https://lifewithlabr.ru/';
 const pages = [
   {key:'home', file:'index.html', label:'Главная', title:'Life with Labr — маленькое счастье. Большая любовь.', description:'Life with Labr — питомник лабрадоров Евгении Скобликовой в Москве. Наши собаки, щенки и жизнь с лабрадором.'},
   {key:'about', file:'about.html', label:'О питомнике', title:'О питомнике — Life with Labr', description:'Питомник лабрадоров Life with Labr в Москве. Евгения Скобликова, наша философия и забота о щенках и их семьях.'},
@@ -28,3 +28,4 @@ for (const page of pages) {
   console.log(`Built ${page.file}`);
 }
 await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map(page => `<url><loc>${origin}${page.key === 'home' ? '' : page.file}</loc></url>`).join('')}</urlset>\n`);
+await writeFile('dist/robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${origin}sitemap.xml\n`);

@@ -2,7 +2,9 @@
 
 Сайт питомника лабрадоров Евгении Скобликовой. Статические страницы на HTML, CSS и JavaScript без внешних зависимостей. Все фотографии предоставлены заказчиком. Шрифты сохранены локально.
 
-Сайт: https://projectmed1ag.github.io/life-with-labr/
+Предпросмотр: https://projectmed1ag.github.io/life-with-labr/
+
+Для основного домена `lifewithlabr.ru` подготовлена [конфигурация Timeweb](deploy/timeweb.md): HTML/CSS/JS, ветка `main`, директория проекта `dist`.
 
 Репозиторий: https://github.com/projectmed1ag/life-with-labr
 
