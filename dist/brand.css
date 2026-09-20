@@ -1,0 +1,15 @@
+/* Approved handwritten identity, with a compact lockup for navigation. */
+.brand.brand-logo{display:block;width:270px;flex:0 0 auto;line-height:0}
+.brand-logo .brand-art{display:block;width:100%;height:auto;overflow:hidden}
+.mobile-menu>.brand-logo{width:min(270px,calc(100% - 48px));flex-shrink:0}
+footer>.brand.brand-logo{width:270px}
+.brand-portrait{width:100%;max-width:290px;height:auto;aspect-ratio:3/2;border-radius:0}
+.brand-portrait img{height:auto;object-fit:contain;transform:none}
+.discover-card:first-child .discover-image{background:var(--cream)}
+.discover-card:first-child .discover-image img{object-fit:contain;transform:none}
+@media(min-width:701px) and (max-width:1000px){.header>.brand.brand-logo{width:215px}}
+@media(max-width:700px){
+  .header>.brand.brand-logo{width:clamp(205px,60vw,260px)}
+  .mobile-menu nav{margin-top:30px}
+  footer>.brand.brand-logo{width:220px}
+}

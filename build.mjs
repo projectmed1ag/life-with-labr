@@ -9,10 +9,11 @@ const pages = [
   {key:'moments', file:'moments.html', label:'Моменты', title:'Моменты: фотоальбом лабрадоров — Life with Labr', description:'Фотографии лабрадоров Life with Labr: первые прогулки, маленькие открытия и жизнь рядом с любимыми собаками.'}
 ];
 const layout = await readFile('src/layout.html', 'utf8');
+const brand = await readFile('src/brand.html', 'utf8');
 for (const page of pages) {
   const links = list => list.map(item => `<a href="${item.key === 'home' ? './' : './' + item.file}"${item.key === page.key ? ' aria-current="page"' : ''}>${item.label}</a>`).join('');
   const values = {
-    title: page.title, description: page.description, page:page.key,
+    title: page.title, description: page.description, page:page.key, brand,
     canonical: origin + (page.key === 'home' ? '' : page.file),
     nav:links(pages.slice(1)), mobileNav:links(pages),
     content:(await readFile(`src/pages/${page.key}.html`, 'utf8'))
