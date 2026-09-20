@@ -1,0 +1,373 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LTXAVTextEncoderLoader",
+    "inputs": {
+      "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "A fixed wide studio shot of exactly TWO real pale cream Labrador puppies facing each other in gentle playful bows, full bodies visible. A sweet quiet reversible gesture: the two puppies slowly rock their shoulders forward toward each other and lower their chests a little. The left puppy gently slides one front paw forward a few centimeters as if inviting the other to play. The right puppy makes a small curious head tilt and gently reaches a front paw toward the other, then lowers it. Their noses move slightly closer, leaving a clear small gap, and they slowly ease back to their original playful bow positions. Both puppies keep their rear paws planted and stay in their original left and right positions. Only small deliberate shoulder, front-paw, ear and head movements. Head and neck remain naturally aligned with the spine; muzzles keep pointing toward each other. No walking, no running, no jumping, no rolling, no exchanging positions. The puppies do not overlap, bite or collide. Exactly two separate puppies, four anatomically correct legs each, two tails visible. Realistic short plush pale Labrador fur, floppy ears, kind eyes, natural animal weight. Their full heads, bodies, feet and tails stay inside the frame with clear green margins. All background and ground remain perfectly flat solid vivid chroma green without shadows or texture. Static locked camera, unchanged scale and lighting. Slow calm lifelike play that reads naturally when played forward or backward. Start and end in the same relaxed playful bows. Silent photorealistic footage."
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "third dog, extra puppy, merged bodies, overlapping dogs, crossed limbs, extra legs, morphing paws, twisted neck, head backwards, spinning, rolling over, jumping, running, biting, fighting, fast motion, toys, ball, floating, camera movement, cropped tails, shadows, green fur, text, cartoon"
+    }
+  },
+  "5": {
+    "class_type": "LTXVConditioning",
+    "inputs": {
+      "positive": [
+        "3",
+        0
+      ],
+      "negative": [
+        "4",
+        0
+      ],
+      "frame_rate": 24
+    }
+  },
+  "6": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "life-with-labr-menu-puppies-v1.png"
+    }
+  },
+  "7": {
+    "class_type": "EmptyImage",
+    "inputs": {
+      "width": 1536,
+      "height": 1024,
+      "batch_size": 1,
+      "color": 65280
+    }
+  },
+  "8": {
+    "class_type": "InvertMask",
+    "inputs": {
+      "mask": [
+        "6",
+        1
+      ]
+    }
+  },
+  "9": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": [
+        "7",
+        0
+      ],
+      "source": [
+        "6",
+        0
+      ],
+      "mask": [
+        "8",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "resize_source": false
+    }
+  },
+  "10": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": [
+        "9",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "width": 640,
+      "height": 426,
+      "crop": "disabled"
+    }
+  },
+  "11": {
+    "class_type": "LTXVPreprocess",
+    "inputs": {
+      "image": [
+        "30",
+        0
+      ],
+      "img_compression": 18
+    }
+  },
+  "12": {
+    "class_type": "EmptyLTXVLatentVideo",
+    "inputs": {
+      "width": 768,
+      "height": 512,
+      "length": 121,
+      "batch_size": 1
+    }
+  },
+  "13": {
+    "class_type": "LTXVAddGuide",
+    "inputs": {
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "5",
+        1
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "latent": [
+        "12",
+        0
+      ],
+      "image": [
+        "11",
+        0
+      ],
+      "frame_idx": 0,
+      "strength": 0.9
+    }
+  },
+  "14": {
+    "class_type": "LTXVAddGuide",
+    "inputs": {
+      "positive": [
+        "13",
+        0
+      ],
+      "negative": [
+        "13",
+        1
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "latent": [
+        "13",
+        2
+      ],
+      "image": [
+        "11",
+        0
+      ],
+      "frame_idx": -1,
+      "strength": 0.9
+    }
+  },
+  "15": {
+    "class_type": "LTXVAudioVAELoader",
+    "inputs": {
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors"
+    }
+  },
+  "16": {
+    "class_type": "LTXVEmptyLatentAudio",
+    "inputs": {
+      "frames_number": 121,
+      "frame_rate": 24,
+      "batch_size": 1,
+      "audio_vae": [
+        "15",
+        0
+      ]
+    }
+  },
+  "17": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "video_latent": [
+        "14",
+        2
+      ],
+      "audio_latent": [
+        "16",
+        0
+      ]
+    }
+  },
+  "18": {
+    "class_type": "CFGGuider",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "14",
+        0
+      ],
+      "negative": [
+        "14",
+        1
+      ],
+      "cfg": 1
+    }
+  },
+  "19": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 920202654
+    }
+  },
+  "20": {
+    "class_type": "SamplerEulerAncestral",
+    "inputs": {
+      "eta": 0,
+      "s_noise": 1
+    }
+  },
+  "21": {
+    "class_type": "ManualSigmas",
+    "inputs": {
+      "sigmas": "1., 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+    }
+  },
+  "22": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": [
+        "19",
+        0
+      ],
+      "guider": [
+        "18",
+        0
+      ],
+      "sampler": [
+        "20",
+        0
+      ],
+      "sigmas": [
+        "21",
+        0
+      ],
+      "latent_image": [
+        "17",
+        0
+      ]
+    }
+  },
+  "23": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": {
+      "av_latent": [
+        "22",
+        1
+      ]
+    }
+  },
+  "24": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "positive": [
+        "14",
+        0
+      ],
+      "negative": [
+        "14",
+        1
+      ],
+      "latent": [
+        "23",
+        0
+      ]
+    }
+  },
+  "25": {
+    "class_type": "VAEDecodeTiled",
+    "inputs": {
+      "samples": [
+        "24",
+        2
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "tile_size": 768,
+      "overlap": 64,
+      "temporal_size": 4096,
+      "temporal_overlap": 64
+    }
+  },
+  "26": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "25",
+        0
+      ],
+      "fps": 24
+    }
+  },
+  "27": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "26",
+        0
+      ],
+      "filename_prefix": "life-with-labr/menu-puppies-v1",
+      "format": "mp4",
+      "codec": "auto"
+    }
+  },
+  "28": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "30",
+        0
+      ],
+      "filename_prefix": "life-with-labr/menu-puppies-source-v1"
+    }
+  },
+  "29": {
+    "class_type": "EmptyImage",
+    "inputs": {
+      "width": 768,
+      "height": 512,
+      "batch_size": 1,
+      "color": 65280
+    }
+  },
+  "30": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": [
+        "29",
+        0
+      ],
+      "source": [
+        "10",
+        0
+      ],
+      "x": 64,
+      "y": 43,
+      "resize_source": false
+    }
+  }
+}

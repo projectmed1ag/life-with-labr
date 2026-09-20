@@ -62,11 +62,15 @@
   .text-button{width:100%;max-width:350px}
   .contact-links a{min-width:0;flex:1;padding-left:12px;padding-right:12px}
   .dialog-close,.circle-button,.lightbox-prev,.lightbox-next{border:1px solid #ecd2a6;border-radius:12px;background:var(--gold);color:var(--green);box-shadow:inset 0 1px 0 #fff5}
+  .header .menu-toggle{flex:0 0 46px;width:46px;height:46px;min-height:46px;align-items:center;justify-content:center;gap:5px;padding:0;border:1px solid #ecd2a6;border-radius:12px;background:linear-gradient(110deg,#d9bc88,#e3cba3 55%,#d9bc88);color:var(--green);box-shadow:inset 0 1px 0 #fff5}
+  .header .menu-toggle span{width:20px;height:2px;border-radius:2px;background:currentColor}
+  .header .menu-toggle:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+  .header .menu-toggle:active{transform:translateY(1px)}
   .mobile-menu[open]{display:flex;flex-direction:column;min-height:100svh;height:100dvh;padding-bottom:max(22px,env(safe-area-inset-bottom))}
   .mobile-menu>.brand,.mobile-menu>nav,.mobile-menu>.menu-phone,.mobile-menu>p{flex-shrink:0}
-  .menu-labradors{display:block;flex-shrink:0;width:min(240px,85%);margin:auto auto 0;padding-top:24px;pointer-events:none}
+  .menu-labradors{display:block;flex-shrink:0;width:min(280px,100%);margin:18px auto 0;padding:0;pointer-events:none}
   .menu-labradors picture{display:block}
-  .menu-labradors img{height:auto;aspect-ratio:480/306;object-fit:contain}
+  .menu-labradors img{height:auto;aspect-ratio:480/200;object-fit:contain}
   .breadcrumbs{padding:25px 6% 0;font-size:11px}
   .page-primary{padding-top:38px}
   .page-primary h1{font-size:clamp(43px,9.8vw,65px)}

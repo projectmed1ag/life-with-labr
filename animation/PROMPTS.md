@@ -1,5 +1,11 @@
 # Исходные изображения
 
+## Играющие щенки для меню — source-menu-puppies-v1.png
+
+Метод: встроенный ImageGen. Новый исходник для мобильного меню; видео генерируется схемой `menu-puppies-api.json`.
+
+Use case: photorealistic-natural. Asset type: source keyframe for a short reversible puppy animation on a premium Labrador breeder website. Wide landscape 1536x1024 photoreal studio photograph of exactly two 8-week-old pale yellow Labrador retriever puppies facing each other in relaxed playful bows. Left puppy warm pale honey cream, right puppy lighter ivory cream; short plush coats, broad soft muzzles and floppy ears. Both full body, horizontal three-quarter side views toward each other and slightly toward camera. Front chests low, forelegs extended, rear legs planted, tails gently raised. Small clear gap between separate forepaws, noses about 15cm apart. Friendly natural expressions, four correct legs per puppy, two distinct complete bodies. Generous empty margins, entire paws and tails visible. Soft neutral studio lighting, detailed real fur. Intended solid chroma green floor and background, no shadow or scenery. No toys, collars, words or watermark. The tool returned an RGBA source; alpha is composited onto green inside the video graph.
+
 ## Щенок с игрушкой — source-puppy-toy-v1.png
 
 Метод: встроенный ImageGen. Отдельный персонаж для кнопки «Узнать о щенках»; запрос движения — в узле 3 `puppy-toy-api.json`.
