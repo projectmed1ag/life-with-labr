@@ -1,0 +1,283 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LTXAVTextEncoderLoader",
+    "inputs": {
+      "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "A single continuous eight-second real-time shot. A living pale cream Labrador puppy, identical to the reference animal, has natural small movements throughout the entire shot. The puppy remains comfortably in its original posture on the green fabric table. Fixed camera, original composition and framing, unchanging garden bokeh and daylight. Its head and floppy ears move naturally as solid anatomically correct parts; its neck always faces forward within a modest comfortable range. Its eyes remain open and alert, its mouth remains closed. Its shoulders and chest gently rise and fall with relaxed breathing through the whole shot. Each action flows directly into the next at an even, unhurried natural pace. Continuous motion is distributed across all eight seconds, with soft smooth reversals of direction and no held poses. The movement is reversible: head tilts, small side-to-side looks, soft ear sways and rhythmic breathing. There are no irreversible actions, objects being picked up, steps or changes of posture. Preserve the exact fluffy pale coat, short muzzle, eyes, ears, paws, table fabric and original photographer signature. Photorealistic natural video, silent. The puppy stays lying down with both forepaws resting on the table. During seconds zero to two it gently lifts its chin and inclines its head a little toward its left shoulder while watching the viewer. During seconds two to four it smoothly levels its head and looks just slightly to the right of the camera. During seconds four to six it follows its gaze back across the camera and gently inclines toward the other shoulder, both floppy ears swaying softly. During seconds six to eight it smoothly brings its gaze toward the viewer again while softly lowering its chin. These are modest attentive head movements, no profile view; both eyes remain visible. Its paws and body stay in the original lying position."
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "freeze frame, still image, motion only at beginning, motion only at end, sudden acceleration, fast movement, long pause, head spin, twisted neck, large head rotation, looking behind, profile view, open mouth, tongue, yawning, licking, changing expression, walking, standing, moving paws, extra limbs, different animal, distorted anatomy, face morphing, fur changing, camera movement, zoom, pan, focus pull, moving background, flicker"
+    }
+  },
+  "5": {
+    "class_type": "LTXVConditioning",
+    "inputs": {
+      "positive": [
+        "3",
+        0
+      ],
+      "negative": [
+        "4",
+        0
+      ],
+      "frame_rate": 24
+    }
+  },
+  "6": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "life-with-labr-hero-native-eight.jpg"
+    }
+  },
+  "10": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": [
+        "6",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "width": 960,
+      "height": 640,
+      "crop": "disabled"
+    }
+  },
+  "11": {
+    "class_type": "LTXVPreprocess",
+    "inputs": {
+      "image": [
+        "10",
+        0
+      ],
+      "img_compression": 12
+    }
+  },
+  "12": {
+    "class_type": "EmptyLTXVLatentVideo",
+    "inputs": {
+      "width": 960,
+      "height": 640,
+      "length": 193,
+      "batch_size": 1
+    }
+  },
+  "13": {
+    "class_type": "LTXVAddGuide",
+    "inputs": {
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "5",
+        1
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "latent": [
+        "12",
+        0
+      ],
+      "image": [
+        "11",
+        0
+      ],
+      "frame_idx": 0,
+      "strength": 1
+    }
+  },
+  "15": {
+    "class_type": "LTXVAudioVAELoader",
+    "inputs": {
+      "ckpt_name": "ltx-2.3-22b-distilled-fp8.safetensors"
+    }
+  },
+  "16": {
+    "class_type": "LTXVEmptyLatentAudio",
+    "inputs": {
+      "frames_number": 193,
+      "frame_rate": 24,
+      "batch_size": 1,
+      "audio_vae": [
+        "15",
+        0
+      ]
+    }
+  },
+  "17": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "video_latent": [
+        "13",
+        2
+      ],
+      "audio_latent": [
+        "16",
+        0
+      ]
+    }
+  },
+  "18": {
+    "class_type": "CFGGuider",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "13",
+        0
+      ],
+      "negative": [
+        "13",
+        1
+      ],
+      "cfg": 1
+    }
+  },
+  "19": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 920202801
+    }
+  },
+  "20": {
+    "class_type": "SamplerEulerAncestral",
+    "inputs": {
+      "eta": 0,
+      "s_noise": 1
+    }
+  },
+  "21": {
+    "class_type": "ManualSigmas",
+    "inputs": {
+      "sigmas": "1., 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+    }
+  },
+  "22": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": [
+        "19",
+        0
+      ],
+      "guider": [
+        "18",
+        0
+      ],
+      "sampler": [
+        "20",
+        0
+      ],
+      "sigmas": [
+        "21",
+        0
+      ],
+      "latent_image": [
+        "17",
+        0
+      ]
+    }
+  },
+  "23": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": {
+      "av_latent": [
+        "22",
+        1
+      ]
+    }
+  },
+  "24": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "positive": [
+        "13",
+        0
+      ],
+      "negative": [
+        "13",
+        1
+      ],
+      "latent": [
+        "23",
+        0
+      ]
+    }
+  },
+  "25": {
+    "class_type": "VAEDecodeTiled",
+    "inputs": {
+      "samples": [
+        "24",
+        2
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "tile_size": 768,
+      "overlap": 64,
+      "temporal_size": 4096,
+      "temporal_overlap": 64
+    }
+  },
+  "26": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "25",
+        0
+      ],
+      "fps": 24
+    }
+  },
+  "27": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "26",
+        0
+      ],
+      "filename_prefix": "life-with-labr/hero-puppy-native-eight-v1",
+      "format": "mp4",
+      "codec": "auto"
+    }
+  },
+  "28": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "10",
+        0
+      ],
+      "filename_prefix": "life-with-labr/hero-puppy-native-eight-source"
+    }
+  }
+}
