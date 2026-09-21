@@ -98,7 +98,7 @@ const dogs = {
 const dogDialog = document.querySelector('#dog-dialog');
 document.querySelectorAll('[data-dog]').forEach(button => button.addEventListener('click', () => {
   const dog = dogs[button.dataset.dog];
-  document.querySelector('#dog-dialog-content').innerHTML = `<div class="profile-cover"><img src="./assets/${dog.image}" alt="${dog.name}"></div><div class="profile-body"><p class="eyebrow">${dog.label}</p><h2 id="dog-dialog-title">${dog.name}</h2><p class="profile-intro">${dog.intro}</p><dl class="profile-facts">${dog.facts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl><details open><summary>Достижения <span aria-hidden="true">+</span></summary><div class="title-list">${dog.titles.map(([title, description]) => `<div><h4>${title}</h4><p>${description}</p></div>`).join('')}</div></details>${dog.health ? `<details><summary>Тесты здоровья <span aria-hidden="true">+</span></summary><dl class="health-list">${dog.health.map(([title, value]) => `<div><dt>${title}</dt><dd>${value}</dd></div>`).join('')}</dl></details>` : ''}<details><summary>${button.dataset.dog === 'edel' ? 'Родословная · 3 поколения' : 'Происхождение'} <span aria-hidden="true">+</span></summary><div class="pedigree">${dog.pedigree}</div></details><a class="button button-dark" href="https://wa.me/79251448648" target="_blank" rel="noopener noreferrer">Узнать о щенках</a></div>`;
+  document.querySelector('#dog-dialog-content').innerHTML = `<div class="profile-cover"><img src="/assets/${dog.image}" alt="${dog.name}"></div><div class="profile-body"><p class="eyebrow">${dog.label}</p><h2 id="dog-dialog-title">${dog.name}</h2><p class="profile-intro">${dog.intro}</p><dl class="profile-facts">${dog.facts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl><details open><summary>Достижения <span aria-hidden="true">+</span></summary><div class="title-list">${dog.titles.map(([title, description]) => `<div><h4>${title}</h4><p>${description}</p></div>`).join('')}</div></details>${dog.health ? `<details><summary>Тесты здоровья <span aria-hidden="true">+</span></summary><dl class="health-list">${dog.health.map(([title, value]) => `<div><dt>${title}</dt><dd>${value}</dd></div>`).join('')}</dl></details>` : ''}<details><summary>${button.dataset.dog === 'edel' ? 'Родословная · 3 поколения' : 'Происхождение'} <span aria-hidden="true">+</span></summary><div class="pedigree">${dog.pedigree}</div></details><a class="button button-dark" href="https://wa.me/79251448648" target="_blank" rel="noopener noreferrer">Узнать о щенках</a></div>`;
   dogDialog.showModal();
   dogDialog.scrollTop = 0;
 }));
@@ -114,7 +114,7 @@ const lightbox = document.querySelector('#lightbox');
 const showPhoto = index => {
   galleryIndex = (index + gallery.length) % gallery.length;
   const [src, title] = gallery[galleryIndex];
-  document.querySelector('#lightbox-image').src = `./assets/${src}`;
+  document.querySelector('#lightbox-image').src = `/assets/${src}`;
   document.querySelector('#lightbox-image').alt = title;
   document.querySelector('#lightbox-count').textContent = `${String(galleryIndex + 1).padStart(2, '0')} / ${String(gallery.length).padStart(2, '0')}`;
 };
@@ -133,10 +133,10 @@ lightbox.addEventListener('touchend', event => {
 }, {passive:true});
 // Keep links to the former home-page sections working after the move to pages.
 if (document.body.dataset.page === 'home') {
-  const legacyPages = {about:'about.html',dogs:'dogs.html',puppies:'puppies.html',moments:'moments.html'};
+  const legacyPages = {about:'/about/',dogs:'/dogs/',puppies:'/puppies/',moments:'/moments/'};
   const followLegacyLink = () => {
     const target = legacyPages[location.hash.slice(1)];
-    if (target) location.replace(new URL(target, location.href));
+    if (target) location.replace(target + location.search);
   };
   followLegacyLink();
   addEventListener('hashchange', followLegacyLink);
