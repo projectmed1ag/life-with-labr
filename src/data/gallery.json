@@ -1,0 +1,52 @@
+[
+  {
+    "id": "life-with-labr",
+    "title": "",
+    "text": "",
+    "date": null,
+    "photos": [
+      {
+        "src": "puppy-garden.jpg",
+        "alt": "Щенок лабрадора на зелёной траве",
+        "width": 1280,
+        "height": 853
+      },
+      {
+        "src": "puppy-profile-1.jpg",
+        "alt": "Щенок в выставочной стойке с хендлером",
+        "width": 1280,
+        "height": 853
+      },
+      {
+        "src": "puppy-portrait-2.jpg",
+        "alt": "Портрет палевого щенка с внимательным взглядом",
+        "width": 853,
+        "height": 1280
+      },
+      {
+        "src": "puppy-rest.jpg",
+        "alt": "Щенок отдыхает на зелёном столе",
+        "width": 1280,
+        "height": 853
+      },
+      {
+        "src": "puppy-portrait-1.jpg",
+        "alt": "Щенок сидит, внимательно глядя вперёд",
+        "width": 853,
+        "height": 1280
+      },
+      {
+        "src": "puppy-profile-2.jpg",
+        "alt": "Палевый щенок в стойке на открытом воздухе",
+        "width": 1280,
+        "height": 853
+      },
+      {
+        "src": "edel-together.jpg",
+        "alt": "Эдель рядом с женщиной на фоне гор",
+        "width": 1260,
+        "height": 839
+      }
+    ]
+  }
+]

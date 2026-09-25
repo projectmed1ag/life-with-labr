@@ -6,7 +6,7 @@ import {escapeHtml, litterRoute, renderLitterSlots, validateLitters} from './src
 
 const root = path.resolve('dist');
 const origin = 'https://lifewithlabr.ru';
-const mainRoutes = ['/','/about/','/dogs/','/puppies/','/moments/'];
+const mainRoutes = ['/','/about/','/dogs/','/puppies/','/gallery/'];
 const litters = JSON.parse(fs.readFileSync('src/data/litters.json', 'utf8'));
 validateLitters(litters);
 const russianRoutes = [...mainRoutes, ...litters.map(litterRoute)];
@@ -86,7 +86,7 @@ for (const [route, html] of pages) {
 }
 assert(!pages.get('/').includes('id="dogs"'), 'Home should link to independent content');
 assert.deepEqual([...new Set([...pages.get('/dogs/').matchAll(/data-dog="([^"]+)"/g)].map(match => match[1]))], ['edel','vanessa','mars','aria'], 'Four confirmed kennel dogs are displayed');
-assert.equal([...pages.get('/moments/').matchAll(/data-gallery="/g)].length, 7, 'Seven gallery photos retained');
+assert.equal([...pages.get('/gallery/').matchAll(/data-gallery="/g)].length, 7, 'Seven gallery photos retained');
 for (const litter of litters) {
   const html = pages.get(litterRoute(litter));
   assert(pages.get('/puppies/').includes(`href="${litterRoute(litter)}"`), 'Each litter has a catalogue link');

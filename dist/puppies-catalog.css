@@ -201,6 +201,16 @@
   .puppy-photo-dialog{padding:62px 16px 22px}
   .puppy-photo-prev,.puppy-photo-next{top:auto;bottom:16px}
 }
+.puppy-name-row{width:100%;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.puppy-name-row h3{min-width:0;overflow-wrap:anywhere}
+.puppy-name-row .puppy-price{margin:0 0 14px auto;font-family:var(--sans,Manrope,sans-serif);font-size:clamp(18px,1.8vw,24px);font-weight:500;color:var(--gold,#dec396);white-space:nowrap;font-variant-numeric:tabular-nums}
+.puppy-pictures{position:relative}
+.puppy-pictures>.puppy-status{position:absolute;top:28px;right:0;z-index:3;display:flex;align-items:center;gap:9px;max-width:calc(100% - 18px);padding:12px 20px;background:#e8d1a7;color:#172b24;font-size:12px;line-height:1.4;border-radius:3px 0 0 3px;box-shadow:0 4px 12px #172b2425}
+.puppy-pictures>.puppy-status::after{content:"";position:absolute;right:0;bottom:-7px;border-top:7px solid #98773e;border-right:8px solid transparent}
+.puppy-pictures>.puppy-status--available{background:#f4f1e9}
+.puppy-pictures>.puppy-status--home{background:#f4e4c5}
+.puppy-pictures>.puppy-status svg{flex-shrink:0}
+.pedigree-text{white-space:pre-wrap;line-height:1.8;padding-block:22px;max-width:75ch}
 @media(max-width:600px){
   .litter-parent-grid{grid-template-columns:minmax(0,1fr);gap:40px;max-width:480px}
   .litter-parent,.litter-parent:nth-child(even){--photo-angle:-.6deg}

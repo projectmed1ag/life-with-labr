@@ -13,3 +13,5 @@ dialog{border:0;padding:0}dialog::backdrop{background:#09150fbd;backdrop-filter:
 /* Fade the actual image boundary, so no cropped edge is exposed by the overlay. */
 .hero-image{-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 26%);mask-image:linear-gradient(90deg,transparent 0%,#000 26%)}
 @media(max-width:700px){.hero-image{-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 28%);mask-image:linear-gradient(180deg,transparent 0%,#000 28%)}}
+
+.gallery-post+.gallery-post{margin-top:72px;padding-top:48px;border-top:1px solid #172b2426}.gallery-post h2{font-size:clamp(30px,4vw,46px);margin-top:24px}.gallery-caption{white-space:pre-wrap;max-width:70ch;margin-top:12px}.gallery-post time{display:block;margin-top:10px;font-size:13px;color:#536259}.gallery-post .moments-grid:has(>.gallery-item:only-child){display:block}.gallery-post .gallery-item:only-child{max-width:820px;width:100%;height:auto;aspect-ratio:1.5}.gallery-post .gallery-item:only-child img{width:100%;height:100%;object-fit:cover}

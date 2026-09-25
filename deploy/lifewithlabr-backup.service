@@ -1,0 +1,6 @@
+[Unit]
+Description=Back up Life with Labr data and photos
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh /opt/lifewithlabr/current/deploy/backup.sh

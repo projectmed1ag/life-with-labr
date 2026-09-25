@@ -4,8 +4,9 @@ import {puppyContactUrl} from './puppy-contacts.mjs';
 export const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 export const litterRoute = litter => `/puppies/${litter.id}/`;
 const asset = filename => `/assets/${filename}`;
-const statusText = puppy => ({available:puppy.sex === 'female' ? 'Свободна' : 'Свободен',reserved:puppy.sex === 'female' ? 'Забронирована' : 'Забронирован',home:'Уже дома'}[puppy.status] || '');
-const status = puppy => puppy.status ? `<span class="puppy-status puppy-status--${puppy.status}">${statusText(puppy)}</span>` : '';
+const puppyKind = litter => litter.puppies.every(puppy=>puppy.color==='Палевый')?'Палевые щенки лабрадора-ретривера':'Щенки лабрадора-ретривера';
+const statusText = puppy => ({available:puppy.sex === 'female' ? 'Свободна' : 'Свободен',reserved:puppy.sex === 'female' ? 'Забронирована' : 'Забронирован',home:puppy.sex === 'female'?'Уехала в новую семью':'Уехал в новую семью'}[puppy.status] || '');
+const status = puppy => puppy.status ? `<span class="puppy-status puppy-status--${puppy.status}">${puppy.status==='home'?'<svg viewBox="0 0 36 30" width="32" height="28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 11C10 1 2 3 3 11c1 6 8 5 13 2m4-2c6-10 14-8 13 0-1 6-8 5-13 2M15 15 10 27l6-2 3 3 1-13m1 0 5 12 2-5 5 1-10-9"/><rect x="15" y="9" width="6" height="7" rx="2"/></svg>':''}${statusText(puppy)}</span>` : '';
 const date = value => new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(`${value}T12:00:00Z`));
 const price = value => value == null ? '' : `${new Intl.NumberFormat('ru-RU').format(value)} ₽`;
 const renderContactChoices = puppy => `<details class="puppy-contact" name="puppy-contact" data-puppy-inquiry="${puppy.id}">
@@ -40,7 +41,7 @@ export function renderLitterCatalog(litters) {
     return `<article class="litter-card" aria-labelledby="catalog-${litter.id}-title">
       <a class="litter-card-cover" href="${litterRoute(litter)}" aria-label="Смотреть помёт: ${escapeHtml(litter.title)}"><span class="litter-card-photo"><img src="${asset(cover.src)}" alt="${escapeHtml(cover.alt)}" width="${cover.width}" height="${cover.height}" loading="lazy"></span></a>
       <div class="litter-card-copy">
-        <p class="litter-card-intro">Палевые щенки лабрадора-ретривера от пары</p>
+        <p class="litter-card-intro">${puppyKind(litter)} от пары</p>
         <h2 id="catalog-${litter.id}-title"><a href="${litterRoute(litter)}">${escapeHtml(litter.title)}</a></h2>
         ${litter.birthDate ? `<p class="litter-date">Дата рождения: <time datetime="${litter.birthDate}">${date(litter.birthDate)}</time></p>` : ''}
         ${available || allHome ? `<span class="puppy-status${allHome ? ' puppy-status--home' : ''}">${allHome ? 'Все щенки уже дома' : 'Есть свободные щенки'}</span>` : ''}
@@ -54,14 +55,13 @@ function renderPuppy(puppy) {
   const photo = puppy.photos[0];
   const canInquire = puppy.status == null || puppy.status === 'available';
   return `<article class="puppy-entry" id="${puppy.id}">
-    <div class="puppy-pictures">
+    <div class="puppy-pictures">${status(puppy)}
       <a class="puppy-portrait" href="${asset(photo.src)}" data-puppy-photo="${puppy.id}" data-photo-index="0" aria-label="Смотреть фото: ${escapeHtml(puppy.name)}"><span class="album-photo-window"><img src="${asset(photo.src)}" alt="${escapeHtml(photo.alt)}" width="${photo.width}" height="${photo.height}" loading="lazy"></span><span class="puppy-photo-label">Смотреть фото<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/></svg></span></a>
       ${puppy.photos.length > 1 ? `<div class="puppy-thumbnails">${puppy.photos.map((item,index)=>`<a href="${asset(item.src)}" data-puppy-photo="${puppy.id}" data-photo-index="${index}" aria-label="Фото ${index+1}: ${escapeHtml(puppy.name)}"><img src="${asset(item.src)}" alt="" width="${item.width}" height="${item.height}" loading="lazy"></a>`).join('')}</div>` : ''}
     </div>
-    <div class="puppy-copy">${status(puppy)}<h3>${escapeHtml(puppy.name)}</h3>
+    <div class="puppy-copy"><div class="puppy-name-row"><h3>${escapeHtml(puppy.name)}</h3>${puppy.price != null ? `<p class="puppy-price">${price(puppy.price)}</p>` : ''}</div>
       <dl class="puppy-facts"><div><dt>Пол</dt><dd>${puppy.sex === 'female' ? 'Девочка' : 'Мальчик'}</dd></div><div><dt>Окрас</dt><dd>${escapeHtml(puppy.color)}</dd></div></dl>
       ${puppy.description ? `<p>${escapeHtml(puppy.description)}</p>` : ''}
-      ${puppy.price != null ? `<p class="puppy-price">${price(puppy.price)}</p>` : ''}
       ${canInquire ? renderContactChoices(puppy) : `<p class="puppy-inquiry-note">${puppy.status === 'home' ? 'Этот щенок уже нашёл свою семью.' : 'На этого щенка уже оформлена бронь.'}</p>`}
     </div>
   </article>`;
@@ -72,10 +72,12 @@ export function renderLitterSlots(litter) {
   const boys = litter.puppies.filter(puppy => puppy.sex === 'male');
   return {
     litterTitle:escapeHtml(litter.title),
+    litterSubtitle:puppyKind(litter),
+    litterDescription:litter.description?`<p>${escapeHtml(litter.description)}</p>`:'',
     litterDate:litter.birthDate ? `<p class="litter-date">Дата рождения: <time datetime="${litter.birthDate}">${date(litter.birthDate)}</time></p>` : '',
-    parents:litter.parents.map(parent => `<article class="litter-parent"><button class="parent-photo" data-dog="${parent.id}" aria-label="Открыть профиль: ${escapeHtml(parent.name)}"><span class="album-photo-window"><img src="${asset(parent.image)}" alt="${escapeHtml(parent.name)} в выставочной стойке" width="${parent.width}" height="${parent.height}" loading="lazy"></span></button><div class="parent-copy"><h3>${escapeHtml(parent.name)}<span class="parent-role">${escapeHtml(parent.role)}</span></h3>${parent.kennel ? `<p class="parent-kennel"><span>Питомник происхождения</span><strong>${escapeHtml(parent.kennel)}</strong></p>` : ''}<p>${escapeHtml(parent.description)}</p><button class="parent-details" data-dog="${parent.id}"><span>Достижения и родословная</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button></div></article>`).join(''),
+    parents:litter.parents.map(parent => `<article class="litter-parent"><button class="parent-photo" data-dog="${parent.id}" aria-label="Открыть профиль: ${escapeHtml(parent.name)}"><span class="album-photo-window"><img src="${asset(parent.image)}" alt="${escapeHtml(parent.name)}" width="${parent.width}" height="${parent.height}" loading="lazy"></span></button><div class="parent-copy"><h3>${escapeHtml(parent.name)}<span class="parent-role">${escapeHtml(parent.role)}</span></h3>${parent.kennel ? `<p class="parent-kennel"><span>Питомник происхождения</span><strong>${escapeHtml(parent.kennel)}</strong></p>` : ''}<p>${escapeHtml(parent.description)}</p><button class="parent-details" data-dog="${parent.id}"><span>Достижения и родословная</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button></div></article>`).join(''),
     puppyGroups:[[boys,'Мальчики'],[girls,'Девочки']].filter(([puppies])=>puppies.length).map(([puppies,title])=>`<section class="puppy-group" aria-label="${title}"><h2>${title}</h2><div class="puppy-grid">${puppies.map(renderPuppy).join('')}</div></section>`).join(''),
     litterPedigree:litter.parents.map((parent,index)=>`<details class="litter-pedigree-branch"${index === 0 ? ' open' : ''}><summary><span class="lineage-summary-name">${escapeHtml(parent.role)} — ${escapeHtml(parent.name)}${parent.kennel ? `<small>${escapeHtml(parent.kennel)}</small>` : ''}</span><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="pedigree" data-pedigree-dog="${parent.id}"></div></details>`).join(''),
-    puppyData:JSON.stringify({title:litter.title,puppies:litter.puppies}).replaceAll('<','\\u003c')
+    puppyData:JSON.stringify({title:litter.title,parents:litter.parents,puppies:litter.puppies}).replaceAll('<','\\u003c')
   };
 }

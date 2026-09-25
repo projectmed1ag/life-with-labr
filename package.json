@@ -1,0 +1,19 @@
+{
+  "name": "life-with-labr",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.4.0"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node check.mjs",
+    "start": "node cms/server.mjs",
+    "test": "node --test cms/test/*.test.mjs",
+    "admin:init": "node cms/init-admin.mjs"
+  },
+  "dependencies": {
+    "sharp": "0.35.4"
+  },
+  "packageManager": "pnpm@11.19.0"
+}

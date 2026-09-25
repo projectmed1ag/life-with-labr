@@ -1,0 +1,525 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-25T11:41:43.724Z",
+  "title": "Design System: Life with Labr",
+  "extensions": {
+    "colorMeta": {
+      "forest": {
+        "role": "primary",
+        "displayName": "Forest",
+        "tonalRamp": [
+          "oklch(15% 0.0293 169.82)",
+          "oklch(26.43% 0.0293 169.82)",
+          "oklch(37.86% 0.0293 169.82)",
+          "oklch(49.29% 0.0293 169.82)",
+          "oklch(60.71% 0.0293 169.82)",
+          "oklch(72.14% 0.0293 169.82)",
+          "oklch(83.57% 0.0293 169.82)",
+          "oklch(95% 0.0293 169.82)"
+        ]
+      },
+      "forest-hover-public": {
+        "role": "primary",
+        "displayName": "Public forest hover",
+        "tonalRamp": [
+          "oklch(15% 0.0358 164.02)",
+          "oklch(26.43% 0.0358 164.02)",
+          "oklch(37.86% 0.0358 164.02)",
+          "oklch(49.29% 0.0358 164.02)",
+          "oklch(60.71% 0.0358 164.02)",
+          "oklch(72.14% 0.0358 164.02)",
+          "oklch(83.57% 0.0358 164.02)",
+          "oklch(95% 0.0358 164.02)"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "Cream paper",
+        "tonalRamp": [
+          "oklch(15% 0.0111 89.72)",
+          "oklch(26.43% 0.0111 89.72)",
+          "oklch(37.86% 0.0111 89.72)",
+          "oklch(49.29% 0.0111 89.72)",
+          "oklch(60.71% 0.0111 89.72)",
+          "oklch(72.14% 0.0111 89.72)",
+          "oklch(83.57% 0.0111 89.72)",
+          "oklch(95% 0.0111 89.72)"
+        ]
+      },
+      "gold": {
+        "role": "secondary",
+        "displayName": "Warm gold",
+        "tonalRamp": [
+          "oklch(15% 0.0668 80.27)",
+          "oklch(26.43% 0.0668 80.27)",
+          "oklch(37.86% 0.0668 80.27)",
+          "oklch(49.29% 0.0668 80.27)",
+          "oklch(60.71% 0.0668 80.27)",
+          "oklch(72.14% 0.0668 80.27)",
+          "oklch(83.57% 0.0668 80.27)",
+          "oklch(95% 0.0668 80.27)"
+        ]
+      },
+      "public-ink": {
+        "role": "neutral",
+        "displayName": "Public green ink",
+        "tonalRamp": [
+          "oklch(15% 0.0341 162.04)",
+          "oklch(26.43% 0.0341 162.04)",
+          "oklch(37.86% 0.0341 162.04)",
+          "oklch(49.29% 0.0341 162.04)",
+          "oklch(60.71% 0.0341 162.04)",
+          "oklch(72.14% 0.0341 162.04)",
+          "oklch(83.57% 0.0341 162.04)",
+          "oklch(95% 0.0341 162.04)"
+        ]
+      },
+      "public-muted": {
+        "role": "neutral",
+        "displayName": "Public muted olive",
+        "tonalRamp": [
+          "oklch(15% 0.0163 128.79)",
+          "oklch(26.43% 0.0163 128.79)",
+          "oklch(37.86% 0.0163 128.79)",
+          "oklch(49.29% 0.0163 128.79)",
+          "oklch(60.71% 0.0163 128.79)",
+          "oklch(72.14% 0.0163 128.79)",
+          "oklch(83.57% 0.0163 128.79)",
+          "oklch(95% 0.0163 128.79)"
+        ]
+      },
+      "public-panel-muted": {
+        "role": "neutral",
+        "displayName": "Light olive panel text",
+        "tonalRamp": [
+          "oklch(15% 0.0155 123.07)",
+          "oklch(26.43% 0.0155 123.07)",
+          "oklch(37.86% 0.0155 123.07)",
+          "oklch(49.29% 0.0155 123.07)",
+          "oklch(60.71% 0.0155 123.07)",
+          "oklch(72.14% 0.0155 123.07)",
+          "oklch(83.57% 0.0155 123.07)",
+          "oklch(95% 0.0155 123.07)"
+        ]
+      },
+      "public-line": {
+        "role": "neutral",
+        "displayName": "Public divider",
+        "tonalRamp": [
+          "oklch(15% 0.0341 162.04 / 0.2)",
+          "oklch(26.43% 0.0341 162.04 / 0.2)",
+          "oklch(37.86% 0.0341 162.04 / 0.2)",
+          "oklch(49.29% 0.0341 162.04 / 0.2)",
+          "oklch(60.71% 0.0341 162.04 / 0.2)",
+          "oklch(72.14% 0.0341 162.04 / 0.2)",
+          "oklch(83.57% 0.0341 162.04 / 0.2)",
+          "oklch(95% 0.0341 162.04 / 0.2)"
+        ]
+      },
+      "ribbon-reserved": {
+        "role": "secondary",
+        "displayName": "Reserved ribbon",
+        "tonalRamp": [
+          "oklch(15% 0.0609 82.49)",
+          "oklch(26.43% 0.0609 82.49)",
+          "oklch(37.86% 0.0609 82.49)",
+          "oklch(49.29% 0.0609 82.49)",
+          "oklch(60.71% 0.0609 82.49)",
+          "oklch(72.14% 0.0609 82.49)",
+          "oklch(83.57% 0.0609 82.49)",
+          "oklch(95% 0.0609 82.49)"
+        ]
+      },
+      "ribbon-home": {
+        "role": "secondary",
+        "displayName": "New-family ribbon",
+        "tonalRamp": [
+          "oklch(15% 0.0444 83.91)",
+          "oklch(26.43% 0.0444 83.91)",
+          "oklch(37.86% 0.0444 83.91)",
+          "oklch(49.29% 0.0444 83.91)",
+          "oklch(60.71% 0.0444 83.91)",
+          "oklch(72.14% 0.0444 83.91)",
+          "oklch(83.57% 0.0444 83.91)",
+          "oklch(95% 0.0444 83.91)"
+        ]
+      },
+      "admin-muted": {
+        "role": "neutral",
+        "displayName": "Admin muted green",
+        "tonalRamp": [
+          "oklch(15% 0.0233 159.07)",
+          "oklch(26.43% 0.0233 159.07)",
+          "oklch(37.86% 0.0233 159.07)",
+          "oklch(49.29% 0.0233 159.07)",
+          "oklch(60.71% 0.0233 159.07)",
+          "oklch(72.14% 0.0233 159.07)",
+          "oklch(83.57% 0.0233 159.07)",
+          "oklch(95% 0.0233 159.07)"
+        ]
+      },
+      "admin-line": {
+        "role": "neutral",
+        "displayName": "Admin divider",
+        "tonalRamp": [
+          "oklch(15% 0.0140 120.32)",
+          "oklch(26.43% 0.0140 120.32)",
+          "oklch(37.86% 0.0140 120.32)",
+          "oklch(49.29% 0.0140 120.32)",
+          "oklch(60.71% 0.0140 120.32)",
+          "oklch(72.14% 0.0140 120.32)",
+          "oklch(83.57% 0.0140 120.32)",
+          "oklch(95% 0.0140 120.32)"
+        ]
+      },
+      "admin-input": {
+        "role": "neutral",
+        "displayName": "Admin field paper",
+        "tonalRamp": [
+          "oklch(15% 0.0054 95.10)",
+          "oklch(26.43% 0.0054 95.10)",
+          "oklch(37.86% 0.0054 95.10)",
+          "oklch(49.29% 0.0054 95.10)",
+          "oklch(60.71% 0.0054 95.10)",
+          "oklch(72.14% 0.0054 95.10)",
+          "oklch(83.57% 0.0054 95.10)",
+          "oklch(95% 0.0054 95.10)"
+        ]
+      },
+      "admin-primary-text": {
+        "role": "neutral",
+        "displayName": "Admin primary light text",
+        "tonalRamp": [
+          "oklch(15% 0.0069 88.64)",
+          "oklch(26.43% 0.0069 88.64)",
+          "oklch(37.86% 0.0069 88.64)",
+          "oklch(49.29% 0.0069 88.64)",
+          "oklch(60.71% 0.0069 88.64)",
+          "oklch(72.14% 0.0069 88.64)",
+          "oklch(83.57% 0.0069 88.64)",
+          "oklch(95% 0.0069 88.64)"
+        ]
+      },
+      "admin-hover": {
+        "role": "neutral",
+        "displayName": "Admin primary hover",
+        "tonalRamp": [
+          "oklch(15% 0.0407 161.09)",
+          "oklch(26.43% 0.0407 161.09)",
+          "oklch(37.86% 0.0407 161.09)",
+          "oklch(49.29% 0.0407 161.09)",
+          "oklch(60.71% 0.0407 161.09)",
+          "oklch(72.14% 0.0407 161.09)",
+          "oklch(83.57% 0.0407 161.09)",
+          "oklch(95% 0.0407 161.09)"
+        ]
+      },
+      "admin-quiet-hover": {
+        "role": "neutral",
+        "displayName": "Admin quiet hover",
+        "tonalRamp": [
+          "oklch(15% 0.0127 126.38)",
+          "oklch(26.43% 0.0127 126.38)",
+          "oklch(37.86% 0.0127 126.38)",
+          "oklch(49.29% 0.0127 126.38)",
+          "oklch(60.71% 0.0127 126.38)",
+          "oklch(72.14% 0.0127 126.38)",
+          "oklch(83.57% 0.0127 126.38)",
+          "oklch(95% 0.0127 126.38)"
+        ]
+      },
+      "admin-selected": {
+        "role": "neutral",
+        "displayName": "Admin selected navigation",
+        "tonalRamp": [
+          "oklch(15% 0.0177 131.88)",
+          "oklch(26.43% 0.0177 131.88)",
+          "oklch(37.86% 0.0177 131.88)",
+          "oklch(49.29% 0.0177 131.88)",
+          "oklch(60.71% 0.0177 131.88)",
+          "oklch(72.14% 0.0177 131.88)",
+          "oklch(83.57% 0.0177 131.88)",
+          "oklch(95% 0.0177 131.88)"
+        ]
+      },
+      "admin-state-draft": {
+        "role": "neutral",
+        "displayName": "Draft tag",
+        "tonalRamp": [
+          "oklch(15% 0.0397 86.06)",
+          "oklch(26.43% 0.0397 86.06)",
+          "oklch(37.86% 0.0397 86.06)",
+          "oklch(49.29% 0.0397 86.06)",
+          "oklch(60.71% 0.0397 86.06)",
+          "oklch(72.14% 0.0397 86.06)",
+          "oklch(83.57% 0.0397 86.06)",
+          "oklch(95% 0.0397 86.06)"
+        ]
+      },
+      "admin-state-draft-text": {
+        "role": "neutral",
+        "displayName": "Draft tag text",
+        "tonalRamp": [
+          "oklch(15% 0.0755 75.19)",
+          "oklch(26.43% 0.0755 75.19)",
+          "oklch(37.86% 0.0755 75.19)",
+          "oklch(49.29% 0.0755 75.19)",
+          "oklch(60.71% 0.0755 75.19)",
+          "oklch(72.14% 0.0755 75.19)",
+          "oklch(83.57% 0.0755 75.19)",
+          "oklch(95% 0.0755 75.19)"
+        ]
+      },
+      "admin-state-live": {
+        "role": "neutral",
+        "displayName": "Published tag",
+        "tonalRamp": [
+          "oklch(15% 0.0210 134.09)",
+          "oklch(26.43% 0.0210 134.09)",
+          "oklch(37.86% 0.0210 134.09)",
+          "oklch(49.29% 0.0210 134.09)",
+          "oklch(60.71% 0.0210 134.09)",
+          "oklch(72.14% 0.0210 134.09)",
+          "oklch(83.57% 0.0210 134.09)",
+          "oklch(95% 0.0210 134.09)"
+        ]
+      },
+      "admin-state-live-text": {
+        "role": "neutral",
+        "displayName": "Published tag text",
+        "tonalRamp": [
+          "oklch(15% 0.0558 144.39)",
+          "oklch(26.43% 0.0558 144.39)",
+          "oklch(37.86% 0.0558 144.39)",
+          "oklch(49.29% 0.0558 144.39)",
+          "oklch(60.71% 0.0558 144.39)",
+          "oklch(72.14% 0.0558 144.39)",
+          "oklch(83.57% 0.0558 144.39)",
+          "oklch(95% 0.0558 144.39)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display-public": {
+        "displayName": "Public catalogue display",
+        "purpose": "Catalogue title; other public surfaces preserve their documented ramps."
+      },
+      "title-puppy": {
+        "displayName": "Puppy name",
+        "purpose": "Serif name within the public green puppy panel."
+      },
+      "body-public": {
+        "displayName": "Public body",
+        "purpose": "General reading copy; compact card details use their recorded 14px variant."
+      },
+      "action-public": {
+        "displayName": "Public serif CTA",
+        "purpose": "Canonical public gold gradient button."
+      },
+      "price": {
+        "displayName": "Puppy price",
+        "purpose": "Right-aligned amount with tabular numerals and nowrap."
+      },
+      "heading-admin": {
+        "displayName": "Admin heading",
+        "purpose": "Operational page heading."
+      },
+      "body-admin": {
+        "displayName": "Admin body",
+        "purpose": "Editor reading text."
+      },
+      "label-admin": {
+        "displayName": "Admin label",
+        "purpose": "Persistent labels above editable fields."
+      }
+    },
+    "shadows": [
+      {
+        "name": "album-photograph",
+        "value": "0 18px 42px #172b2420",
+        "purpose": "Public catalogue, parent, and puppy frames."
+      },
+      {
+        "name": "album-photograph-mobile",
+        "value": "0 8px 22px #172b241a",
+        "purpose": "Stacked catalogue card at 700px and below."
+      },
+      {
+        "name": "status-ribbon",
+        "value": "0 4px 12px #172b2425",
+        "purpose": "Availability ribbon over puppy photograph."
+      },
+      {
+        "name": "admin-notice",
+        "value": "0 8px 28px #172b2430",
+        "purpose": "Transient admin operation feedback."
+      }
+    ],
+    "motion": [
+      {
+        "name": "album-ease",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Public album transforms and control movement."
+      },
+      {
+        "name": "album-frame-transition",
+        "value": ".55s",
+        "purpose": "Parent and puppy image/frame interaction."
+      },
+      {
+        "name": "album-settle",
+        "value": ".75s",
+        "purpose": "Puppy presentation animation, only without reduced-motion preference."
+      },
+      {
+        "name": "admin-control-transition",
+        "value": ".16s",
+        "purpose": "Admin background and text color transition; disabled with reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "public-puppy-two-columns",
+        "value": "1000px"
+      },
+      {
+        "name": "public-intro-stacked",
+        "value": "900px"
+      },
+      {
+        "name": "public-header-mobile",
+        "value": "760px"
+      },
+      {
+        "name": "public-catalogue-stacked",
+        "value": "700px"
+      },
+      {
+        "name": "public-litter-single-column",
+        "value": "600px"
+      },
+      {
+        "name": "admin-navigation-strip",
+        "value": "850px"
+      },
+      {
+        "name": "admin-single-column-fields",
+        "value": "600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Public gold action",
+      "kind": "button",
+      "refersTo": "button-public",
+      "description": "Existing gradient CTA from pages.css, with catalogue/litter interaction states.",
+      "html": "<button class=\"ds-public-button\">Смотреть весь помёт <svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.4\" aria-hidden=\"true\"><path d=\"M4 12h15m-6-6 6 6-6 6\"/></svg></button>",
+      "css": ".ds-public-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:15px 22px;border:1px solid #ecd2a6;border-radius:12px;background:linear-gradient(110deg,#d9bc88,#e3cba3 55%,#d9bc88);color:var(--green,#172b24);box-shadow:inset 0 1px 0 #fff5;font:500 22px/1.2 var(--serif,\"Cormorant Garamond\",Georgia,serif);text-align:center;cursor:pointer;transition:background .2s,border-color .2s,box-shadow .2s,transform .16s cubic-bezier(.16,1,.3,1)}.ds-public-button:hover{background:linear-gradient(110deg,#e5cca2,#efdbb8 55%,#e5cca2);border-color:#f2dfbd;box-shadow:inset 0 1px 0 #fff7,0 5px 18px #10241c12}.ds-public-button:focus-visible{outline:2px solid #ad7a35;outline-offset:6px}.ds-public-button:active{transform:scale(.98)}@media(prefers-reduced-motion:reduce){.ds-public-button:active{transform:none}}"
+    },
+    {
+      "name": "Admin primary action",
+      "kind": "button",
+      "refersTo": "button-admin-primary",
+      "description": "Publish, create, and other primary owner actions.",
+      "html": "<button class=\"ds-admin-primary\">Опубликовать</button>",
+      "css": ".ds-admin-primary{font:15px Manrope,system-ui,sans-serif;cursor:pointer;border:1px solid #7c8a80;border-radius:8px;padding:11px 18px;min-height:44px;transition:background .16s,color .16s;background:var(--green,#172b24);border-color:var(--green,#172b24);color:#fffdf8}.ds-admin-primary:hover{background:#304b3d}.ds-admin-primary:focus-visible{outline:3px solid #ae7025;outline-offset:3px}.ds-admin-primary:disabled{cursor:wait;opacity:.55}@media(prefers-reduced-motion:reduce){.ds-admin-primary{transition:none}}"
+    },
+    {
+      "name": "Admin secondary action",
+      "kind": "button",
+      "refersTo": "button-admin-secondary",
+      "description": "Save draft and ordinary editor actions.",
+      "html": "<button class=\"ds-admin-secondary\">Сохранить черновик</button>",
+      "css": ".ds-admin-secondary{font:15px Manrope,system-ui,sans-serif;cursor:pointer;border:1px solid #7c8a80;border-radius:8px;padding:11px 18px;min-height:44px;transition:background .16s,color .16s;background:transparent;color:var(--green,#172b24)}.ds-admin-secondary:hover{background:#e4e8df}.ds-admin-secondary:focus-visible{outline:3px solid #ae7025;outline-offset:3px}.ds-admin-secondary:disabled{cursor:wait;opacity:.55}@media(prefers-reduced-motion:reduce){.ds-admin-secondary{transition:none}}"
+    },
+    {
+      "name": "Admin quiet action",
+      "kind": "button",
+      "refersTo": "button-admin-quiet",
+      "description": "Low-emphasis archive and supporting editor actions.",
+      "html": "<button class=\"ds-admin-quiet\">Архив</button>",
+      "css": ".ds-admin-quiet{font:15px Manrope,system-ui,sans-serif;cursor:pointer;border:1px solid #7c8a80;border-radius:8px;padding:11px 18px;min-height:44px;transition:background .16s,color .16s;border-color:transparent;padding:9px 12px;background:transparent;color:var(--green,#172b24)}.ds-admin-quiet:hover{background:#e4e8df}.ds-admin-quiet:focus-visible{outline:3px solid #ae7025;outline-offset:3px}.ds-admin-quiet:disabled{cursor:wait;opacity:.55}@media(prefers-reduced-motion:reduce){.ds-admin-quiet{transition:none}}"
+    },
+    {
+      "name": "Admin labelled field",
+      "kind": "input",
+      "refersTo": "input-admin",
+      "description": "Visible field label with the actual editor border, surface, and focus treatment.",
+      "html": "<label class=\"ds-field\">Кличка<input class=\"ds-input\" type=\"text\" placeholder=\"Кличка щенка\"></label>",
+      "css": ".ds-field{display:grid;gap:8px;font:550 14px Manrope,system-ui,sans-serif;color:#172b24}.ds-input{width:100%;min-width:0;min-height:46px;padding:12px;border:1px solid #9da79c;border-radius:6px;background:#fffefa;color:#172b24;font:15px Manrope,system-ui,sans-serif;caret-color:#172b24}.ds-input::placeholder{color:#667268}.ds-input:focus-visible{outline:3px solid #ae7025;outline-offset:3px}"
+    },
+    {
+      "name": "Public navigation",
+      "kind": "nav",
+      "description": "Current page and hover share the public gold underline on the forest header.",
+      "html": "<nav class=\"ds-public-nav\" aria-label=\"Пример публичной навигации\"><a class=\"ds-public-nav-link\" href=\"#puppies\" aria-current=\"page\">Щенки</a><a class=\"ds-public-nav-link\" href=\"#gallery\">Галерея</a></nav>",
+      "css": ".ds-public-nav{display:flex;justify-content:center;gap:clamp(30px,4vw,70px);min-height:72px;border-top:1px solid #dec39640;background:var(--green,#172b24);color:var(--cream,#f4f1e9);font:500 17px var(--sans,Manrope,Arial,sans-serif);letter-spacing:.015em}.ds-public-nav-link{position:relative;display:flex;align-items:center;min-height:54px;padding:12px 0;color:inherit;text-decoration:none;white-space:nowrap}.ds-public-nav-link::after{content:\"\";position:absolute;bottom:12px;left:0;width:100%;height:1px;background:var(--gold,#dec396);transform:scaleX(0);transform-origin:left;transition:transform .35s}.ds-public-nav-link[aria-current]{color:var(--gold,#dec396)}.ds-public-nav-link:hover::after,.ds-public-nav-link[aria-current]::after{transform:scaleX(1)}.ds-public-nav-link:focus-visible{outline:2px solid #ad7a35;outline-offset:6px}"
+    },
+    {
+      "name": "Admin navigation",
+      "kind": "nav",
+      "description": "Selected section fill; the production sidebar becomes a horizontal strip at 850px.",
+      "html": "<nav class=\"ds-admin-nav\" aria-label=\"Пример разделов админки\"><button class=\"ds-admin-nav-button\" aria-current=\"page\">Помёты и щенки</button><button class=\"ds-admin-nav-button\">Галерея</button></nav>",
+      "css": ".ds-admin-nav{display:grid;gap:8px;background:#f4f1e9;padding:12px;max-width:230px}.ds-admin-nav-button{font:15px Manrope,system-ui,sans-serif;cursor:pointer;border:1px solid #7c8a80;border-radius:8px;padding:11px 18px;min-height:44px;transition:background .16s,color .16s;border:0;text-align:left;background:transparent;color:#172b24}.ds-admin-nav-button[aria-current]{background:#dfe6da;font-weight:650}.ds-admin-nav-button:hover{background:#e4e8df}.ds-admin-nav-button:focus-visible{outline:3px solid #ae7025;outline-offset:3px}@media(prefers-reduced-motion:reduce){.ds-admin-nav-button{transition:none}}"
+    },
+    {
+      "name": "Publication state tags",
+      "kind": "chip",
+      "refersTo": "state-admin-draft",
+      "description": "Administrative publication state, separate from public puppy availability.",
+      "html": "<span class=\"ds-state\">Черновик</span> <span class=\"ds-state ds-state-live\">Опубликовано</span>",
+      "css": ".ds-state{display:inline-block;padding:5px 9px;border-radius:4px;background:#ede0c4;color:#715223;font:12px Manrope,system-ui,sans-serif}.ds-state-live{background:#dfe8da;color:#304b30}"
+    },
+    {
+      "name": "Puppy name and price panel",
+      "kind": "card",
+      "refersTo": "puppy-panel",
+      "description": "Structural excerpt of the public puppy panel; placeholder labels are documentation samples, not inventory data.",
+      "html": "<section class=\"ds-puppy-panel\"><div class=\"ds-puppy-name-row\"><h3 class=\"ds-puppy-name\">Кличка</h3><p class=\"ds-puppy-price\">Цена, ₽</p></div><p class=\"ds-puppy-description\">Описание щенка</p></section>",
+      "css": ".ds-puppy-panel{display:flex;flex-direction:column;align-items:flex-start;padding:56px 26px 26px;background:var(--green,#172b24);color:var(--cream,#f4f1e9);border-radius:0 0 16px 16px}.ds-puppy-name-row{width:100%;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}.ds-puppy-name{margin:0;min-width:0;overflow-wrap:anywhere;font:400 46px/1.1 var(--serif,\"Cormorant Garamond\",Georgia,serif)}.ds-puppy-price{margin:0 0 14px auto;font:500 clamp(18px,1.8vw,24px) var(--sans,Manrope,Arial,sans-serif);color:var(--gold,#dec396);white-space:nowrap;font-variant-numeric:tabular-nums}.ds-puppy-description{margin:0 0 16px;max-width:44ch;color:#d2d6cb;font:14px/1.8 var(--sans,Manrope,Arial,sans-serif)}@media(max-width:700px){.ds-puppy-panel{padding:52px 22px 22px}.ds-puppy-name{font-size:40px}}"
+    },
+    {
+      "name": "New-family status ribbon",
+      "kind": "custom",
+      "description": "Ribbon-and-bow excerpt that sits at the upper right of an actual puppy photograph.",
+      "html": "<span class=\"ds-home-ribbon\"><svg viewBox=\"0 0 36 30\" width=\"32\" height=\"28\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M16 11C10 1 2 3 3 11c1 6 8 5 13 2m4-2c6-10 14-8 13 0-1 6-8 5-13 2M15 15 10 27l6-2 3 3 1-13m1 0 5 12 2-5 5 1-10-9\"/><rect x=\"15\" y=\"9\" width=\"6\" height=\"7\" rx=\"2\"/></svg>Уехал в новую семью</span>",
+      "css": ".ds-home-ribbon{position:relative;display:inline-flex;align-items:center;gap:9px;max-width:calc(100% - 18px);padding:12px 20px;background:#f4e4c5;color:#172b24;font:12px/1.4 var(--sans,Manrope,Arial,sans-serif);border-radius:3px 0 0 3px;box-shadow:0 4px 12px #172b2425}.ds-home-ribbon::after{content:\"\";position:absolute;right:0;bottom:-7px;border-top:7px solid #98773e;border-right:8px solid transparent}.ds-home-ribbon svg{flex-shrink:0}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Family Photo Album",
+    "overview": "This name describes the existing, user-approved public style; it does not introduce a new identity. Cream paper, forest-green panels, warm gold actions, expressive serif headings, and real kennel photography make the public site feel personal and composed. Slightly tilted photograph frames overlap their accompanying text panels.\n\nThe owner editor uses the same cream and green foundation with Manrope text, visible field labels, simple rows, and explicit actions. It is a quieter application of the identity. Album composition and decorative photography belong to the public presentation, while operational layout is recorded in [.impeccable/surfaces/admin.md](.impeccable/surfaces/admin.md).\n\nThis is a source scan of the shipped extension: `dist/style.css`, `pages.css`, `fonts.css`, `brand.css`, `header.css`, `home.css`, `puppies-catalog.css`, `src/render-litters.mjs`, and `cms/public/{index.html,admin.css,admin.js}`. The frontmatter records extracted values; component CSS in `.impeccable/design.json` preserves details the token schema cannot express. Sidecar tonal ramps are generated palette previews, not additional production color tokens. Existing public brand artwork remains the visual authority.",
+    "keyCharacteristics": [
+      "Real photographs in light album frames, with green copy panels.",
+      "Cormorant Garamond for public display and Manrope for readable detail.",
+      "Warm gold for public actions, emphasis, prices, and selected status treatments.",
+      "A calm, plainly labelled admin with lists, fields, and publication state."
+    ],
+    "rules": [
+      {
+        "name": "The Surface Context Rule",
+        "body": "Preserve the distinction between public gold actions and admin forest actions; a shared palette does not make their button treatments interchangeable.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reading Roles Rule",
+        "body": "Public serif expression belongs to headings and established CTAs; admin forms and working headings retain Manrope.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "**Do** preserve the approved cream, forest, gold, real-photography, and serif/sans pairing.",
+      "**Do** apply public and admin component variants in their documented surface context.",
+      "**Do** keep the puppy name row full width and allow the name to wrap while the price stays right-aligned.",
+      "**Do** show publication and availability state with explicit text, including on mobile.",
+      "**Do** preserve visible keyboard focus and the existing reduced-motion behavior."
+    ],
+    "donts": [
+      "**Don't** carry album tilts, display typography, or decorative photo overlap into the owner editor.",
+      "**Don't** invent prices, availability, or decorative status claims when data is absent.",
+      "**Don't** show an inquiry action for a reserved puppy or one already with a new family.",
+      "**Don't** replace the established brand artwork or real puppy photography as part of an ordinary extension."
+    ]
+  }
+}

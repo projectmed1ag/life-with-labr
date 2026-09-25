@@ -157,30 +157,39 @@ const dogs = {
   }
 };
 const dogDialog = document.querySelector('#dog-dialog');
+const escapeContent=value=>String(value||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const litterParents=JSON.parse(document.querySelector('#litter-data')?.textContent||'{}').parents||[];
+for(const parent of litterParents){
+  const previous=dogs[parent.id];
+  dogs[parent.id]={...previous,name:escapeContent(parent.name),image:parent.image,label:escapeContent(parent.role),intro:escapeContent(parent.description),facts:previous?.facts||[['Питомник',escapeContent(parent.kennel)]],titles:previous?.titles||[],pedigree:previous?.pedigree};
+}
+
 document.querySelectorAll('[data-pedigree-dog]').forEach(container => {
   const dog = dogs[container.dataset.pedigreeDog];
-  if (dog?.pedigree) container.innerHTML = localize(renderPedigree(dog.pedigree));
+  const parent=litterParents.find(parent=>parent.id===container.dataset.pedigreeDog);
+  if(parent?.pedigree) {container.textContent=parent.pedigree;container.classList.add('pedigree-text');}
+  else if(dog?.pedigree) container.innerHTML=localize(renderPedigree(dog.pedigree));
+  else container.closest('details')?.remove();
 });
 document.querySelectorAll('[data-dog]').forEach(button => button.addEventListener('click', () => {
   const dog = dogs[button.dataset.dog];
+  if(!dog) return;
   dogDialog.dataset.dog = button.dataset.dog;
   document.querySelector('#dog-dialog-content').innerHTML = localize(`<div class="profile-cover${dog.portrait ? ' profile-cover--portrait' : ''}"><img src="/assets/${dog.image}" alt="${dog.name}"></div><div class="profile-body"><p class="eyebrow">${dog.label}</p><h2 id="dog-dialog-title">${dog.name}</h2><p class="profile-intro">${dog.intro}</p><dl class="profile-facts">${dog.facts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl><details open><summary>Достижения <span aria-hidden="true">+</span></summary><div class="title-list">${dog.titles.map(([title, description]) => `<div><h4>${title}</h4><p>${description}</p></div>`).join('')}</div></details>${dog.health ? `<details><summary>Тесты здоровья <span aria-hidden="true">+</span></summary><dl class="health-list">${dog.health.map(([title, value]) => `<div><dt>${title}</dt><dd>${value}</dd></div>`).join('')}</dl></details>` : ''}${dog.pedigree ? `<details><summary>${dog.pedigreeTitle || (button.dataset.dog === 'edel' ? 'Родословная · 3 поколения' : 'Происхождение')} <span aria-hidden="true">+</span></summary><div class="pedigree">${renderPedigree(dog.pedigree)}</div></details>` : ''}<a class="button button-dark" href="https://wa.me/79251448648" target="_blank" rel="noopener noreferrer">Узнать о щенках</a></div>`);
+  const parent=litterParents.find(parent=>parent.id===button.dataset.dog);
+  if(parent?.pedigree){const detail=document.createElement('p');detail.className='pedigree-text';detail.textContent=parent.pedigree;dogDialog.querySelector('.profile-body').append(detail);}
   dogDialog.showModal();
   dogDialog.scrollTop = 0;
 }));
 
-const gallery = [
-  ['puppy-garden.jpg', 'Палевый щенок на траве'], ['puppy-profile-1.jpg', 'Щенок лабрадора в стойке'],
-  ['puppy-portrait-2.jpg', 'Портрет палевого щенка'], ['puppy-rest.jpg', 'Щенок лежит на зелёном столе'],
-  ['puppy-portrait-1.jpg', 'Палевый щенок сидит на столе'], ['puppy-profile-2.jpg', 'Щенок в стойке на открытом воздухе'],
-  ['edel-together.jpg', 'Эдель рядом с женщиной на фоне гор']
-];
+const gallery=[...document.querySelectorAll('[data-gallery]')].map(button=>{const img=button.querySelector('img');return [img.getAttribute('src'),img.alt];});
 let galleryIndex = 0;
 const lightbox = document.querySelector('#lightbox');
 const showPhoto = index => {
+  if(!gallery.length) return;
   galleryIndex = (index + gallery.length) % gallery.length;
   const [src, title] = gallery[galleryIndex];
-  document.querySelector('#lightbox-image').src = `/assets/${src}`;
+  document.querySelector('#lightbox-image').src = src;
   document.querySelector('#lightbox-image').alt = t(title);
   document.querySelector('#lightbox-count').textContent = `${String(galleryIndex + 1).padStart(2, '0')} / ${String(gallery.length).padStart(2, '0')}`;
 };
@@ -199,7 +208,7 @@ lightbox.addEventListener('touchend', event => {
 }, {passive:true});
 // Keep links to the former home-page sections working after the move to pages.
 if (document.body.dataset.page === 'home') {
-  const legacyPages = {about:'/about/',dogs:'/dogs/',puppies:'/puppies/',moments:'/moments/'};
+  const legacyPages = {about:'/about/',dogs:'/dogs/',puppies:'/puppies/',moments:'/gallery/'};
   const followLegacyLink = () => {
     const target = legacyPages[location.hash.slice(1)];
     if (target) location.replace((language === 'en' ? '/en' : '') + target + location.search);

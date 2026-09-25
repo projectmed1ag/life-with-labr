@@ -3,21 +3,27 @@ import {escapeHtml, litterRoute, renderLitterCatalog, renderLitterSlots, validat
 import {translateText, translateMarkup} from './dist/localization.js';
 import {localizeLinks} from './src/localize-links.mjs';
 import {socials} from './src/data/socials.mjs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {renderGallery} from './src/render-gallery.mjs';
 
 const origin = 'https://lifewithlabr.ru/';
+export async function renderSite(contentData) {
+const output = new Map();
 const pages = [
   {key:'home', file:'index.html', label:'Главная', title:'Питомник лабрадоров в Москве — Life with Labr', description:'Life with Labr — питомник лабрадоров Евгении Скобликовой в Москве. Палевые щенки, фотографии родителей, достижения и поддержка после переезда.'},
   {key:'about', file:'about.html', label:'О питомнике', title:'О питомнике лабрадоров и заводчике — Life with Labr', description:'Питомник лабрадоров Life with Labr в Москве. Заводчик Евгения Скобликова: знакомство со щенками, их родителями и поддержка владельцев.'},
   {key:'dogs', file:'dogs.html', label:'Наши собаки', title:'Наши собаки, достижения и родословные — Life with Labr', description:'Эдель, Ванесса, Марс и Ария — четыре лабрадора питомника Life with Labr. Фотографии, выставочные достижения и родословные наших собак.'},
   {key:'puppies', file:'puppies.html', label:'Щенки', title:'Палевые щенки лабрадора в Москве — Life with Labr', description:'Палевые щенки лабрадора от Эдель и Енота в питомнике Life with Labr, Москва. Знакомство с малышами, фотографии родителей и поддержка заводчика.'},
-  {key:'moments', file:'moments.html', label:'Моменты', title:'Моменты: фотоальбом лабрадоров — Life with Labr', description:'Фотографии собак и щенков лабрадора питомника Life with Labr.'}
+  {key:'moments', route:'/gallery/', file:'gallery.html', label:'Галерея', title:'Галерея: фотоальбом лабрадоров — Life with Labr', description:'Фотографии собак и щенков лабрадора питомника Life with Labr.'}
 ];
 const layout = await readFile('src/layout.html', 'utf8');
 const navigationPages = pages.filter(page => page.key !== 'about');
 const brand = await readFile('src/brand.html', 'utf8');
 const socialSymbols = await readFile('src/social-symbols.html', 'utf8');
 const socialLinks = socials.map(([icon,label,url]) => `<a href="${url}" target="_blank" rel="noopener noreferrer" aria-label="${label}" title="${label}"><svg aria-hidden="true"><use href="#icon-${icon}"></use></svg></a>`).join('');
-const litters = JSON.parse(await readFile('src/data/litters.json','utf8'));
+const litters = contentData?.litters ?? JSON.parse(await readFile('src/data/litters.json','utf8'));
+const gallery = contentData?.gallery ?? JSON.parse(await readFile('src/data/gallery.json','utf8'));
 validateLitters(litters);
 const litterTemplate = await readFile('src/pages/litter.html','utf8');
 const allPages = [...pages, ...litters.map(litter => ({
@@ -71,7 +77,8 @@ for (const page of allPages) {
   } else {
     content = (await readFile(`src/pages/${page.key}.html`, 'utf8'))
       .replace('{{sittingLabradors}}', page.key === 'about' ? await readFile('src/sitting-labradors.html','utf8') : '')
-      .replace('{{litterCatalog}}', page.key === 'puppies' ? renderLitterCatalog(litters) : '');
+      .replace('{{litterCatalog}}', page.key === 'puppies' ? renderLitterCatalog(litters) : '')
+      .replace('{{gallery}}', page.key === 'moments' ? renderGallery(gallery) : '');
   }
   const share = page.litter ? [page.litter.puppies[0].photos[0].src,page.litter.puppies[0].photos[0].alt] : shareImages[page.key];
   const values = {
@@ -83,19 +90,17 @@ for (const page of allPages) {
     structuredData:JSON.stringify({'@context':'https://schema.org','@graph':graph}).replaceAll('<','\\u003c'),
     nav:links(navigationPages), mobileNav:links(navigationPages),
     content,
-    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=story-1">' : page.key === 'dogs' ? '<link rel="stylesheet" href="/dogs.css?v=aria-photo-2">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=litter-album-9"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
-    appVersion:'pedigree-tree-2'
+    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=story-1">' : page.key === 'dogs' ? '<link rel="stylesheet" href="/dogs.css?v=aria-photo-2">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=cms-2"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
+    appVersion:'cms-1'
   };
   const html = layout.replace(/\{\{(\w+)\}\}/g, (_, key) => {
     if (!(key in values)) throw new Error(`Unknown layout slot ${key}`);
     return values[key];
   }).replace(/[\t ]+$/gm, '');
-  const directory = `dist${route}`;
-  await mkdir(directory, {recursive:true});
-  await writeFile(`${directory}index.html`, localizeLinks(translateMarkup(html, language), language, page.litter?.puppies));
+  output.set(`${route}index.html`, localizeLinks(translateMarkup(html, language), language, page.litter?.puppies));
   builtRoutes.push(route);
   if (language === 'ru' && page.file && page.key !== 'home') {
-    await writeFile(`dist/${page.file}`, `<!doctype html>
+    output.set(`/${page.file}`, `<!doctype html>
 <html lang="ru"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${page.title}</title>
@@ -106,8 +111,15 @@ for (const page of allPages) {
 </head><body><a href="${route}">${page.label}</a></body></html>
 `);
   }
-  console.log(`Built ${route}`);
 }
 }
-await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${builtRoutes.map(route => `<url><loc>${new URL(route, origin).href}</loc></url>`).join('')}</urlset>\n`);
-await writeFile('dist/robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${origin}sitemap.xml\n`);
+output.set('/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${builtRoutes.map(route => `<url><loc>${new URL(route, origin).href}</loc></url>`).join('')}</urlset>\n`);
+output.set('/robots.txt', `User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: ${origin}sitemap.xml\n`);
+for(const [oldRoute,newRoute] of [['/moments/','/gallery/'],['/en/moments/','/en/gallery/'],['/moments.html','/gallery/']]) output.set(oldRoute.endsWith('/')?`${oldRoute}index.html`:oldRoute, `<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Галерея</title><meta name="robots" content="noindex"><link rel="canonical" href="${origin.slice(0,-1)}${newRoute}"><script>location.replace(${JSON.stringify(newRoute)}+location.search+location.hash)</script><noscript><meta http-equiv="refresh" content="0;url=${newRoute}"></noscript></head><body><a href="${newRoute}">Галерея</a></body></html>`);
+return output;
+}
+if(process.argv[1] && path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
+  const output=await renderSite();
+  for(const [file,html] of output){const target=path.join('dist',file);await mkdir(path.dirname(target),{recursive:true});await writeFile(target,html);}
+  console.log(`Built ${output.size} documents.`);
+}

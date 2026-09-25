@@ -1,4 +1,12 @@
 export default {
+  "Щенки лабрадора-ретривера от пары": "Labrador Retriever puppies from",
+  "Щенки лабрадора-ретривера · Life with Labr": "Labrador Retriever puppies · Life with Labr",
+"Три девочки: Аврора, Аура и Амелия. Палевые лабрадоры.": "Three girls: Avrora, Aura and Amelia. Yellow Labradors.",
+  "Галерея": "Gallery",
+  "Галерея: фотоальбом лабрадоров — Life with Labr": "Gallery: Labrador photo album — Life with Labr",
+  "Уехала в новую семью": "With her new family",
+  "Уехал в новую семью": "With his new family",
+  "Скоро здесь появятся новые фотографии.": "New photos will appear here soon.",
   "Питомник лабрадоров · Москва": "Labrador kennel · Moscow",
   "Навигация в подвале": "Footer navigation",
   "Питомник лабрадоров в Москве — Life with Labr": "Labrador kennel in Moscow — Life with Labr",
