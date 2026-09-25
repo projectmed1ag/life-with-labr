@@ -36,6 +36,8 @@ The gallery grid uses flexible columns of at least 210px on desktop and two colu
 
 ## Feedback
 
+Puppy availability keeps a native select with a styled picker in browsers supporting `appearance: base-select`. The menu uses the light input surface, 48px option targets, pale green selection and a trailing checkmark. Availability markers are a green circle, gold circle and forest diamond; the unspecified state uses an outline circle. Labels remain essential. The browser owns keyboard selection, focus, dismissal and popup placement. Browsers without customizable-select support retain the standard native picker.
+
 Keep saving state in the sticky bar and use the existing transient notice for operation results. Inputs preserve their values across routine record actions. Errors use Russian text, a visible error treatment, and an alert/status role where already implemented. Disabled buttons show the waiting state. Do not add public availability claims to administrative publication badges.
 
 ## Existing details not promoted into the shared system

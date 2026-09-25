@@ -11,6 +11,27 @@
 .close-litter-dialog{width:min(540px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:32px;border:1px solid var(--line);border-radius:12px;background:#f4f1e9;color:var(--green);box-shadow:0 24px 80px #172b2440}.close-litter-dialog::backdrop{background:#172b2499}.close-litter-dialog h2{font-size:25px;line-height:1.3;text-wrap:balance}.close-litter-dialog p{margin-top:18px;color:var(--muted)}.close-litter-dialog form{display:flex;justify-content:flex-end;gap:12px;margin-top:28px}@media(max-width:600px){.close-litter-dialog{padding:24px}.close-litter-dialog form{flex-direction:column-reverse}.close-litter-dialog h2{font-size:23px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 .photo-dimensions{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+/* Keep native selection, keyboard controls and viewport-aware popup placement. */
+@supports (appearance:base-select){
+  select[data-field$=".status"],select[data-field$=".status"]::picker(select){appearance:base-select}
+  select[data-field$=".status"]{display:flex;align-items:center;gap:12px;padding:13px 16px;min-height:52px;border-radius:8px;line-height:1.5;white-space:normal;cursor:pointer;transition:border-color .16s,background .16s}
+  select[data-field$=".status"]:hover{border-color:var(--green);background:#fffdf8}
+  select[data-field$=".status"]:open{border-color:var(--green);background:#fffdf8}
+  select[data-field$=".status"]:disabled{cursor:default;opacity:.55}
+  select[data-field$=".status"]::picker-icon{content:"";width:9px;height:9px;flex-shrink:0;margin-left:auto;margin-right:3px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .16s}
+  select[data-field$=".status"]:open::picker-icon{transform:translateY(2px) rotate(225deg)}
+  select[data-field$=".status"]::picker(select){padding:6px;margin-block:6px;border:0;border-radius:12px;background:#fffefa;color:var(--green);box-shadow:0 12px 36px #172b2430;max-height:min(320px,70dvh);max-width:calc(100vw - 24px);overscroll-behavior:contain}
+  select[data-field$=".status"] option{display:flex;align-items:center;gap:12px;min-height:48px;padding:12px;border:0;border-radius:6px;background:transparent;color:var(--green);font-weight:450;line-height:1.5;white-space:normal;cursor:pointer}
+  select[data-field$=".status"] option:checked{background:#dfe6da;font-weight:600}
+  select[data-field$=".status"] option:hover{background:#e4e8df}
+  select[data-field$=".status"] option:focus-visible{outline:2px solid var(--green);outline-offset:-2px;background:#e4e8df}
+  select[data-field$=".status"] option::checkmark{content:"";order:1;margin-left:auto;flex-shrink:0;width:7px;height:12px;margin-right:4px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+  select[data-field$=".status"]::before,select[data-field$=".status"] option::before{content:"";width:9px;height:9px;flex-shrink:0;border:1.5px solid #7c8a80;border-radius:50%}
+  select[data-field$=".status"]:has(option[value="available"]:checked)::before,select[data-field$=".status"] option[value="available"]::before{background:#304b3d;border-color:#304b3d}
+  select[data-field$=".status"]:has(option[value="reserved"]:checked)::before,select[data-field$=".status"] option[value="reserved"]::before{background:#ae7025;border-color:#ae7025}
+  select[data-field$=".status"]:has(option[value="home"]:checked)::before,select[data-field$=".status"] option[value="home"]::before{background:var(--green);border-color:var(--green);border-radius:2px;transform:rotate(45deg)}
+  @media(prefers-reduced-motion:reduce){select[data-field$=".status"]::picker-icon{transition:none}}
+}
 .photo-edit--puppy img{height:auto;aspect-ratio:3/4}.photo-edit--parent img{height:auto;aspect-ratio:3/2}
 .photo-edit>[data-edit-photo],.gallery-photo>[data-edit-photo]{padding:10px;font-size:12px;text-align:left}
 .gallery-photo>img{height:auto;aspect-ratio:auto}
