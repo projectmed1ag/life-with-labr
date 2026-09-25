@@ -19,7 +19,7 @@ Use Manrope working headings and body text, cream page surfaces, forest primary 
 ## Responsive behavior
 
 - Above 850px: 230px sidebar within a maximum 1500px workspace; main padding uses `44px clamp(24px,5vw,72px) 110px`.
-- At 850px and below: sidebar navigation becomes a top strip; its explanatory paragraph and the header's small descriptive label disappear.
+- At 850px and below: sidebar navigation becomes a top strip and its explanatory paragraph disappears.
 - At 600px and below: main padding is `26px 18px 100px`; page headings stack; paired fields become one column; record rows wrap; photo previews use two columns; the sticky save area stacks its status and two equal action columns.
 - Base fields remain at least 46px high and base action buttons at least 44px high. Compact photo controls and header utility actions keep their implemented exceptions; these are not a new general target-size rule.
 
