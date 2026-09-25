@@ -31,7 +31,7 @@ typography:
     lineHeight: 1.04
   title-puppy:
     fontFamily: "Cormorant Garamond, Georgia, serif"
-    fontSize: "46px"
+    fontSize: "clamp(32px, 12cqi, 46px)"
     fontWeight: 400
     lineHeight: 1.1
   body-public:
@@ -46,8 +46,10 @@ typography:
     lineHeight: 1.2
   price:
     fontFamily: "Manrope, Arial, sans-serif"
-    fontSize: "clamp(18px, 1.8vw, 24px)"
-    fontWeight: 500
+    fontSize: "clamp(18px, 5.8cqi, 22px)"
+    fontWeight: 400
+    lineHeight: 1.2
+    letterSpacing: "-.025em"
   heading-admin:
     fontFamily: "Manrope, system-ui, sans-serif"
     fontSize: "clamp(26px, 3vw, 38px)"
@@ -181,7 +183,7 @@ The serif supplies the public site's gentle, editorial character. Manrope carrie
 - **Public titles:** puppy names use the frontmatter puppy title role; parent names are (48px), section group titles (52px), and catalogue card headings `clamp(48px, 4.5vw, 70px)`.
 - **Public body:** global paragraphs use the frontmatter body role; parent and puppy details use compact (14px) text, with descriptions commonly bounded at (44ch).
 - **Public actions:** the main gold CTA uses the serif action role. Header contact controls use Manrope (14px, 600); puppy contact summaries use a (20px) serif treatment.
-- **Prices:** use the frontmatter price role, tabular numerals, and no line break within the amount. Prices align to the right of the name row.
+- **Prices:** use the frontmatter price role and tabular lining numerals. Narrow nonbreaking spaces group thousands; the ruble sign is a separate (0.72em) span with a (0.22em) gap on the same baseline. The unbroken amount stays at the right edge, vertically centred against the name.
 - **Admin:** the frontmatter heading, body, and label roles apply. Section headings use (21px, 650); record titles (19px), helper text (13px), and publication tags (12px). Paragraphs are bounded at (70ch).
 
 **The Reading Roles Rule.** Public serif expression belongs to headings and established CTAs; admin forms and working headings retain Manrope.
@@ -192,7 +194,7 @@ Public sections use generous vertical space and percentage gutters: the base sec
 
 - Catalogue cards: a (1180px) maximum, two columns in a (1.06fr / 1fr) ratio, and a photograph overlapping the text panel by (36px). At (700px) and below, cards become a single column capped at (480px), with the panel overlapping the photograph vertically by (24px).
 - Litter content: parent and puppy sections are capped at (1200px). Parents use two columns; puppy cards use three, then two at (1000px), then one at (600px). Mobile single-column cards are capped at (480px).
-- Puppy name and price: a full-width flex row with baseline alignment, a (16px) gap, and wrapping. The name may wrap; the price's auto left margin keeps it at the available right edge, including when wrapping onto another line.
+- Puppy name and price: a full-width two-column grid with centre alignment, a (12px) gap and (12px) bottom margin. The name takes the flexible column and can wrap; the price takes its natural width at the right edge. Each puppy entry is an inline-size container, so both type sizes follow the card width rather than the viewport.
 - Public navigation: the final header has a centred brand, social links, and contact controls above a separate navigation row. At (760px), it switches to the compact header and menu control. Do not infer the header breakpoint from the base stylesheet's older (700px) rules.
 - Admin: a centred (1500px) workspace with a (230px) sidebar and a flexible main column. At (850px), navigation becomes a horizontal strip above the content. At (600px), paired fields become one column, save actions use two equal columns, and record thumbnails reduce from (88px square) to (64px × 74px).
 
