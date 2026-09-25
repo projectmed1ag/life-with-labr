@@ -1,5 +1,6 @@
 import {translateText, translateMarkup} from './localization.js';
-import {pedigreeBranch, renderPedigree} from './pedigree.js?v=tree-1';
+import {renderPedigree} from './pedigree.js?v=tree-2';
+import {knownPedigrees, resolvePedigree, visiblePedigree} from './pedigree-data.js';
 const language = document.documentElement.lang;
 const t = text => translateText(text, language);
 const localize = html => translateMarkup(html, language);
@@ -95,13 +96,7 @@ const dogs = {
       ['Юный Чемпион', 'России, НКП, Армении · 8 × Юный Чемпион РКФ'],
       ['Кандидат', 'В Шоу Чемпионы, Интерчемпионы и Чемпионы Золотого Кольца']
     ],
-    pedigree: [pedigreeBranch('ОТЕЦ', 'Никсон Лаб Бонапарт', 'Грандчемпион России · Чемпион России, НКП, РКФ', [
-      {name: 'Кристофер Строллер Сан', title: 'Интерчемпион · Грандчемпион', parents: ['Rocheby Step Ahead', 'Юффо Лондон Блю Топаз']},
-      {name: 'Kelly for Nikson Dvaruva', title: 'Чемпион России · Литва', parents: ['Big Bang Magic Power', 'Rocheby Pastelshades']}
-    ]), pedigreeBranch('МАТЬ', 'Время Мечты Вера', 'Чемпион России, РКФ', [
-      {name: 'Жерминаль Мисти Шоу Мэйкер', title: 'Интерчемпион · Грандчемпион', parents: ['Rocheby Step Ahead', 'Жерминаль Мисти Чарминг Чанс']},
-      {name: 'Флэми Стар Тестаросса', title: 'Чемпион России · Чемпион-производитель', parents: ['Jentleman Jim Down the Hill', 'Флэми Стар Нирвана']}
-    ])]
+    pedigree: knownPedigrees.edel
   },
   vanessa: {
     name: 'Ванесса', image: 'vanessa-show.jpg', portrait: true, label: 'LIFE WITH LABR',
@@ -139,13 +134,7 @@ const dogs = {
       ['Победы в бестах', 'Многократный победитель BIS, JBIS, JBISS, BIS Baby и BIS Puppy']
     ],
     pedigreeTitle: 'Родословная · 3 поколения',
-    pedigree: [pedigreeBranch('ОТЕЦ', 'Rocheby Squadron Leader', 'Чемпион России, РКФ · Англия', [
-      {name: 'Silver Suede Over Rocheby', title: 'Чемпион Англии', parents: ['Anti Aspen of Finnwoods', 'Bridgeford Chrystal Clear']},
-      {name: 'Rocheby Serenade', title: 'Палевый · Англия', parents: ['Rocheby Old Smokey', 'Rocheby Sensational']}
-    ]), pedigreeBranch('МАТЬ', 'Время Мечты Вера', 'Чемпион России, РКФ', [
-      {name: 'Жерминаль Мисти Шоу Мэйкер', title: 'Интерчемпион · Грандчемпион', parents: ['Rocheby Step Ahead', 'Жерминаль Мисти Чарминг Чанс']},
-      {name: 'Флэми Стар Тестаросса', title: 'Чемпион России · Чемпион-производитель', parents: ['Jentleman Jim Down the Hill', 'Флэми Стар Нирвана']}
-    ])]
+    pedigree: knownPedigrees.aria
   },
   enot: {
     name: 'Русмайрас Енот', image: 'enot.jpg', label: 'ОТЕЦ ЩЕНКОВ',
@@ -153,7 +142,7 @@ const dogs = {
     facts: [['Порода', 'Лабрадор-ретривер'], ['Пол', 'Кобель'], ['Окрас', 'Палевый'], ['Питомник', 'Русмайрас']],
     titles: [['Чемпион России', 'Взрослый титул'], ['Юный Грандчемпион России', 'Юниорский титул'], ['Юный Чемпион', 'России, НКП, РКФ']],
     health: [['Суставы', 'HD/ED — A/0'], ['Генетические тесты', 'PRA, HNPK, EIC, CNM — clear'], ['Длинношёрстность', 'Не несёт аллель длинношёрстности']],
-    pedigree: [pedigreeBranch('ОТЕЦ', 'Русмайрас Пьер', 'Чемпион России · Юный Чемпион России, НКП, РКФ, Эстонии, Украины, Словении', []), pedigreeBranch('МАТЬ', 'Русмайрас Смайли', 'Чемпион Литвы, Венгрии', [])]
+    pedigree: knownPedigrees.enot
   }
 };
 const dogDialog = document.querySelector('#dog-dialog');
@@ -161,21 +150,22 @@ const escapeContent=value=>String(value||'').replace(/[&<>"']/g,c=>({'&':'&amp;'
 const litterParents=JSON.parse(document.querySelector('#litter-data')?.textContent||'{}').parents||[];
 for(const parent of litterParents){
   const previous=dogs[parent.id];
-  dogs[parent.id]={...previous,name:escapeContent(parent.name),image:parent.image,label:escapeContent(parent.role),intro:escapeContent(parent.description),facts:previous?.facts||[['Питомник',escapeContent(parent.kennel)]],titles:previous?.titles||[],pedigree:previous?.pedigree};
+  dogs[parent.id]={...previous,name:escapeContent(parent.name),image:parent.image,label:escapeContent(parent.role),intro:escapeContent(parent.description),facts:previous?.facts||[['Питомник',escapeContent(parent.kennel)]],titles:previous?.titles||[],pedigree:visiblePedigree(resolvePedigree(parent))};
 }
 
 document.querySelectorAll('[data-pedigree-dog]').forEach(container => {
   const dog = dogs[container.dataset.pedigreeDog];
   const parent=litterParents.find(parent=>parent.id===container.dataset.pedigreeDog);
-  if(parent?.pedigree) {container.textContent=parent.pedigree;container.classList.add('pedigree-text');}
-  else if(dog?.pedigree) container.innerHTML=localize(renderPedigree(dog.pedigree));
-  else container.closest('details')?.remove();
+  if(dog?.pedigree?.length || parent?.pedigree) {
+    container.innerHTML=localize(renderPedigree(dog?.pedigree || []));
+    if(parent?.pedigree){const note=document.createElement('p');note.className='pedigree-text';note.textContent=parent.pedigree;container.append(note);}
+  } else container.closest('details')?.remove();
 });
 document.querySelectorAll('[data-dog]').forEach(button => button.addEventListener('click', () => {
   const dog = dogs[button.dataset.dog];
   if(!dog) return;
   dogDialog.dataset.dog = button.dataset.dog;
-  document.querySelector('#dog-dialog-content').innerHTML = localize(`<div class="profile-cover${dog.portrait ? ' profile-cover--portrait' : ''}"><img src="/assets/${dog.image}" alt="${dog.name}"></div><div class="profile-body"><p class="eyebrow">${dog.label}</p><h2 id="dog-dialog-title">${dog.name}</h2><p class="profile-intro">${dog.intro}</p><dl class="profile-facts">${dog.facts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl><details open><summary>Достижения <span aria-hidden="true">+</span></summary><div class="title-list">${dog.titles.map(([title, description]) => `<div><h4>${title}</h4><p>${description}</p></div>`).join('')}</div></details>${dog.health ? `<details><summary>Тесты здоровья <span aria-hidden="true">+</span></summary><dl class="health-list">${dog.health.map(([title, value]) => `<div><dt>${title}</dt><dd>${value}</dd></div>`).join('')}</dl></details>` : ''}${dog.pedigree ? `<details><summary>${dog.pedigreeTitle || (button.dataset.dog === 'edel' ? 'Родословная · 3 поколения' : 'Происхождение')} <span aria-hidden="true">+</span></summary><div class="pedigree">${renderPedigree(dog.pedigree)}</div></details>` : ''}<a class="button button-dark" href="https://wa.me/79251448648" target="_blank" rel="noopener noreferrer">Узнать о щенках</a></div>`);
+  document.querySelector('#dog-dialog-content').innerHTML = localize(`<div class="profile-cover${dog.portrait ? ' profile-cover--portrait' : ''}"><img src="/assets/${dog.image}" alt="${dog.name}"></div><div class="profile-body"><p class="eyebrow">${dog.label}</p><h2 id="dog-dialog-title">${dog.name}</h2><p class="profile-intro">${dog.intro}</p><dl class="profile-facts">${dog.facts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl><details open><summary>Достижения <span aria-hidden="true">+</span></summary><div class="title-list">${dog.titles.map(([title, description]) => `<div><h4>${title}</h4><p>${description}</p></div>`).join('')}</div></details>${dog.health ? `<details><summary>Тесты здоровья <span aria-hidden="true">+</span></summary><dl class="health-list">${dog.health.map(([title, value]) => `<div><dt>${title}</dt><dd>${value}</dd></div>`).join('')}</dl></details>` : ''}${dog.pedigree?.length ? `<details><summary>${dog.pedigreeTitle || (button.dataset.dog === 'edel' ? 'Родословная · 3 поколения' : 'Происхождение')} <span aria-hidden="true">+</span></summary><div class="pedigree">${renderPedigree(dog.pedigree)}</div></details>` : ''}<a class="button button-dark" href="https://wa.me/79251448648" target="_blank" rel="noopener noreferrer">Узнать о щенках</a></div>`);
   const parent=litterParents.find(parent=>parent.id===button.dataset.dog);
   if(parent?.pedigree){const detail=document.createElement('p');detail.className='pedigree-text';detail.textContent=parent.pedigree;dogDialog.querySelector('.profile-body').append(detail);}
   dogDialog.showModal();

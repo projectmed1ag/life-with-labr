@@ -91,7 +91,7 @@ for (const page of allPages) {
     nav:links(navigationPages), mobileNav:links(navigationPages),
     content,
     pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=story-1">' : page.key === 'dogs' ? '<link rel="stylesheet" href="/dogs.css?v=aria-photo-2">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=price-5"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
-    appVersion:'cms-1'
+    appVersion:'pedigree-2'
   };
   const html = layout.replace(/\{\{(\w+)\}\}/g, (_, key) => {
     if (!(key in values)) throw new Error(`Unknown layout slot ${key}`);

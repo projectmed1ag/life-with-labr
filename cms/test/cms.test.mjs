@@ -9,6 +9,7 @@ import {openStore} from '../store.mjs';
 import {hashPassword,verifyPassword} from '../auth.mjs';
 import {validateContent} from '../validation.mjs';
 import {createApplication} from '../server.mjs';
+import {editablePedigree} from '../../dist/pedigree-data.js';
 const litters=JSON.parse(await readFile('src/data/litters.json'));
 const gallery=JSON.parse(await readFile('src/data/gallery.json'));
 const seed={litters,gallery};
@@ -49,10 +50,14 @@ test('HTTP auth, CSRF, photos, publication and dynamic routes',async()=>{
     assert.equal((await request('/api/logout','POST',{}, {Origin:'https://evil.example'})).status,403);
     assert.equal((await request('/api/logout','POST',{}, {'X-CSRF-Token':'bad'})).status,403);
     const draft=structuredClone(litters[0]);draft.id='new-litter';draft.title='Новый помёт';draft.puppies[0].status='home';draft.puppies[0].price=95000;
+    draft.parents[0].id='new-mother';draft.parents[0].pedigreeTree=editablePedigree();
+    draft.parents[0].pedigreeTree[0].name='Отец новой мамы';
+    draft.parents[0].pedigreeTree[0].parents[1].parents[1].name='Третье поколение тест';
     let response=await request('/api/content/litters/new-litter','PUT',{data:draft,version:0,action:'draft'});assert.equal(response.status,200);
     assert.equal((await request('/puppies/new-litter/')).status,404);
     response=await request('/api/content/litters/new-litter','PUT',{data:draft,version:1,action:'publish'});assert.equal(response.status,200);
     const html=await (await request('/puppies/new-litter/')).text();assert(html.includes('Уехала в новую семью'));assert(html.includes('puppy-price'));assert(!html.includes('data-puppy-inquiry="avrora"'));
+    assert(html.includes('<h4>Третье поколение тест</h4>'));assert(html.includes('<h4>Отец новой мамы</h4>'));
     const changed=structuredClone(draft);changed.title='<img src=x onerror=alert(1)>';
     assert.equal((await request('/api/content/litters/new-litter','PUT',{data:changed,version:2,action:'publish'})).status,200);
     const escaped=await (await request('/puppies/new-litter/')).text();assert(escaped.includes('&lt;img src=x onerror=alert(1)&gt;'));
@@ -123,6 +128,7 @@ test('Failed rendering leaves the published record unchanged; production admin i
   const request=(url,options={})=>new Promise((resolve,reject)=>{const req=http.request(url,{method:options.method||'GET',headers:options.headers},res=>{const chunks=[];res.on('data',chunk=>chunks.push(chunk));res.on('end',()=>resolve(new Response(Buffer.concat(chunks),{status:res.statusCode,headers:res.headers})));});req.on('error',reject);req.end(options.body);});
   try{
     assert.equal((await request(base+'/api/content',{headers:{Host:'example.test'}})).status,404);
+    assert.equal((await request(base+'/pedigree-data.js',{headers:{Host:'admin.example.test'}})).status,200);
     const login=await request(base+'/api/login',{method:'POST',headers:{Host:'admin.example.test',Origin:adminOrigin,'Content-Type':'application/json'},body:JSON.stringify({username:'admin',password:'qa-private-password'})});
     assert.equal(login.status,200);assert(login.headers.get('set-cookie').includes('__Host-lwl_session='));assert(login.headers.get('set-cookie').includes('; Secure'));
     const cookie=login.headers.get('set-cookie').split(';')[0],{csrf}=await login.json();

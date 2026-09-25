@@ -1,3 +1,5 @@
+import {resolvePedigree} from '../dist/pedigree-data.js';
+
 export class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
 }
@@ -17,6 +19,14 @@ const date = value => {
 };
 const list = (value,max,label) => { if(!Array.isArray(value)||value.length>max) fail(`Слишком много элементов: ${label}.`); return value; };
 const unique = items => {if(new Set(items.map(x=>x.id)).size!==items.length) fail('Идентификаторы не должны повторяться.');return items;};
+const pedigreeTree = (nodes, depth=1) => {
+  const items=list(nodes,2,'родители в родословной');
+  if(depth>3 && items.length) fail('В родословной можно указать до трёх поколений.');
+  return items.map(node=>{
+    if(!node || typeof node!=='object' || Array.isArray(node)) fail('Проверьте данные предка в родословной.');
+    return {name:text(node.name??'','Кличка предка',120),title:text(node.title??'','Титулы предка',500),parents:pedigreeTree(node.parents??[],depth+1)};
+  });
+};
 export function validateContent(kind, input, {publish=false, mediaExists=()=>true}={}) {
   if(!input || typeof input!=='object' || Array.isArray(input)) fail('Запись должна быть объектом.');
   const photo = raw => {
@@ -40,7 +50,7 @@ export function validateContent(kind, input, {publish=false, mediaExists=()=>tru
     if(!['Мама','Папа'].includes(raw.role)) fail('Укажите роль родителя.');
     const image=raw.image ? photo({src:raw.image,width:raw.width,height:raw.height,alt:raw.name||''}) : null;
     if(publish && !image) fail('Добавьте фотографии родителей.');
-    return {id:id(raw.id),name:text(raw.name||'','Кличка родителя',120,publish),role:raw.role,kennel:text(raw.kennel||'','Питомник',160),description:text(raw.description||'','О родителе',3000),pedigree:text(raw.pedigree||'','Родословная',5000),image:image?.src||'',width:image?.width||0,height:image?.height||0};
+    return {id:id(raw.id),name:text(raw.name||'','Кличка родителя',120,publish),role:raw.role,kennel:text(raw.kennel||'','Питомник',160),description:text(raw.description||'','О родителе',3000),pedigree:text(raw.pedigree||'','Родословная',5000),pedigreeTree:pedigreeTree(resolvePedigree(raw)),image:image?.src||'',width:image?.width||0,height:image?.height||0};
   }));
   if(new Set(parents.map(p=>p.role)).size!==parents.length) fail('Выберите одного папу и одну маму.');
   const puppies=unique(list(input.puppies||[],30,'щенки').map(raw=>{

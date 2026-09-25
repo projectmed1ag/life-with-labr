@@ -7,6 +7,8 @@
 .lineage-node{position:relative;min-width:0;padding:12px 0}
 .lineage-name h4{font-family:var(--serif);font-size:25px;font-weight:500;line-height:1.18;margin:0;overflow-wrap:anywhere;text-wrap:balance}
 .lineage-role{display:block;margin-top:8px;font-size:12px;line-height:1.5;color:#5b665b;text-transform:lowercase}
+.lineage-role--ancestor{display:none}
+.lineage-children--partial>.lineage-branch>.lineage-node .lineage-role--ancestor{display:block}
 .lineage-node p{margin-top:8px;font-size:13px;line-height:1.65;color:#5b665b;overflow-wrap:anywhere}
 .lineage-tree>.lineage-branch>.lineage-node{background:#e8ece2;border-radius:12px;padding:24px}
 .lineage-tree>.lineage-branch>.lineage-node h4{font-size:28px}
@@ -27,11 +29,14 @@
   .lineage-tree .lineage-branch{display:block}
   .lineage-tree>.lineage-branch>.lineage-node{padding:20px}
   .lineage-tree>.lineage-branch>.lineage-node h4{font-size:26px}
-  .lineage-tree .lineage-children{display:block;margin:0 0 0 20px;padding:12px 0 0 20px;border-left:1px solid var(--lineage-line)}
+  .lineage-tree .lineage-children{display:block;margin:0 0 0 12px;padding:12px 0 0 16px;border-left:1px solid var(--lineage-line)}
   .lineage-tree .lineage-node{padding:12px 0}
   .lineage-tree .lineage-name h4{font-size:23px}
   .lineage-tree .lineage-children .lineage-children{padding-top:0}
-  .lineage-tree .lineage-children .lineage-children h4{font-size:14px}
+  .lineage-tree .lineage-children .lineage-children h4{font-size:16px;line-height:1.55}
+  .lineage-tree .lineage-role--ancestor{display:block;font-size:12px;margin-top:5px}
+  .lineage-tree .lineage-node p{font-size:14px;line-height:1.6}
+  .lineage-tree .lineage-children>.lineage-branch+ .lineage-branch{margin-top:16px}
   .lineage-tree .lineage-branch::before,.lineage-tree .lineage-node::after{display:none}
-  .lineage-tree .lineage-children>.lineage-branch>.lineage-node::before{left:-20px;width:12px}
+  .lineage-tree .lineage-children>.lineage-branch>.lineage-node::before{left:-16px;width:10px}
 }

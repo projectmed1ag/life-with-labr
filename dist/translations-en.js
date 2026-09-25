@@ -1,4 +1,12 @@
 export default {
+  "Отец": "Sire",
+  "Мать": "Dam",
+  "Отец · 2-е поколение": "Sire · Second generation",
+  "Мать · 2-е поколение": "Dam · Second generation",
+  "Отец · 3-е поколение": "Sire · Third generation",
+  "Мать · 3-е поколение": "Dam · Third generation",
+  "Не указан": "Not recorded",
+  "Информацию о происхождении уточняйте у заводчика.": "Ask the breeder about the pedigree.",
   "Щенки лабрадора-ретривера от пары": "Labrador Retriever puppies from",
   "Щенки лабрадора-ретривера · Life with Labr": "Labrador Retriever puppies · Life with Labr",
 "Три девочки: Аврора, Аура и Амелия. Палевые лабрадоры.": "Three girls: Avrora, Aura and Amelia. Yellow Labradors.",

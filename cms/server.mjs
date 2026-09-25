@@ -113,7 +113,7 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
         if(!['index.html','admin.js','admin.css','photo-editor.js','photo-geometry.js'].includes(name))fail(404,'Страница не найдена.');
         const content=await readFile(path.join(ROOT,'cms/public',name));res.writeHead(200,{'Content-Type':types[path.extname(name)]});return res.end(req.method==='HEAD'?undefined:content);
       }
-      if(isAdmin&&!development && route!=='/fonts.css')fail(404,'Страница не найдена.');
+      if(isAdmin&&!development && !['/fonts.css','/pedigree-data.js'].includes(route))fail(404,'Страница не найдена.');
       const old={'/moments/':'/gallery/','/moments.html':'/gallery/','/en/moments/':'/en/gallery/'};
       if(old[route]){res.writeHead(308,{Location:old[route]+url.search});return res.end();}
       const key=route.endsWith('/')?route+'index.html':route;

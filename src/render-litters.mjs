@@ -1,5 +1,7 @@
 import {socials} from './data/socials.mjs';
 import {puppyContactUrl} from './puppy-contacts.mjs';
+import {resolvePedigree, visiblePedigree} from '../dist/pedigree-data.js';
+import {renderPedigree} from '../dist/pedigree.js';
 
 export const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 export const litterRoute = litter => `/puppies/${litter.id}/`;
@@ -78,7 +80,7 @@ export function renderLitterSlots(litter) {
     litterDate:litter.birthDate ? `<p class="litter-date">Дата рождения: <time datetime="${litter.birthDate}">${date(litter.birthDate)}</time></p>` : '',
     parents:litter.parents.map(parent => `<article class="litter-parent"><button class="parent-photo" data-dog="${parent.id}" aria-label="Открыть профиль: ${escapeHtml(parent.name)}"><span class="album-photo-window"><img src="${asset(parent.image)}" alt="${escapeHtml(parent.name)}" width="${parent.width}" height="${parent.height}" loading="lazy"></span></button><div class="parent-copy"><h3>${escapeHtml(parent.name)}<span class="parent-role">${escapeHtml(parent.role)}</span></h3>${parent.kennel ? `<p class="parent-kennel"><span>Питомник происхождения</span><strong>${escapeHtml(parent.kennel)}</strong></p>` : ''}<p>${escapeHtml(parent.description)}</p><button class="parent-details" data-dog="${parent.id}"><span>Достижения и родословная</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button></div></article>`).join(''),
     puppyGroups:[[boys,'Мальчики'],[girls,'Девочки']].filter(([puppies])=>puppies.length).map(([puppies,title])=>`<section class="puppy-group" aria-label="${title}"><h2>${title}</h2><div class="puppy-grid">${puppies.map(renderPuppy).join('')}</div></section>`).join(''),
-    litterPedigree:litter.parents.map((parent,index)=>`<details class="litter-pedigree-branch"${index === 0 ? ' open' : ''}><summary><span class="lineage-summary-name">${escapeHtml(parent.role)} — ${escapeHtml(parent.name)}${parent.kennel ? `<small>${escapeHtml(parent.kennel)}</small>` : ''}</span><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="pedigree" data-pedigree-dog="${parent.id}"></div></details>`).join(''),
+    litterPedigree:litter.parents.map(parent=>({parent,tree:visiblePedigree(resolvePedigree(parent))})).filter(({parent,tree})=>tree.length||parent.pedigree).map(({parent,tree},index)=>`<details class="litter-pedigree-branch"${index === 0 ? ' open' : ''}><summary><span class="lineage-summary-name">${escapeHtml(parent.role)} — ${escapeHtml(parent.name)}${parent.kennel ? `<small>${escapeHtml(parent.kennel)}</small>` : ''}</span><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="pedigree">${renderPedigree(tree)}${parent.pedigree?`<p class="pedigree-text">${escapeHtml(parent.pedigree)}</p>`:''}</div></details>`).join('') || '<p>Информацию о происхождении уточняйте у заводчика.</p>',
     puppyData:JSON.stringify({title:litter.title,parents:litter.parents,puppies:litter.puppies}).replaceAll('<','\\u003c')
   };
 }
