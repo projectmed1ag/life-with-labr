@@ -21,11 +21,13 @@
 .litter-card-copy .puppy-status{margin:22px 0 0;padding:0;color:var(--gold)}
 .litter-card-copy .puppy-status--home{color:#d2d6cb}
 .litter-card-cover:focus-visible{outline-offset:4px}
-.puppies-page .care{padding-top:0;padding-bottom:88px;gap:10%}
-.puppies-page .care h2{font-size:clamp(44px,4.5vw,64px);line-height:1.05}
-.puppies-page .care-list article{display:block;padding:28px 0}
-.puppies-page .care-list h3{font-size:30px;margin-bottom:12px}
-.puppies-page .care-list p{font-size:15px;max-width:58ch}
+.puppies-page .care{display:grid;grid-template-columns:minmax(0,1fr);padding-top:0;padding-bottom:88px;gap:40px}
+.puppies-page .care>div{width:100%;max-width:1180px;margin-inline:auto}
+.puppies-page .care h2{font-size:clamp(44px,4.5vw,64px);line-height:1.05;text-wrap:balance}
+.puppies-page .care-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}
+.puppies-page .care-list article{display:block;min-width:0;padding:24px 0 0}
+.puppies-page .care-list h3{font-size:30px;line-height:1.2;margin-bottom:12px;text-wrap:balance}
+.puppies-page .care-list p{font-size:15px;max-width:58ch;color:#5b665b}
 .litter-date{margin-top:16px;font-size:14px}
 .puppy-status{display:inline-block;color:var(--green);font-size:13px;line-height:1.4;padding:8px 0;margin-bottom:12px}
 .puppy-status--reserved,.puppy-status--home{color:var(--muted)}
@@ -156,6 +158,7 @@
 @media(max-width:1000px){.litter-card-copy{padding:40px 28px 40px 64px;min-height:380px}.litter-card-copy>.button{gap:14px;padding-inline:20px;font-size:20px}.litter-card-copy h2{font-size:48px}}
 @media(max-width:1000px){.puppy-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px}}
 @media(max-width:900px){.puppies-intro{display:block}.puppies-intro>p{margin-top:24px;max-width:45ch}.litter-parent-grid{gap:28px}}
+@media(max-width:900px){.puppies-page .care-list{grid-template-columns:minmax(0,1fr);gap:28px}.puppies-page .care-list p{max-width:65ch}}
 @media(max-width:700px){
   .puppies-intro{padding-top:32px;padding-bottom:40px}
   .puppies-intro h1{font-size:clamp(48px,12vw,74px)}
@@ -169,8 +172,8 @@
   .litter-card-intro{font-size:14px}
   .litter-card-copy h2{font-size:42px;margin-top:16px}
   .litter-card-copy>.button{margin-top:28px;width:100%;font-size:20px;gap:12px;padding-inline:14px;min-height:56px}
-  .puppies-page .care{padding-bottom:52px}
-  .puppies-page .care-list{margin-top:32px}
+  .puppies-page .care{padding-bottom:52px;gap:28px}
+  .puppies-page .care-list{margin-top:0}
   .puppies-page .care-list h3{font-size:28px}
   .puppies-page .care-list p{font-size:14px}
   .litter-page .breadcrumbs{flex-wrap:wrap;gap:9px}
