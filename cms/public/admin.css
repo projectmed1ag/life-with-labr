@@ -10,3 +10,24 @@
 @media(max-width:600px){.record-open{gap:12px;flex-wrap:wrap}.record-open>.state{margin-left:76px;margin-top:-8px}.record-open .record-info{flex-basis:calc(100% - 88px)}.record-close{margin-left:84px;font-size:12px;white-space:normal;text-align:left}.record-actions>button[data-save="close"]{width:100%}}
 .close-litter-dialog{width:min(540px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:32px;border:1px solid var(--line);border-radius:12px;background:#f4f1e9;color:var(--green);box-shadow:0 24px 80px #172b2440}.close-litter-dialog::backdrop{background:#172b2499}.close-litter-dialog h2{font-size:25px;line-height:1.3;text-wrap:balance}.close-litter-dialog p{margin-top:18px;color:var(--muted)}.close-litter-dialog form{display:flex;justify-content:flex-end;gap:12px;margin-top:28px}@media(max-width:600px){.close-litter-dialog{padding:24px}.close-litter-dialog form{flex-direction:column-reverse}.close-litter-dialog h2{font-size:23px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.photo-dimensions{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.photo-edit--puppy img{height:auto;aspect-ratio:3/4}.photo-edit--parent img{height:auto;aspect-ratio:3/2}
+.photo-edit>[data-edit-photo],.gallery-photo>[data-edit-photo]{padding:10px;font-size:12px;text-align:left}
+.gallery-photo>img{height:auto;aspect-ratio:auto}
+body:has(.photo-dialog[open]){overflow:hidden}
+.photo-dialog{width:min(1020px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:12px;background:#f4f1e9;color:var(--green);box-shadow:0 24px 80px #172b2450;overflow:auto;overscroll-behavior:contain}
+.photo-dialog::backdrop{background:#172b2499}
+.photo-dialog-header{display:flex;align-items:start;justify-content:space-between;gap:20px;padding:24px 28px;border-bottom:1px solid var(--line)}
+.photo-dialog-header h2{font-size:26px;line-height:1.25}.photo-dialog-header p{font-size:13px;color:var(--muted);margin-top:8px}
+.photo-dialog-close{display:grid;place-items:center;flex-shrink:0;width:44px;padding:10px}
+.photo-dialog-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr)}
+.photo-stage{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#dfe6da;padding:28px;gap:18px}
+.photo-stage canvas{display:block;width:auto;height:auto;max-width:100%;max-height:min(53dvh,510px);touch-action:none;cursor:grab;border-radius:4px;box-shadow:0 8px 24px #172b2426}
+.photo-stage canvas:active{cursor:grabbing}.photo-stage p{font-size:12px;color:#354c3c;text-align:center;line-height:1.6}
+.photo-settings{padding:26px;display:flex;flex-direction:column;gap:22px;min-width:0}.photo-file-name{font-weight:650;font-size:14px;overflow-wrap:anywhere}.photo-original-size{font-size:12px;color:var(--muted);margin-top:-16px;font-variant-numeric:tabular-nums}
+.photo-format-note,.photo-save-note{font-size:13px;color:var(--muted)}
+.photo-zoom-label{grid-template-columns:1fr auto;align-items:center}.photo-zoom-label output{font-size:13px;font-variant-numeric:tabular-nums}.photo-zoom-label input{grid-column:1/-1;padding:0;background:transparent;border:0;accent-color:var(--green);cursor:pointer}
+.photo-adjustments{display:flex;gap:10px;flex-wrap:wrap}.photo-adjustments button{display:inline-flex;align-items:center;gap:8px;font-size:13px;padding:10px 12px}
+.photo-result-size{font-size:13px;font-weight:650;font-variant-numeric:tabular-nums}.photo-quality:not(:empty){font-size:13px;color:#775014;background:#f0e2c8;padding:12px;border-radius:6px;line-height:1.6}.photo-quality:empty,.photo-error:empty{display:none}.photo-error{font-size:13px;color:#9a2a21}
+.photo-dialog-footer{display:flex;align-items:center;gap:12px;padding:18px 28px;background:#f4f1e9;border-top:1px solid var(--line);position:sticky;bottom:0;z-index:1}.photo-dialog-footer .primary{margin-left:auto}
+@media(max-width:700px){.photo-dialog{width:calc(100% - 16px);max-height:calc(100dvh - 16px)}.photo-dialog-header{padding:18px}.photo-dialog-header h2{font-size:23px}.photo-dialog-body{grid-template-columns:1fr}.photo-stage{padding:20px;gap:12px}.photo-stage canvas{max-height:36dvh}.photo-settings{padding:20px;gap:18px}.photo-dialog-footer{padding:12px;gap:6px;flex-wrap:wrap}.photo-dialog-footer button{font-size:13px;padding:10px 12px}.photo-dialog-footer .primary{flex:1}}

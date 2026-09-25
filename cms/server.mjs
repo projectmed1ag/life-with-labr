@@ -110,7 +110,7 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
         res.setHeader('Content-Security-Policy',"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'");
         res.setHeader('X-Robots-Tag','noindex, nofollow');res.setHeader('Cache-Control','no-store');
         const name=route==='/'||route==='/admin/'?'index.html':route.slice(7);
-        if(!['index.html','admin.js','admin.css'].includes(name))fail(404,'Страница не найдена.');
+        if(!['index.html','admin.js','admin.css','photo-editor.js','photo-geometry.js'].includes(name))fail(404,'Страница не найдена.');
         const content=await readFile(path.join(ROOT,'cms/public',name));res.writeHead(200,{'Content-Type':types[path.extname(name)]});return res.end(req.method==='HEAD'?undefined:content);
       }
       if(isAdmin&&!development && route!=='/fonts.css')fail(404,'Страница не найдена.');

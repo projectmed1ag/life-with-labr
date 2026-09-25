@@ -127,3 +127,5 @@
   .home-discover{padding-bottom:65px}
 }
 @media(max-width:520px){.discover-grid{grid-template-columns:1fr}}
+.gallery-collection .moments-grid .gallery-item{aspect-ratio:auto;grid-column:auto;height:auto}
+.gallery-collection .moments-grid .gallery-item img{height:auto;object-fit:contain}

@@ -1,6 +1,6 @@
 # Owner editor
 
-Status: implemented extension of the approved Life with Labr identity. Visual source: `cms/public/index.html`, `admin.css`, and `admin.js`. Shared tokens and component variants are recorded in the root `DESIGN.md`.
+Status: implemented extension of the approved Life with Labr identity. Visual source: `cms/public/index.html`, `admin.css`, `admin.js`, and `photo-editor.js`; crop geometry is in `photo-geometry.js`. Shared tokens and component variants are recorded in the root `DESIGN.md`.
 
 ## Purpose and sequence
 
@@ -12,6 +12,14 @@ The forest header holds the existing text brand, a site-opening link, and logout
 
 The editor begins with back navigation and record identity. Ruled sections group content, parents, puppy facts, and photos. Paired fields occupy two columns when space allows. Photo previews retain explicit reorder and remove controls. Saving/publishing stay in a sticky lower bar; record actions are separate from field editing. Draft state and published state remain distinguishable, including when a published record has new unpublished changes.
 
+## Photo preparation
+
+Selecting a file opens a modal preview before upload. Puppy photos use a fixed 3:4 frame and parent photos use 3:2; gallery photos start with their original proportions and may use 3:4, 3:2 or 1:1. The preview and exported image use the same crop. Owners can drag with a mouse or finger, move the frame with arrow keys, zoom, rotate in quarter turns, and reset. The desktop dialog pairs the preview with labelled controls and keeps its actions in a sticky footer. It uses the established cream, green, Manrope, and plain admin controls.
+
+Show the original and final dimensions, with a readable warning when the crop's shorter side is below 800 px. Export WebP at no more than 2400 px on the longer side without enlargement. Each selected file is handled in sequence; Skip advances to the next, while Cancel stops the remaining selection and keeps photos already added. Uploads remain unsaved changes until the owner saves the gallery or saves/publishes the litter.
+
+Existing previews show saved dimensions and a «Кадр и предпросмотр» action. Gallery previews retain the saved proportions; puppy and parent previews match their respective frames. Re-editing starts from the saved file, so restoring an already cropped-out area requires selecting the original again. After the upload or edit sequence, keyboard focus returns to its initiating control.
+
 ## Visual expression
 
 Use Manrope working headings and body text, cream page surfaces, forest primary buttons, pale input surfaces, visible labels, and restrained separators. The existing admin text wordmark is an implementation detail, not an additional system-wide display font. Public album frames, serif card titles, gold gradient CTAs, and availability ribbons do not become editor chrome.
@@ -20,6 +28,7 @@ Use Manrope working headings and body text, cream page surfaces, forest primary 
 
 - Above 850px: 230px sidebar within a maximum 1500px workspace; main padding uses `44px clamp(24px,5vw,72px) 110px`.
 - At 850px and below: sidebar navigation becomes a top strip and its explanatory paragraph disappears.
+- At 700px and below: the photo dialog stacks preview above controls; its footer actions wrap and the primary action fills the remaining space.
 - At 600px and below: main padding is `26px 18px 100px`; page headings stack; paired fields become one column; record rows wrap; photo previews use two columns; the sticky save area stacks its status and two equal action columns.
 - Base fields remain at least 46px high and base action buttons at least 44px high. Compact photo controls and header utility actions keep their implemented exceptions; these are not a new general target-size rule.
 

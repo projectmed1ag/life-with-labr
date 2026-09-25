@@ -1,3 +1,4 @@
+import {preparePhoto} from './photo-editor.js';
 const app=document.querySelector('#app'),notice=document.querySelector('#notice');
 let csrf='',records=[],section='litters',current=null,dirty=false,busy=false,archived=false,pendingEdit=null;
 const e=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -27,7 +28,7 @@ const area=(label,key,value,max=3000)=>`<label>${label}<textarea data-field="${k
 const select=(label,key,value,options)=>`<label>${label}<select data-field="${key}">${options.map(([v,label])=>`<option value="${v}"${String(value??'')===v?' selected':''}>${label}</option>`).join('')}</select></label>`;
 function get(key){return key.split('.').reduce((value,k)=>value[k],current.data);}
 function set(key,value){const keys=key.split('.'),last=keys.pop(),target=keys.reduce((v,k)=>v[k],current.data);target[last]=value;dirty=true;document.querySelector('#save-state').textContent='Есть несохранённые изменения';}
-function photoEditor(key,photos,single=false){return `<div class="photo-editor"><div class="photo-list">${photos.map((photo,i)=>`<div class="photo-edit"><img src="${image(photo.src)}" width="160" height="120" alt="${e(photo.alt)}">${single?'':field('Описание фото',`${key}.${i}.alt`,photo.alt,'text','maxlength="300"')}<div class="photo-tools">${i?`<button type="button" class="quiet" data-move="${key}" data-index="${i}" aria-label="Переместить фото ${i+1} раньше">Раньше</button>`:''}<button type="button" class="quiet" data-remove-photo="${key}" data-index="${i}">Убрать</button></div></div>`).join('')}</div><label class="upload-label">${single&&photos.length?'Заменить фото':'Добавить фото'}<input type="file" data-upload="${key}" accept="image/jpeg,image/png,image/webp" ${single?'':'multiple'}></label><p class="help">JPG, PNG или WebP до 12 МБ. ${single?'':'Первое фото станет обложкой.'}</p></div>`;}
+function photoEditor(key,photos,single=false){return `<div class="photo-editor"><div class="photo-list">${photos.map((photo,i)=>`<div class="photo-edit photo-edit--${single?'parent':'puppy'}"><img src="${image(photo.src)}" width="160" height="120" alt="${e(photo.alt)}"><span class="photo-dimensions">${photo.width} × ${photo.height} px</span><button type="button" data-edit-photo="${key}" data-index="${i}">Кадр и предпросмотр</button>${single?'':field('Описание фото',`${key}.${i}.alt`,photo.alt,'text','maxlength="300"')}<div class="photo-tools">${i?`<button type="button" class="quiet" data-move="${key}" data-index="${i}" aria-label="Переместить фото ${i+1} раньше">Раньше</button>`:''}<button type="button" class="quiet" data-remove-photo="${key}" data-index="${i}">Убрать</button></div></div>`).join('')}</div><label class="upload-label">${single&&photos.length?'Заменить фото':'Добавить фото'}<input type="file" data-upload="${key}" accept="image/jpeg,image/png,image/webp" ${single?'':'multiple'}></label><p class="help">JPG, PNG или WebP до 12 МБ. ${single?'Кадр 3:2 — выберете перед загрузкой.':'Кадр 3:4 — выберете перед загрузкой. Первое фото станет обложкой.'}</p></div>`;}
 function parentEditor(parent,i){const key=`parents.${i}`;
   return `<section class="editor-section"><div class="section-title"><h2>${parent.role}</h2><button type="button" class="quiet" data-remove-parent="${i}">Убрать родителя</button></div><div class="two-columns">${field('Кличка',key+'.name',parent.name,'text','maxlength="120"')}${field('Питомник происхождения',key+'.kennel',parent.kennel,'text','maxlength="160"')}</div>${photoEditor(key+'.image',parent.image?[{src:parent.image,width:parent.width,height:parent.height,alt:parent.name}]:[],true)}${area('Достижения и описание',key+'.description',parent.description)}${area('Родословная',key+'.pedigree',parent.pedigree,5000)}<p class="help">Для Эдель и Енота сохраняется текущая родословная, если это поле пустое.</p></section>`;}
 function puppyEditor(puppy,i){const key=`puppies.${i}`;
@@ -37,8 +38,8 @@ function galleryEditor(){
   const photos=current.data.photos;
   chrome(`<div class="page-heading"><div><h1>Галерея</h1><p>Все фотографии питомника в одном альбоме.</p></div><a href="${publicOrigin}/gallery/" target="_blank" rel="noopener">Посмотреть на сайте ↗</a></div>
     <form id="editor-form" class="gallery-editor"><fieldset>
-      <div class="gallery-toolbar"><div><label class="upload-label">Добавить фотографии<input type="file" data-upload="photos" accept="image/jpeg,image/png,image/webp" multiple></label><p class="help">Можно выбрать несколько фото. JPG, PNG или WebP до 12 МБ каждое.</p></div><p class="gallery-count">Фотографий: ${photos.length}</p></div>
-      ${photos.length?`<div class="gallery-photo-grid">${photos.map((photo,i)=>`<div class="gallery-photo"><img src="${image(photo.src)}" alt="${e(photo.alt)}" width="${photo.width}" height="${photo.height}" loading="lazy">${field('Подпись к фото',`photos.${i}.alt`,photo.alt,'text','maxlength="300"')}<div class="gallery-photo-tools"><button type="button" data-move="photos" data-index="${i}" data-step="-1" ${i===0?'disabled':''} aria-label="Переместить фото ${i+1} раньше" title="Раньше">${galleryIcon('M15 5 8 12l7 7')}</button><button type="button" data-move="photos" data-index="${i}" data-step="1" ${i===photos.length-1?'disabled':''} aria-label="Переместить фото ${i+1} позже" title="Позже">${galleryIcon('m9 5 7 7-7 7')}</button><button type="button" data-remove-photo="photos" data-index="${i}" aria-label="Убрать фото ${i+1} из галереи" title="Убрать из галереи">${galleryIcon('m6 6 12 12M18 6 6 18')}</button></div></div>`).join('')}</div>`:'<div class="empty"><h2>Добавьте первые фотографии</h2><p>Они появятся в общей галерее после сохранения.</p></div>'}
+      <div class="gallery-toolbar"><div><label class="upload-label">Добавить фотографии<input type="file" data-upload="photos" accept="image/jpeg,image/png,image/webp" multiple></label><p class="help">Можно выбрать несколько фото. Перед загрузкой откроется предпросмотр. JPG, PNG или WebP до 12 МБ каждое.</p></div><p class="gallery-count">Фотографий: ${photos.length}</p></div>
+      ${photos.length?`<div class="gallery-photo-grid">${photos.map((photo,i)=>`<div class="gallery-photo"><img src="${image(photo.src)}" alt="${e(photo.alt)}" width="${photo.width}" height="${photo.height}" loading="lazy"><span class="photo-dimensions">${photo.width} × ${photo.height} px</span><button type="button" data-edit-photo="photos" data-index="${i}">Кадр и предпросмотр</button>${field('Подпись к фото',`photos.${i}.alt`,photo.alt,'text','maxlength="300"')}<div class="gallery-photo-tools"><button type="button" data-move="photos" data-index="${i}" data-step="-1" ${i===0?'disabled':''} aria-label="Переместить фото ${i+1} раньше" title="Раньше">${galleryIcon('M15 5 8 12l7 7')}</button><button type="button" data-move="photos" data-index="${i}" data-step="1" ${i===photos.length-1?'disabled':''} aria-label="Переместить фото ${i+1} позже" title="Позже">${galleryIcon('m9 5 7 7-7 7')}</button><button type="button" data-remove-photo="photos" data-index="${i}" aria-label="Убрать фото ${i+1} из галереи" title="Убрать из галереи">${galleryIcon('m6 6 12 12M18 6 6 18')}</button></div></div>`).join('')}</div>`:'<div class="empty"><h2>Добавьте первые фотографии</h2><p>Они появятся в общей галерее после сохранения.</p></div>'}
     </fieldset><div class="save-bar"><div id="save-state" role="status">${dirty||current.dirty?'Есть несохранённые изменения':'Изменения появятся на сайте после сохранения'}</div><div class="inline-actions"><button type="button" class="quiet" data-action="reset-gallery">Отменить изменения</button><button type="submit" class="primary">Сохранить изменения</button></div></div></form>`);
 }
 function editor(){
@@ -74,13 +75,48 @@ app.addEventListener('submit',async event=>{event.preventDefault();if(event.targ
   try{const values=new FormData(form),result=await api('/api/login',{method:'POST',data:{username:values.get('username'),password:values.get('password')}});csrf=result.csrf;await refresh();if(pendingEdit){current=pendingEdit;section=current.kind;pendingEdit=null;dirty=true;editor();say('Вход восстановлен. Ваши изменения сохранены в форме.');}else{listing();say('');}}catch(error){const errorNode=document.querySelector('#login-error');if(errorNode)errorNode.textContent=error.message;button.disabled=false;button.textContent='Войти';}});
 app.addEventListener('input',event=>{const input=event.target;if(input.id==='search'){document.querySelectorAll('[data-search]').forEach(row=>row.hidden=!row.dataset.search.includes(input.value.toLowerCase()));return;}
   if(input.dataset.field){let value=input.value;if(input.type==='number')value=value===''?null:Number(value);if(input.dataset.field.endsWith('.status')&&!value)value=null;set(input.dataset.field,value);}});
-app.addEventListener('change',async event=>{const input=event.target;
-  if(!input.dataset.upload)return;
-  const files=[...input.files];if(!files.length)return;const key=input.dataset.upload,single=key.endsWith('.image');
+async function uploadPhotos(files,key,replaceIndex=null){
+  if(busy)return;
+  const single=key.endsWith('.image'),kind=single?'parent':section==='gallery'?'gallery':'puppy';
   const limit=section==='gallery'?500:20;
-  if(!single&&get(key).length+files.length>limit){say(`Можно добавить до ${limit} фотографий.`,true);input.value='';return;}
-  busy=true;input.disabled=true;document.querySelector('#editor-form fieldset').disabled=true;
-  try{for(let i=0;i<files.length;i++){say(`Загружаем фото ${i+1} из ${files.length}…`);if(files[i].size>12*1024*1024)throw new Error('Фото больше 12 МБ. Выберите файл поменьше.');const photo=await api('/api/upload',{method:'POST',raw:files[i]});if(single){const p=get(key.slice(0,-6));p.image=photo.src;p.width=photo.width;p.height=photo.height;}else{photo.alt=current.data.title||'';get(key).push(photo);}dirty=true;}say(section==='gallery'?'Фотографии добавлены. Сохраните изменения.':'Фотографии загружены. Сохраните запись.');}catch(error){say(error.message,true);}finally{busy=false;if(current)editor();}});
+  if(!single&&replaceIndex===null&&get(key).length+files.length>limit){say(`Можно добавить до ${limit} фотографий.`,true);return;}
+  busy=true;document.querySelector('#editor-form fieldset').disabled=true;
+  let added=0;
+  try{
+    for(let i=0;i<files.length;i++){
+      const prepared=await preparePhoto(files[i],{kind,index:i+1,total:files.length,editing:replaceIndex!==null});
+      if(!prepared)break;if(prepared.skip)continue;
+      say('Загружаем фото…');
+      const photo=await api('/api/upload',{method:'POST',raw:prepared.blob});
+      if(single){const parent=get(key.slice(0,-6));parent.image=photo.src;parent.width=photo.width;parent.height=photo.height;}
+      else if(replaceIndex!==null){photo.alt=get(key)[replaceIndex].alt;get(key)[replaceIndex]=photo;}
+      else{photo.alt=kind==='puppy'?get(key.slice(0,-7)).name||'':current.data.title||'';get(key).push(photo);}
+      dirty=true;added++;
+    }
+    say(added?(replaceIndex!==null?'Кадр обновлён. Сохраните изменения.':`Добавлено фото: ${added}. Сохраните изменения.`):'');
+  }catch(error){say(`${error.message}${added?' Уже добавлено фото: '+added+'. Сохраните изменения.':''}`,true);}
+  finally{
+    busy=false;
+    if(current){
+      editor();
+      const opener=replaceIndex===null?`[data-upload="${key}"]`:`[data-edit-photo="${key}"][data-index="${replaceIndex}"]`;
+      document.querySelector(opener)?.focus();
+    }
+  }
+}
+async function editPhoto(key,index){
+  const single=key.endsWith('.image'),src=single?get(key):get(key)[index].src;
+  busy=true;
+  try{
+    const response=await fetch(image(src));if(!response.ok)throw new Error('Не удалось открыть фото. Обновите страницу и попробуйте снова.');
+    const blob=await response.blob();busy=false;
+    await uploadPhotos([new File([blob],src,{type:blob.type})],key,index);
+  }catch(error){say(error.message,true);}finally{busy=false;}
+}
+app.addEventListener('change',event=>{const input=event.target;
+  if(!input.dataset.upload)return;
+  const files=[...input.files];input.value='';if(files.length)void uploadPhotos(files,input.dataset.upload);
+});
 app.addEventListener('click',async event=>{const b=event.target.closest('button,a');if(!b)return;if(busy){event.preventDefault();return;}
   try{
     if(b.dataset.section){if(!canLeave())return;section=b.dataset.section;archived=false;listing();}
@@ -91,6 +127,7 @@ app.addEventListener('click',async event=>{const b=event.target.closest('button,
     if(b.dataset.removeParent!==undefined){if(confirm('Убрать родителя из этого помёта?')){current.data.parents.splice(+b.dataset.removeParent,1);dirty=true;editor();}}
     if(b.dataset.removePuppy!==undefined){if(confirm('Убрать щенка из этого помёта?')){current.data.puppies.splice(+b.dataset.removePuppy,1);dirty=true;editor();}}
     if(b.dataset.removePhoto){const key=b.dataset.removePhoto;if(key.endsWith('.image')){const p=get(key.slice(0,-6));p.image='';p.width=p.height=0;}else get(key).splice(+b.dataset.index,1);dirty=true;editor();}
+    if(b.dataset.editPhoto)return editPhoto(b.dataset.editPhoto,+b.dataset.index);
     if(b.dataset.move){const photos=get(b.dataset.move),i=+b.dataset.index,next=i+Number(b.dataset.step||-1);if(next>=0&&next<photos.length){[photos[next],photos[i]]=[photos[i],photos[next]];dirty=true;editor();document.querySelector(`[data-move="${b.dataset.move}"][data-index="${next}"]:not(:disabled)`)?.focus();}}
     const action=b.dataset.action;
     if(action==='home'){event.preventDefault();if(canLeave())listing();}
