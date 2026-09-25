@@ -8,7 +8,7 @@ One owner manages a shared photo gallery and litters. Gallery opens directly int
 
 ## Composition
 
-The forest header holds the existing text brand, a site-opening link, and logout. The cream workspace has a section sidebar and a broad main column. The list heading and create action precede a labelled search field, archive switch, and divided rows. A row combines photo, title, useful record details, and publication state. Published litters expose a separate «Все щенки нашли дом» button beside the editor-opening control; the buttons are siblings. On narrow screens the close action moves below the record. A confirmation explains catalog removal, redirecting old public URLs and reversible archiving.
+The forest header holds the existing text brand, a site-opening link, and logout. The cream workspace has a section sidebar and a broad main column. The list heading and create action precede a labelled search field, archive switch, and divided rows. A row combines photo, title, useful record details, and publication state. Published litters expose a separate «Все щенки проданы!» button beside the editor-opening control; the buttons are siblings. On narrow screens the close action moves below the record. A confirmation explains catalog removal, redirecting old public URLs and reversible archiving.
 
 The editor begins with back navigation and record identity. Ruled sections group content, parents, puppy facts, and photos. Paired fields occupy two columns when space allows. Photo previews retain explicit reorder and remove controls. Saving/publishing stay in a sticky lower bar; record actions are separate from field editing. Draft state and published state remain distinguishable, including when a published record has new unpublished changes.
 
