@@ -94,6 +94,7 @@ export default {
   "Эдель": "Edel",
   "Грандчемпион России, НКП, Армении, Грузии, Беларуси.": "Grand Champion of Russia, the National Breed Club, Armenia, Georgia and Belarus.",
   "Достижения и родословная": "Achievements and pedigree",
+  "Подробнее": "Learn more",
   "ПАЛЕВЫЙ": "YELLOW",
   "Ванесса": "Vanessa",
   "12 побед в Best in Group.": "12 Best in Group wins.",
