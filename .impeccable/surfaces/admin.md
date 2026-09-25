@@ -4,7 +4,7 @@ Status: implemented extension of the approved Life with Labr identity. Visual so
 
 ## Purpose and sequence
 
-One owner manages gallery publications and litters. The direct path is section → record list → editor → save draft or publish. Archive is a separate, reversible record action; the archive view returns to the current list. Keep these operations explicit and labelled in Russian.
+One owner manages a shared photo gallery and litters. Gallery opens directly into a photo grid with a multi-file uploader, captions, earlier/later controls, removal, reset, and one Save changes button. There are no gallery posts, titles, dates, search or archive controls. Litters follow section → record list → editor → save draft or publish. Archive remains a separate, reversible litter action; the archive view returns to the current list. Keep these operations explicit and labelled in Russian.
 
 ## Composition
 
@@ -22,6 +22,8 @@ Use Manrope working headings and body text, cream page surfaces, forest primary 
 - At 850px and below: sidebar navigation becomes a top strip; its explanatory paragraph and the header's small descriptive label disappear.
 - At 600px and below: main padding is `26px 18px 100px`; page headings stack; paired fields become one column; record rows wrap; photo previews use two columns; the sticky save area stacks its status and two equal action columns.
 - Base fields remain at least 46px high and base action buttons at least 44px high. Compact photo controls and header utility actions keep their implemented exceptions; these are not a new general target-size rule.
+
+The gallery grid uses flexible columns of at least 210px on desktop and two columns on mobile (one below 360px). Photo controls retain 44px targets; the Save changes button is first in the mobile save bar. Existing gallery publication records are merged without publishing pending edits; their original data remains in history.
 
 ## Feedback
 

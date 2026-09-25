@@ -27,14 +27,14 @@ export function validateContent(kind, input, {publish=false, mediaExists=()=>tru
     if(!Number.isInteger(width)||!Number.isInteger(height)||width<1||height<1||width>20000||height>20000) fail('Некорректные размеры фотографии.');
     return {src,width,height,alt:text(raw.alt||'','Описание фото',300)};
   };
-  const photos=(raw,required=false)=>{
-    const values=list(raw||[],20,'фотографии').map(photo);
+  const photos=(raw,required=false,max=20)=>{
+    const values=list(raw||[],max,'фотографии').map(photo);
     if(required && !values.length) fail('Добавьте хотя бы одну фотографию.');
     return values;
   };
-  const common={id:id(input.id),title:text(input.title||'','Название',120,publish)};
-  if(kind==='gallery') return {...common,text:text(input.text||'','Текст публикации',5000),date:date(input.date),photos:photos(input.photos,publish)};
+  if(kind==='gallery') return {id:id(input.id),title:'',text:'',date:null,photos:photos(input.photos,false,500)};
   if(kind!=='litters') fail('Неизвестный раздел.');
+  const common={id:id(input.id),title:text(input.title||'','Название',120,publish)};
   const parents=unique(list(input.parents||[],2,'родители').map(raw=>{
     if(!raw || typeof raw!=='object') fail('Некорректные сведения о родителе.');
     if(!['Мама','Папа'].includes(raw.role)) fail('Укажите роль родителя.');

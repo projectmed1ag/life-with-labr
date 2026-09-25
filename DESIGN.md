@@ -267,3 +267,5 @@ Use the kennel's real uploaded photographs and descriptive alternatives. Portrai
 - **Don't** invent prices, availability, or decorative status claims when data is absent.
 - **Don't** show an inquiry action for a reserved puppy or one already with a new family.
 - **Don't** replace the established brand artwork or real puppy photography as part of an ordinary extension.
+
+The owner’s gallery is a single album editor: direct photo grid, captions, earlier/later controls, removal, reset and one Save changes action. Post lists, publication names and dates are not part of this surface. Public photos form one continuous grid.

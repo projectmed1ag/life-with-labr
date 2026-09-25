@@ -83,6 +83,7 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
         const match=/^\/api\/content\/(litters|gallery)\/([a-z0-9-]+)$/.exec(route);
         if(match&&req.method==='PUT'){
           const input=await jsonBody(req),[,kind,id]=match;if(!validId(id))fail(400,'Некорректный адрес.');
+          if(kind==='gallery' && (id!=='gallery' || !['draft','publish'].includes(input.action)))fail(400,'Галерея единая. Обновите страницу, чтобы редактировать фотографии.');
           if(!Number.isInteger(input.version)||input.version<0)fail(400,'Обновите запись.');
           return await serialize(async()=>{
             // Render first: failed publication leaves both the live pages and stored record intact.

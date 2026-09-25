@@ -2,6 +2,7 @@ import {DatabaseSync, backup} from 'node:sqlite';
 import {mkdirSync, existsSync, chmodSync} from 'node:fs';
 import path from 'node:path';
 import {HttpError, validateContent} from './validation.mjs';
+import {migrateGallery} from './gallery.mjs';
 
 export function openStore(directory, {seed, assetDirectory}={}) {
   mkdirSync(directory,{recursive:true,mode:0o700});
@@ -24,16 +25,18 @@ export function openStore(directory, {seed, assetDirectory}={}) {
       db.prepare('INSERT INTO meta VALUES(?,?)').run('seeded','1'); db.exec('COMMIT');
     } catch(error) {db.exec('ROLLBACK');throw error;}
   }
+  migrateGallery(db);
   const mediaExists=src=> src.startsWith('upload-') ? !!db.prepare('SELECT 1 FROM media WHERE src=?').get(src) : !!assetDirectory && existsSync(path.join(assetDirectory,src));
   const unpack=row=>row?{kind:row.kind,id:row.id,data:JSON.parse(row.draft),version:row.version,archived:!!row.archived,published:!!row.published,dirty:row.draft!==row.published,updated:row.updated}:null;
   const get=(kind,id)=>unpack(db.prepare('SELECT * FROM records WHERE kind=? AND id=?').get(kind,id));
-  const all=()=>db.prepare('SELECT * FROM records ORDER BY updated DESC,id').all().map(unpack);
+  const all=()=>db.prepare("SELECT * FROM records WHERE kind!='gallery' OR id='gallery' ORDER BY updated DESC,id").all().map(unpack);
   const published=()=>{
     const data={litters:[],gallery:[]};
     for(const row of db.prepare('SELECT kind,published FROM records WHERE published IS NOT NULL AND archived=0 ORDER BY updated DESC,id').all()) data[row.kind].push(JSON.parse(row.published));
     data.gallery.sort((a,b)=>(b.date||'').localeCompare(a.date||''));return data;
   };
   const save=(kind,id,input,version,action='draft')=>{
+    if(kind==='gallery' && (id!=='gallery' || !['draft','publish'].includes(action))) throw new HttpError(400,'Галерея единая. Обновите страницу, чтобы редактировать фотографии.');
     if(!['draft','publish','unpublish','archive','restore'].includes(action)) throw new HttpError(400,'Неизвестное действие.');
     const data=validateContent(kind,{...input,id},{publish:action==='publish',mediaExists});
     db.exec('BEGIN IMMEDIATE');
