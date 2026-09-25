@@ -90,7 +90,7 @@ for (const page of allPages) {
     structuredData:JSON.stringify({'@context':'https://schema.org','@graph':graph}).replaceAll('<','\\u003c'),
     nav:links(navigationPages), mobileNav:links(navigationPages),
     content,
-    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=story-1">' : page.key === 'dogs' ? '<link rel="stylesheet" href="/dogs.css?v=aria-photo-2">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=care-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
+    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=story-3">' : page.key === 'dogs' ? '<link rel="stylesheet" href="/dogs.css?v=aria-photo-2">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=care-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
     appVersion:'pedigree-2'
   };
   const html = layout.replace(/\{\{(\w+)\}\}/g, (_, key) => {

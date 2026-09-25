@@ -1,5 +1,5 @@
 /* Home-page story, using the site's existing type, colors and photography. */
-.home-page{--story-gap:clamp(40px,6vw,88px);--story-body:17px}
+.home-page{--story-gap:clamp(32px,4vw,64px);--story-body:17px}
 .home-page ::selection{background:var(--gold);color:var(--green)}
 .home-page .hero{min-height:640px}
 .home-page .hero-content{height:100%;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding-top:64px;padding-bottom:128px}
@@ -7,14 +7,13 @@
 .home-tagline{font-family:var(--serif);font-size:clamp(29px,3vw,44px);line-height:1.2;max-width:500px;text-wrap:balance;color:var(--cream)}
 .home-tagline em{color:var(--gold)}
 .home-page .hero .button{margin-top:36px}
-.home-welcome{padding-top:96px;padding-bottom:64px}
+.home-welcome{padding-top:96px;padding-bottom:40px}
 .home-welcome .welcome-lead{max-width:1060px;font-family:var(--serif);font-size:clamp(32px,3.5vw,48px);line-height:1.28;letter-spacing:-.015em;text-wrap:pretty}
 .welcome-lead em{color:#617253}
-.welcome-details{max-width:680px;margin:36px 0 0 auto}
-.welcome-details>p,.home-approach-copy>p{font-size:var(--story-body);line-height:1.9;color:var(--ink);text-wrap:pretty}
+.home-approach-copy>p{font-size:var(--story-body);line-height:1.8;color:var(--ink);text-wrap:pretty}
 .home-text-link{display:inline-flex;align-items:center;min-height:44px;padding:8px 0;margin-top:20px;font-size:14px;text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1px;text-decoration-color:#7e8870}
 .home-text-link:hover{color:#617253;text-decoration-color:currentColor}
-.home-approach{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:var(--story-gap);align-items:center;padding-top:24px;padding-bottom:104px}
+.home-approach{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--story-gap);align-items:start;padding-top:0;padding-bottom:104px}
 .home-approach figure{margin:0}
 .home-approach img{height:auto;aspect-ratio:1179/787}
 .home-approach-copy>p+p{margin-top:24px}
@@ -26,9 +25,10 @@
 @media(min-width:701px) and (max-width:1000px){
   .home-page{--story-body:16px;--story-gap:36px}
   .home-tagline{max-width:430px}
-  .home-approach{grid-template-columns:minmax(0,1fr);gap:36px}
-  .home-approach figure{max-width:640px}
-  .home-approach-copy{max-width:680px;justify-self:end}
+}
+@media(max-width:1200px){
+  .home-approach{grid-template-columns:minmax(0,1fr)}
+  .home-approach>figure,.home-approach-copy{width:100%;max-width:680px;justify-self:center}
 }
 @media(max-width:700px){
   .home-page{--story-body:16px;--story-gap:32px}
@@ -42,10 +42,9 @@
   .home-page .hero-image img,.home-page .hero-image .photo-loop{object-position:40% 50%}
   .home-page .hero-bottom{position:relative;inset:auto;order:3;margin:0;padding:20px 6%;min-height:72px}
   .home-page .hero-bottom .scroll-line{height:28px}
-  .home-welcome{padding-top:56px;padding-bottom:40px}
+  .home-welcome{padding-top:56px;padding-bottom:32px}
   .home-welcome .welcome-lead{font-size:31px;line-height:1.3}
-  .welcome-details{margin-top:28px;max-width:none}
-  .welcome-details>p,.home-approach-copy>p{line-height:1.85}
+  .home-approach-copy>p{line-height:1.85}
   .home-approach{grid-template-columns:minmax(0,1fr);padding-top:0;padding-bottom:56px}
   .home-approach-copy>p+p{margin-top:24px}
   .home-signoff{padding-top:56px;padding-bottom:56px}
