@@ -34,6 +34,7 @@ export function validateLitters(litters) {
 }
 
 export function renderLitterCatalog(litters) {
+  if(!litters.length)return `<div class="litter-empty"><h2>Сейчас нет открытых помётов</h2><p>Информацию о новых помётах уточняйте у Евгении.</p><a class="button button-dark" href="#contacts">Связаться с питомником</a></div>`;
   return litters.map(litter => {
     const allHome = litter.puppies.every(puppy => puppy.status === 'home');
     const available = litter.puppies.some(puppy => puppy.status === 'available');

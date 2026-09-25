@@ -315,5 +315,7 @@ export default {
   "Забронирован": "Reserved",
   "Уже дома": "At home",
   "Уточнить наличие": "Check availability",
-  "Забронировать": "Reserve a puppy"
+  "Забронировать": "Reserve a puppy",
+  "Сейчас нет открытых помётов": "There are no current litters",
+  "Информацию о новых помётах уточняйте у Евгении.": "Contact Evgeniya for information about upcoming litters."
 };

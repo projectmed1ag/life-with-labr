@@ -69,7 +69,22 @@ test('HTTP auth, CSRF, photos, publication and dynamic routes',async()=>{
     assert((await (await request('/gallery/')).text()).includes('Скоро здесь появятся новые фотографии.'));
     assert.equal((await request('/assets/fonts/font-0.ttf')).status,200);assert.equal((await request('/admin/admin.js')).status,200);assert.equal((await request('/.env')).status,404);
     assert.equal((await request('/moments/')).status,308);
-    assert.equal((await request('/api/content/litters/new-litter','PUT',{data:changed,version:3,action:'archive'})).status,200);assert.equal((await request('/puppies/new-litter/')).status,404);
+    assert.equal((await request('/api/content/litters/new-litter','PUT',{data:changed,version:3,action:'archive'})).status,200);
+    for(const [route,location] of [['/puppies/new-litter/','/puppies/'],['/en/puppies/new-litter/','/en/puppies/'],['/puppies/new-litter/index.html','/puppies/']]){
+      const closed=await request(route);assert.equal(closed.status,302);assert.equal(closed.headers.get('location'),location);assert.equal(closed.headers.get('cache-control'),'no-store');
+    }
+    assert(!(await (await request('/puppies/')).text()).includes('/puppies/new-litter/'));
+    assert(!(await (await request('/sitemap.xml')).text()).includes('/puppies/new-litter/'));
+    const original=store.get('litters',litters[0].id);
+    response=await request('/api/content/litters/'+original.id,'PUT',{data:original.data,version:original.version,action:'archive'});assert.equal(response.status,200);
+    const empty=await (await request('/puppies/')).text();assert(empty.includes('Сейчас нет открытых помётов'));assert(empty.includes('href="#contacts"'));
+    assert((await (await request('/en/puppies/')).text()).includes('There are no current litters'));
+    let restored=store.get('litters',original.id);
+    response=await request('/api/content/litters/'+original.id,'PUT',{data:restored.data,version:restored.version,action:'restore'});assert.equal(response.status,200);restored=(await response.json()).record;
+    assert.deepEqual(restored.data.puppies,original.data.puppies);
+    assert.equal((await request('/puppies/'+original.id+'/')).status,404);
+    assert.equal((await request('/api/content/litters/'+original.id,'PUT',{data:restored.data,version:restored.version,action:'publish'})).status,200);
+    assert.equal((await request('/puppies/'+original.id+'/')).status,200);
     assert.equal((await request('/api/logout','POST',{})).status,200);assert.equal((await request('/api/content')).status,401);
   }finally{await new Promise(resolve=>server.close(resolve));await rm(dir,{recursive:true,force:true});}
 });

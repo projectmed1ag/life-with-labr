@@ -211,6 +211,7 @@
 .puppy-pictures>.puppy-status--home{background:#f4e4c5}
 .puppy-pictures>.puppy-status svg{flex-shrink:0}
 .pedigree-text{white-space:pre-wrap;line-height:1.8;padding-block:22px;max-width:75ch}
+.litter-empty{max-width:760px;margin-inline:auto;padding-block:28px 40px}.litter-empty h2{font-size:clamp(32px,4vw,54px)}.litter-empty p{margin-block:20px 28px;line-height:1.7}
 @media(max-width:600px){
   .litter-parent-grid{grid-template-columns:minmax(0,1fr);gap:40px;max-width:480px}
   .litter-parent,.litter-parent:nth-child(even){--photo-angle:-.6deg}

@@ -119,6 +119,8 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
       const key=route.endsWith('/')?route+'index.html':route;
       if(pages.has(key)){res.writeHead(200,{'Content-Type':types[path.extname(key)],'Cache-Control':'no-cache'});return res.end(req.method==='HEAD'?undefined:pages.get(key));}
       if(pages.has(route+'/index.html')){res.writeHead(308,{Location:route+'/'+url.search});return res.end();}
+      const closedLitter=/^\/(en\/)?puppies\/([a-z0-9-]+)(?:\/index\.html|\/)?$/.exec(route);
+      if(closedLitter && store.get('litters',closedLitter[2])?.archived){res.writeHead(302,{Location:closedLitter[1]?'/en/puppies/':'/puppies/','Cache-Control':'no-store'});return res.end();}
       if(/^\/[a-zA-Z0-9-]+\.(css|js)$/.test(route)||['/favicon-64.png','/favicon.svg','/apple-touch-icon.png'].includes(route))return await file(req,res,path.join(ROOT,'dist',route));
       fail(404,'Страница не найдена.');
     }catch(error){if(res.headersSent)return res.destroy();json(res,error.status||500,{error:error.status?error.message:'Не удалось сохранить изменения. Повторите попытку.'});if(!error.status)console.error('Request failed:',error.message);}
