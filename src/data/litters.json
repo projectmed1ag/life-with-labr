@@ -1,0 +1,17 @@
+[
+  {
+    "id": "edel-enot",
+    "title": "Эдель и Енот",
+    "birthDate": null,
+    "description": "Три девочки: Аврора, Аура и Амелия. Палевые лабрадоры.",
+    "parents": [
+      {"id": "edel", "name": "Эдель", "role": "Мама", "kennel": "Время Мечты", "image": "edel.jpg", "width": 964, "height": 646, "description": "Грандчемпион России, НКП, Армении, Грузии и Беларуси."},
+      {"id": "enot", "name": "Енот", "role": "Папа", "kennel": "Русмайрас", "image": "enot.jpg", "width": 1102, "height": 731, "description": "Чемпион России, юный грандчемпион России."}
+    ],
+    "puppies": [
+      {"id": "avrora", "name": "Аврора", "sex": "female", "color": "Палевый", "price": null, "status": null, "description": "", "photos": [{"src": "puppy-avrora.jpg", "width": 1200, "height": 1600, "alt": "Аврора сидит на деревянной террасе на фоне осенней листвы"}]},
+      {"id": "aura", "name": "Аура", "sex": "female", "color": "Палевый", "price": null, "status": null, "description": "", "photos": [{"src": "puppy-aura.jpg", "width": 1200, "height": 1600, "alt": "Аура смотрит в камеру на фоне красных осенних листьев"}]},
+      {"id": "amelia", "name": "Амелия", "sex": "female", "color": "Палевый", "price": null, "status": null, "description": "", "photos": [{"src": "puppy-amelia.jpg", "width": 1200, "height": 1600, "alt": "Амелия сидит на террасе, слегка наклонив голову"}]}
+    ]
+  }
+]

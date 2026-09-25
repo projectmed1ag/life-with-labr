@@ -1,3 +1,8 @@
+import {translateText, translateMarkup} from './localization.js';
+import {pedigreeBranch, renderPedigree} from './pedigree.js?v=tree-1';
+const language = document.documentElement.lang;
+const t = text => translateText(text, language);
+const localize = html => translateMarkup(html, language);
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
   if (entry.isIntersecting) { entry.target.classList.add('is-visible'); revealObserver.unobserve(entry.target); }
@@ -8,6 +13,20 @@ document.querySelectorAll('[data-reveal]').forEach(el => {
 });
 document.documentElement.classList.add('enhanced');
 document.querySelector('#year').textContent = new Date().getFullYear();
+
+// Direct contact links are already available at the end of the page.
+const floatingContact = document.querySelector('.floating-contact');
+const visibleContactSections = new Set();
+if (floatingContact) {
+  const contactObserver = new IntersectionObserver(entries => {
+    entries.forEach(({target, isIntersecting}) => {
+      if (isIntersecting) visibleContactSections.add(target);
+      else visibleContactSections.delete(target);
+    });
+    floatingContact.classList.toggle('is-obscured', visibleContactSections.size > 0);
+  });
+  document.querySelectorAll('#contacts, .site-footer').forEach(section => contactObserver.observe(section));
+}
 
 const heroImage = document.querySelector('.hero-image .photo-loop') ? null : document.querySelector('.hero-image img');
 let framePending = false;
@@ -63,12 +82,10 @@ document.querySelectorAll('dialog').forEach(dialog => {
   });
 });
 
-const pedigreeBranch = (label, parent, title, grandparents) => `<section class="pedigree-branch"><p class="eyebrow">${label}</p><div class="ancestor root-ancestor"><h4>${parent}</h4><p>${title}</p></div><div class="ancestor-grid">${grandparents.map(p => `<div class="ancestor"><h4>${p.name}</h4><p>${p.title}</p>${p.parents ? `<div class="great-grandparents">${p.parents.map(n => `<span>${n}</span>`).join('')}</div>` : ''}</div>`).join('')}</div></section>`;
-
 const dogs = {
   edel: {
-    name: 'Время Мечты Эдель', image: 'edel.jpg', label: 'НАША ЭДЕЛЬ',
-    intro: 'Гармоничная, женственная и ласковая. Заботливая мама щенков Life with Labr.',
+    name: 'Эдель', image: 'edel.jpg', label: 'LIFE WITH LABR',
+    intro: 'Грандчемпион России, НКП, Армении, Грузии и Беларуси.',
     facts: [['Дата рождения', '4 марта 2024'], ['Окрас', 'Палевый'], ['Владелец', 'Евгения Скобликова'], ['Заводчик', 'Илона Монахова'], ['Питомник', 'Время Мечты']],
     titles: [
       ['Грандчемпион', 'России, НКП, Армении, Грузии, Беларуси'],
@@ -78,27 +95,76 @@ const dogs = {
       ['Юный Чемпион', 'России, НКП, Армении · 8 × Юный Чемпион РКФ'],
       ['Кандидат', 'В Шоу Чемпионы, Интерчемпионы и Чемпионы Золотого Кольца']
     ],
-    pedigree: pedigreeBranch('ОТЕЦ', 'Никсон Лаб Бонапарт', 'Грандчемпион России · Чемпион России, НКП, РКФ', [
+    pedigree: [pedigreeBranch('ОТЕЦ', 'Никсон Лаб Бонапарт', 'Грандчемпион России · Чемпион России, НКП, РКФ', [
       {name: 'Кристофер Строллер Сан', title: 'Интерчемпион · Грандчемпион', parents: ['Rocheby Step Ahead', 'Юффо Лондон Блю Топаз']},
       {name: 'Kelly for Nikson Dvaruva', title: 'Чемпион России · Литва', parents: ['Big Bang Magic Power', 'Rocheby Pastelshades']}
-    ]) + pedigreeBranch('МАТЬ', 'Время Мечты Вера', 'Чемпион России, РКФ', [
+    ]), pedigreeBranch('МАТЬ', 'Время Мечты Вера', 'Чемпион России, РКФ', [
       {name: 'Жерминаль Мисти Шоу Мэйкер', title: 'Интерчемпион · Грандчемпион', parents: ['Rocheby Step Ahead', 'Жерминаль Мисти Чарминг Чанс']},
       {name: 'Флэми Стар Тестаросса', title: 'Чемпион России · Чемпион-производитель', parents: ['Jentleman Jim Down the Hill', 'Флэми Стар Нирвана']}
-    ])
+    ])]
+  },
+  vanessa: {
+    name: 'Ванесса', image: 'vanessa-show.jpg', portrait: true, label: 'LIFE WITH LABR',
+    intro: 'Победитель выставочных групп и специализированных выставок. Многократный победитель породы.',
+    facts: [['Порода', 'Лабрадор-ретривер'], ['Пол', 'Сука'], ['Окрас', 'Палевый']],
+    titles: [
+      ['12 × Best in Group', 'Победитель группы'],
+      ['4 × Reserve Best in Group', 'Резервный победитель группы'],
+      ['6 × Best in Group-3', 'Третье место в группе'],
+      ['6 × Best in Show Specialty', 'Победитель специализированной выставки'],
+      ['Многократный BOB', 'Лучший представитель породы']
+    ]
+  },
+  mars: {
+    name: 'Марс', image: 'mars-show.jpg', portrait: true, label: 'LIFE WITH LABR',
+    intro: 'Юный грандчемпион России и НКП. Юный победитель клуба года — 2026.',
+    facts: [['Порода', 'Лабрадор-ретривер'], ['Пол', 'Кобель'], ['Окрас', 'Палевый']],
+    titles: [
+      ['Юный грандчемпион', 'России и НКП'],
+      ['Юный чемпион', 'России, Армении и клуба'],
+      ['3 × Юный чемпион РКФ', 'Три титула'],
+      ['Юный чемпион РФЛС и РФСС', 'Титулы федераций'],
+      ['Юный победитель клуба года', '2026'],
+      ['Кандидат', 'В юные интерчемпионы']
+    ]
+  },
+  aria: {
+    name: 'Ария', image: 'aria-show.jpg', portrait: true, label: 'LIFE WITH LABR',
+    intro: 'Юный грандчемпион России и НКП. Многократный победитель BIS, JBIS, JBISS, BIS Baby и BIS Puppy.',
+    facts: [['Порода', 'Лабрадор-ретривер'], ['Пол', 'Сука'], ['Окрас', 'Палевый']],
+    titles: [
+      ['Юный грандчемпион', 'России и НКП'],
+      ['Юный чемпион', 'России и НКП'],
+      ['8 × Юный чемпион РКФ', 'Восемь титулов'],
+      ['Победы в бестах', 'Многократный победитель BIS, JBIS, JBISS, BIS Baby и BIS Puppy']
+    ],
+    pedigreeTitle: 'Родословная · 3 поколения',
+    pedigree: [pedigreeBranch('ОТЕЦ', 'Rocheby Squadron Leader', 'Чемпион России, РКФ · Англия', [
+      {name: 'Silver Suede Over Rocheby', title: 'Чемпион Англии', parents: ['Anti Aspen of Finnwoods', 'Bridgeford Chrystal Clear']},
+      {name: 'Rocheby Serenade', title: 'Палевый · Англия', parents: ['Rocheby Old Smokey', 'Rocheby Sensational']}
+    ]), pedigreeBranch('МАТЬ', 'Время Мечты Вера', 'Чемпион России, РКФ', [
+      {name: 'Жерминаль Мисти Шоу Мэйкер', title: 'Интерчемпион · Грандчемпион', parents: ['Rocheby Step Ahead', 'Жерминаль Мисти Чарминг Чанс']},
+      {name: 'Флэми Стар Тестаросса', title: 'Чемпион России · Чемпион-производитель', parents: ['Jentleman Jim Down the Hill', 'Флэми Стар Нирвана']}
+    ])]
   },
   enot: {
     name: 'Русмайрас Енот', image: 'enot.jpg', label: 'ОТЕЦ ЩЕНКОВ',
-    intro: 'Крепкий, красивый кобель, отлично проявивший себя в ринге и зарекомендовавший себя как производитель.',
-    facts: [['Порода', 'Лабрадор-ретривер'], ['Пол', 'Кобель'], ['Окрас', 'Палевый']],
+    intro: 'Чемпион России, юный грандчемпион России. Отец щенков от Эдель.',
+    facts: [['Порода', 'Лабрадор-ретривер'], ['Пол', 'Кобель'], ['Окрас', 'Палевый'], ['Питомник', 'Русмайрас']],
     titles: [['Чемпион России', 'Взрослый титул'], ['Юный Грандчемпион России', 'Юниорский титул'], ['Юный Чемпион', 'России, НКП, РКФ']],
     health: [['Суставы', 'HD/ED — A/0'], ['Генетические тесты', 'PRA, HNPK, EIC, CNM — clear'], ['Длинношёрстность', 'Не несёт аллель длинношёрстности']],
-    pedigree: pedigreeBranch('ОТЕЦ', 'Русмайрас Пьер', 'Чемпион России · Юный Чемпион России, НКП, РКФ, Эстонии, Украины, Словении', []) + pedigreeBranch('МАТЬ', 'Русмайрас Смайли', 'Чемпион Литвы, Венгрии', [])
+    pedigree: [pedigreeBranch('ОТЕЦ', 'Русмайрас Пьер', 'Чемпион России · Юный Чемпион России, НКП, РКФ, Эстонии, Украины, Словении', []), pedigreeBranch('МАТЬ', 'Русмайрас Смайли', 'Чемпион Литвы, Венгрии', [])]
   }
 };
 const dogDialog = document.querySelector('#dog-dialog');
+document.querySelectorAll('[data-pedigree-dog]').forEach(container => {
+  const dog = dogs[container.dataset.pedigreeDog];
+  if (dog?.pedigree) container.innerHTML = localize(renderPedigree(dog.pedigree));
+});
 document.querySelectorAll('[data-dog]').forEach(button => button.addEventListener('click', () => {
   const dog = dogs[button.dataset.dog];
-  document.querySelector('#dog-dialog-content').innerHTML = `<div class="profile-cover"><img src="/assets/${dog.image}" alt="${dog.name}"></div><div class="profile-body"><p class="eyebrow">${dog.label}</p><h2 id="dog-dialog-title">${dog.name}</h2><p class="profile-intro">${dog.intro}</p><dl class="profile-facts">${dog.facts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl><details open><summary>Достижения <span aria-hidden="true">+</span></summary><div class="title-list">${dog.titles.map(([title, description]) => `<div><h4>${title}</h4><p>${description}</p></div>`).join('')}</div></details>${dog.health ? `<details><summary>Тесты здоровья <span aria-hidden="true">+</span></summary><dl class="health-list">${dog.health.map(([title, value]) => `<div><dt>${title}</dt><dd>${value}</dd></div>`).join('')}</dl></details>` : ''}<details><summary>${button.dataset.dog === 'edel' ? 'Родословная · 3 поколения' : 'Происхождение'} <span aria-hidden="true">+</span></summary><div class="pedigree">${dog.pedigree}</div></details><a class="button button-dark" href="https://wa.me/79251448648" target="_blank" rel="noopener noreferrer">Узнать о щенках</a></div>`;
+  dogDialog.dataset.dog = button.dataset.dog;
+  document.querySelector('#dog-dialog-content').innerHTML = localize(`<div class="profile-cover${dog.portrait ? ' profile-cover--portrait' : ''}"><img src="/assets/${dog.image}" alt="${dog.name}"></div><div class="profile-body"><p class="eyebrow">${dog.label}</p><h2 id="dog-dialog-title">${dog.name}</h2><p class="profile-intro">${dog.intro}</p><dl class="profile-facts">${dog.facts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl><details open><summary>Достижения <span aria-hidden="true">+</span></summary><div class="title-list">${dog.titles.map(([title, description]) => `<div><h4>${title}</h4><p>${description}</p></div>`).join('')}</div></details>${dog.health ? `<details><summary>Тесты здоровья <span aria-hidden="true">+</span></summary><dl class="health-list">${dog.health.map(([title, value]) => `<div><dt>${title}</dt><dd>${value}</dd></div>`).join('')}</dl></details>` : ''}${dog.pedigree ? `<details><summary>${dog.pedigreeTitle || (button.dataset.dog === 'edel' ? 'Родословная · 3 поколения' : 'Происхождение')} <span aria-hidden="true">+</span></summary><div class="pedigree">${renderPedigree(dog.pedigree)}</div></details>` : ''}<a class="button button-dark" href="https://wa.me/79251448648" target="_blank" rel="noopener noreferrer">Узнать о щенках</a></div>`);
   dogDialog.showModal();
   dogDialog.scrollTop = 0;
 }));
@@ -115,7 +181,7 @@ const showPhoto = index => {
   galleryIndex = (index + gallery.length) % gallery.length;
   const [src, title] = gallery[galleryIndex];
   document.querySelector('#lightbox-image').src = `/assets/${src}`;
-  document.querySelector('#lightbox-image').alt = title;
+  document.querySelector('#lightbox-image').alt = t(title);
   document.querySelector('#lightbox-count').textContent = `${String(galleryIndex + 1).padStart(2, '0')} / ${String(gallery.length).padStart(2, '0')}`;
 };
 document.querySelectorAll('[data-gallery]').forEach(button => button.addEventListener('click', () => { showPhoto(Number(button.dataset.gallery)); lightbox.showModal(); }));
@@ -136,7 +202,7 @@ if (document.body.dataset.page === 'home') {
   const legacyPages = {about:'/about/',dogs:'/dogs/',puppies:'/puppies/',moments:'/moments/'};
   const followLegacyLink = () => {
     const target = legacyPages[location.hash.slice(1)];
-    if (target) location.replace(target + location.search);
+    if (target) location.replace((language === 'en' ? '/en' : '') + target + location.search);
   };
   followLegacyLink();
   addEventListener('hashchange', followLegacyLink);

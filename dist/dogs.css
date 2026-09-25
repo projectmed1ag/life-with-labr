@@ -1,0 +1,34 @@
+/* Four kennel dogs, within the site's existing two-column layout. */
+.dogs-page .dog-grid{row-gap:72px;align-items:start}
+.dogs-page .dog-card:nth-child(even){padding-top:65px}
+.dogs-page .dog-photo--vanessa img{object-position:50% 80%}
+.dogs-page .dog-photo--mars img{object-position:50% 90%}
+.dogs-page .dog-photo--aria img{object-position:50% 100%;width:calc(100% * 1036 / 988);max-width:none;margin-left:calc(-100% * 24 / 988)}
+.dogs-page .dog-card p{max-width:48ch}
+.dogs-page .profile-cover--portrait{height:min(55svh,480px);background:#e9e6dc}
+.dogs-page .profile-cover--portrait img{object-fit:contain;object-position:center}
+.dogs-page .profile-body h2,.dogs-page .ancestor h4{overflow-wrap:anywhere}
+/* Display only the photograph within the supplied 1036 × 1600 screenshot.
+   The original file and the photographer's signature remain intact. */
+.dogs-page .dog-dialog[data-dog="aria"] .profile-cover{
+  position:relative;height:auto;aspect-ratio:988/1470;background:none;
+}
+.dogs-page .dog-dialog[data-dog="aria"] .profile-cover img{
+  position:absolute;left:calc(-100% * 24 / 988);top:calc(-100% * 130 / 1470);
+  width:calc(100% * 1036 / 988);height:calc(100% * 1600 / 1470);
+  max-width:none;object-fit:fill;
+}
+@media(min-width:701px){
+  .dogs-page .dog-dialog[data-dog="aria"]{width:min(1000px,94vw)}
+  .dogs-page .dog-dialog[data-dog="aria"] #dog-dialog-content{display:grid;grid-template-columns:minmax(0,40%) minmax(0,1fr);align-items:start}
+  .dogs-page .dog-dialog[data-dog="aria"] .profile-cover{position:sticky;top:0}
+  .dogs-page .dog-dialog[data-dog="aria"] .profile-body{padding:38px 32px 36px;min-width:0}
+  .dogs-page .dog-dialog[data-dog="aria"] .profile-body h2{padding-right:35px}
+}
+@media(max-width:700px){
+  .dogs-page .dog-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:48px}
+  .dogs-page .dog-card:nth-child(even){padding-top:0}
+  .dogs-page .dog-photo{aspect-ratio:1.43}
+  .dogs-page .dog-meta{flex-wrap:wrap}
+  .dogs-page .profile-cover--portrait{height:min(48svh,360px)}
+}

@@ -1,0 +1,19 @@
+<div class="breadcrumbs"><a href="/">Главная</a><span aria-hidden="true">/</span><a href="/puppies/">Щенки</a><span aria-hidden="true">/</span><span>{{litterTitle}}</span></div>
+<section class="litter-intro section page-primary" aria-labelledby="litter-title">
+  <h1 id="litter-title">Помёт {{litterTitle}}</h1>
+  <p>Палевые щенки лабрадора-ретривера · Life with Labr</p>
+  {{litterDate}}
+  <nav class="litter-jump-links" aria-label="Разделы помёта"><a href="#litter-parents">Родители</a><a href="#litter-puppies">Выбрать щенка</a><a href="#litter-pedigree">Родословная</a></nav>
+</section>
+<section class="litter-parents section" id="litter-parents" aria-labelledby="parents-title"><h2 id="parents-title">Родители</h2><div class="litter-parent-grid">{{parents}}</div></section>
+<section class="litter-puppies section" id="litter-puppies" aria-label="Щенки помёта">{{puppyGroups}}</section>
+<section class="litter-pedigree section" id="litter-pedigree" aria-labelledby="pedigree-title"><h2 id="pedigree-title">Родословная</h2><p>Происхождение по материнской и отцовской линиям.</p>{{litterPedigree}}<noscript><p>Для просмотра родословных включите JavaScript или <a href="#contacts">свяжитесь с заводчиком</a>.</p></noscript></section>
+<section class="litter-return section"><a class="button button-dark" href="/puppies/">Все помёты</a></section>
+
+<dialog class="puppy-photo-dialog" id="puppy-photo-dialog" aria-labelledby="puppy-photo-title">
+  <button class="dialog-close" data-close aria-label="Закрыть фото щенка">×</button>
+  <figure><img id="puppy-photo-image" alt=""><figcaption><span id="puppy-photo-title"></span><span id="puppy-photo-count"></span></figcaption></figure>
+  <button class="puppy-photo-prev" aria-label="Предыдущее фото щенка">←</button><button class="puppy-photo-next" aria-label="Следующее фото щенка">→</button>
+</dialog>
+<script type="application/json" id="litter-data">{{puppyData}}</script>
+<script type="module" src="/puppies.js?v=social-choice-3"></script>

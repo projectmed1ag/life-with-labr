@@ -1,0 +1,37 @@
+/* The nested lists retain ancestry order when the tree becomes vertical. */
+.pedigree{container-type:inline-size;--lineage-line:#bec6b6;--lineage-gap:32px}
+.lineage-generations{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--lineage-gap);padding-bottom:16px;margin-bottom:8px;border-bottom:1px solid var(--line);color:#5b665b;font-size:12px}
+.lineage-tree,.lineage-children{list-style:none;margin:0;padding:0}
+.lineage-tree{display:grid;gap:24px}
+.lineage-branch{position:relative;display:grid;grid-template-columns:minmax(0,calc((100% - 2 * var(--lineage-gap)) / 3)) minmax(0,1fr);gap:var(--lineage-gap);align-items:center;min-width:0}
+.lineage-node{position:relative;min-width:0;padding:12px 0}
+.lineage-name h4{font-family:var(--serif);font-size:25px;font-weight:500;line-height:1.18;margin:0;overflow-wrap:anywhere;text-wrap:balance}
+.lineage-role{display:block;margin-top:8px;font-size:12px;line-height:1.5;color:#5b665b;text-transform:lowercase}
+.lineage-node p{margin-top:8px;font-size:13px;line-height:1.65;color:#5b665b;overflow-wrap:anywhere}
+.lineage-tree>.lineage-branch>.lineage-node{background:#e8ece2;border-radius:12px;padding:24px}
+.lineage-tree>.lineage-branch>.lineage-node h4{font-size:28px}
+.lineage-children{display:grid;gap:0;position:relative}
+.lineage-children>.lineage-branch{grid-template-columns:repeat(2,minmax(0,1fr))}
+.lineage-branch.lineage-branch--leaf{display:block}
+.lineage-children .lineage-children .lineage-node{padding-block:16px}
+.lineage-children .lineage-children .lineage-node h4{font:500 14px/1.6 var(--sans);text-wrap:initial}
+.lineage-branch:has(>.lineage-children)>.lineage-node::after{content:"";position:absolute;right:calc(var(--lineage-gap)/-2);top:50%;width:calc(var(--lineage-gap)/2);border-top:1px solid var(--lineage-line)}
+.lineage-children>.lineage-branch::before{content:"";position:absolute;left:calc(var(--lineage-gap)/-2);top:0;bottom:0;border-left:1px solid var(--lineage-line)}
+.lineage-children>.lineage-branch:first-child::before{top:50%}
+.lineage-children>.lineage-branch:last-child::before{bottom:50%}
+.lineage-children>.lineage-branch>.lineage-node::before{content:"";position:absolute;left:calc(var(--lineage-gap)/-2);top:50%;width:calc(var(--lineage-gap)/2);border-top:1px solid var(--lineage-line)}
+.lineage-tree--short{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;align-items:start}
+@container(max-width:700px){
+  .lineage-generations{display:none}
+  .lineage-tree{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
+  .lineage-tree .lineage-branch{display:block}
+  .lineage-tree>.lineage-branch>.lineage-node{padding:20px}
+  .lineage-tree>.lineage-branch>.lineage-node h4{font-size:26px}
+  .lineage-tree .lineage-children{display:block;margin:0 0 0 20px;padding:12px 0 0 20px;border-left:1px solid var(--lineage-line)}
+  .lineage-tree .lineage-node{padding:12px 0}
+  .lineage-tree .lineage-name h4{font-size:23px}
+  .lineage-tree .lineage-children .lineage-children{padding-top:0}
+  .lineage-tree .lineage-children .lineage-children h4{font-size:14px}
+  .lineage-tree .lineage-branch::before,.lineage-tree .lineage-node::after{display:none}
+  .lineage-tree .lineage-children>.lineage-branch>.lineage-node::before{left:-20px;width:12px}
+}
