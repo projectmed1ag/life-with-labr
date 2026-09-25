@@ -314,5 +314,6 @@ export default {
   "Забронирована": "Reserved",
   "Забронирован": "Reserved",
   "Уже дома": "At home",
-  "Уточнить наличие": "Check availability"
+  "Уточнить наличие": "Check availability",
+  "Забронировать": "Reserve a puppy"
 };

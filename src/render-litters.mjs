@@ -10,7 +10,7 @@ const status = puppy => puppy.status ? `<span class="puppy-status puppy-status--
 const date = value => new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(`${value}T12:00:00Z`));
 const price = value => value == null ? '' : `${new Intl.NumberFormat('ru-RU').format(value)} ₽`;
 const renderContactChoices = puppy => `<details class="puppy-contact" name="puppy-contact" data-puppy-inquiry="${puppy.id}">
-  <summary class="button button-dark"><span>Уточнить наличие</span><svg class="puppy-contact-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+  <summary class="button button-dark"><span>${puppy.status === 'available' ? 'Забронировать' : 'Уточнить наличие'}</span><svg class="puppy-contact-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
   <nav class="puppy-contact-options" aria-label="Выбрать соцсеть">${socials.map(([channel,label]) => `<a href="${escapeHtml(puppyContactUrl(channel,puppy))}" data-puppy-contact="${puppy.id}" data-contact-channel="${channel}" target="_blank" rel="noopener noreferrer"><svg width="22" height="22" aria-hidden="true"><use href="#icon-${channel}"></use></svg><span>${channel === 'instagram' ? 'Instagram' : escapeHtml(label)}</span><svg class="puppy-contact-arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a>`).join('')}</nav>
 </details>`;
 
