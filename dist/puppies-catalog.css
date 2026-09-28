@@ -16,8 +16,6 @@
 .litter-card-copy h2{font-size:clamp(48px,4.5vw,70px);line-height:1.04;margin-top:22px;text-wrap:balance}
 .litter-card-copy h2 a:hover{color:var(--gold)}
 .litter-card-copy>.button{margin-top:38px;gap:22px;min-height:60px;padding-inline:24px}
-.litter-card-link svg{flex-shrink:0;transition:transform .22s var(--album-ease)}
-.litter-card-link:focus-visible svg{transform:translateX(4px)}
 .litter-card-copy .puppy-status{margin:22px 0 0;padding:0;color:var(--gold)}
 .litter-card-copy .puppy-status--home{color:#d2d6cb}
 .litter-card-cover:focus-visible{outline-offset:4px}
@@ -58,7 +56,6 @@
 .parent-kennel>span{font-size:12px;color:#d2d6cb}
 .parent-kennel>strong{font-size:15px;font-weight:500}
 .parent-details{display:flex;justify-content:space-between;gap:12px;width:100%;border:0;background:none;color:var(--gold);padding:8px 0;margin-top:auto;text-align:left;text-decoration-color:#dec39666}
-.parent-details svg{flex-shrink:0;transition:transform .22s var(--album-ease)}
 .parent-details:hover{color:var(--cream);text-decoration-color:currentColor}
 .parent-details:focus-visible{outline-color:var(--gold);outline-offset:4px}
 .litter-puppies{padding-top:56px;padding-bottom:80px;border-top:1px solid var(--line)}
@@ -103,7 +100,6 @@
 .puppy-contact-options>a:hover{background:var(--green-light)}
 .puppy-contact-options>a:focus-visible{outline-offset:2px;background:var(--green-light)}
 .puppy-contact-options svg{flex-shrink:0}
-.puppy-contact-arrow{margin-left:auto;color:var(--gold)}
 .litter-pedigree{padding-top:48px;padding-bottom:40px;border-top:1px solid var(--line)}
 .litter-pedigree>h2{font-size:48px;max-width:1200px;margin-inline:auto}
 .litter-pedigree>p{max-width:1200px;color:#5b665b;margin:16px auto 32px}
@@ -132,9 +128,7 @@
 .puppies-page .button:active,.litter-page .button:active{transform:scale(.98)}
 .litter-card-copy a:focus-visible{outline-color:var(--gold)}
 @media(hover:hover) and (pointer:fine){
-  .litter-card-link:hover svg{transform:translateX(5px)}
   .litter-card-copy h2 a{transition:color .2s}
-  .parent-details:hover svg{transform:translateX(4px)}
 }
 @media(prefers-reduced-motion:no-preference){
   .litter-card.is-presented .litter-card-photo{animation:album-photo .85s var(--album-ease)}
@@ -154,7 +148,6 @@
 @media(prefers-reduced-motion:reduce){
   .litter-card-cover img{transform:none}
   .parent-photo,.puppy-portrait,.parent-photo img,.puppy-portrait img{transition:none}
-  .parent-details:hover svg{transform:none}
   .puppies-page .button:active,.litter-page .button:active{transform:none}
 }
 @media(max-width:1000px){.litter-card-copy{padding:40px 28px 40px 64px;min-height:380px}.litter-card-copy>.button{gap:14px;padding-inline:20px;font-size:20px}.litter-card-copy h2{font-size:48px}}

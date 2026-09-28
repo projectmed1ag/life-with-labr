@@ -9,7 +9,6 @@ export default {
   "4 марта 2024 г.": "4 March 2024",
   "Лабрадоры питомника Life with Labr. Фотографии, выставочные достижения и родословные наших собак.": "Labradors of Life with Labr kennel. Photos, show achievements and pedigrees of our dogs.",
   "Выбрать способ связи": "Choose how to contact us",
-  "Написать Евгении": "Message Evgeniya",
   "Отец": "Sire",
   "Родители:": "Parents of",
   "Показать родителей": "Show parents",

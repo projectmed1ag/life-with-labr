@@ -23,7 +23,7 @@ const navigationPages = pages.filter(page => page.key !== 'about');
 const brand = await readFile('src/brand.html', 'utf8');
 const socialSymbols = await readFile('src/social-symbols.html', 'utf8');
 const socialLinks = socials.map(([icon,label,url]) => `<a href="${url}" target="_blank" rel="noopener noreferrer" aria-label="${label}" title="${label}"><svg aria-hidden="true"><use href="#icon-${icon}"></use></svg></a>`).join('');
-const floatingContactLinks = socials.map(([icon,label,url]) => `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer"><svg class="contact-channel-icon" width="22" height="22" aria-hidden="true"><use href="#icon-${icon}"></use></svg><span>${escapeHtml(icon === 'instagram' ? 'Instagram' : label)}</span><svg class="contact-channel-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a>`).join('');
+const floatingContactLinks = socials.map(([icon,label,url]) => `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer"><svg class="contact-channel-icon" width="22" height="22" aria-hidden="true"><use href="#icon-${icon}"></use></svg><span>${escapeHtml(icon === 'instagram' ? 'Instagram' : label)}</span></a>`).join('');
 const litters = contentData?.litters ?? JSON.parse(await readFile('src/data/litters.json','utf8'));
 const gallery = contentData?.gallery ?? JSON.parse(await readFile('src/data/gallery.json','utf8'));
 const dogs = (contentData?.dogs ?? JSON.parse(await readFile('src/data/dogs.json','utf8'))).slice().sort((a,b)=>a.order-b.order||a.id.localeCompare(b.id));
@@ -96,7 +96,7 @@ for (const page of allPages) {
     structuredData:JSON.stringify({'@context':'https://schema.org','@graph':graph}).replaceAll('<','\\u003c'),
     nav:links(navigationPages), mobileNav:links(navigationPages),
     content,
-    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=ending-2">' : (page.key === 'dogs' || page.dog) ? '<link rel="stylesheet" href="/dogs.css?v=cms-dogs-1">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=mobile-family-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
+    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=ending-2">' : (page.key === 'dogs' || page.dog) ? '<link rel="stylesheet" href="/dogs.css?v=cms-dogs-1">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=clean-links-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
     appVersion:'cms-dogs-1'
   };
   const html = layout.replace(/\{\{(\w+)\}\}/g, (_, key) => {

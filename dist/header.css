@@ -32,12 +32,10 @@
 .floating-contact .contact-close-icon,.floating-contact-widget[open] .contact-chat-icon{display:none}
 .floating-contact-widget[open] .contact-close-icon{display:block}
 .floating-contact:focus-visible{outline:2px solid var(--green);outline-offset:4px}
-.floating-contact-options{position:absolute;right:0;bottom:calc(100% + 12px);width:min(300px,calc(100vw - 48px));max-height:calc(100vh - 112px);max-height:calc(100dvh - 112px - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;padding:12px;background:var(--cream);color:var(--green);border-radius:16px;box-shadow:0 12px 40px #172b2433;scrollbar-color:#929f95 var(--cream)}
-.floating-contact-options h2{margin:6px 8px 12px;font:500 27px/1.2 var(--serif)}
+.floating-contact-options{position:absolute;right:0;bottom:calc(100% + 12px);width:min(240px,calc(100vw - 48px));max-height:calc(100vh - 112px);max-height:calc(100dvh - 112px - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;padding:12px;background:var(--cream);color:var(--green);border-radius:16px;box-shadow:0 12px 40px #172b2433;scrollbar-color:#929f95 var(--cream)}
 .floating-contact-options a{display:flex;align-items:center;gap:14px;min-height:48px;padding:11px 12px;border-radius:8px;font:500 14px/1.5 var(--sans);text-decoration:none;transition:background-color .16s}
 .floating-contact-options a+a{margin-top:3px}
 .floating-contact-options svg{flex-shrink:0}
-.floating-contact-options .contact-channel-arrow{margin-left:auto;color:#5b665b}
 .floating-contact-options a:focus-visible{outline:2px solid var(--green);outline-offset:-2px;background:#e8ece2}
 .floating-contact-options a:active{background:#e8ece2}
 body:has(dialog[open]) .floating-contact-widget{visibility:hidden}
