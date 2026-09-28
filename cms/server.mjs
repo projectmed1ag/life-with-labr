@@ -68,6 +68,19 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
         if(route==='/api/session'&&req.method==='GET')return json(res,200,{username:current.username,csrf:current.csrf});
         if(route==='/api/logout'&&req.method==='POST'){store.db.prepare('DELETE FROM sessions WHERE token=?').run(current.token);res.setHeader('Set-Cookie',cookie('',0));return json(res,200,{ok:true});}
         if(route==='/api/content'&&req.method==='GET')return json(res,200,{records:store.all()});
+        const statusRoute=/^\/api\/litters\/([a-z0-9-]+)\/puppy-status$/.exec(route);
+        if(statusRoute&&req.method==='POST'){
+          const input=await jsonBody(req),id=statusRoute[1];
+          if(!validId(id)||!validId(input?.puppyId))fail(400,'Обновите список щенков.');
+          return await serialize(async()=>{
+            const update=store.preparePuppyStatus(id,input.puppyId,input.status,input.version),next=store.published();
+            // Change only availability; unrelated unpublished edits stay private.
+            next.litters=next.litters.map(litter=>litter.id===id?JSON.parse(update.published):litter);
+            const nextPages=await renderer(next);
+            const record=store.setPuppyStatus(id,input.puppyId,input.status,input.version);
+            pages=nextPages;return json(res,200,{record});
+          });
+        }
         if(route==='/api/dogs/reorder'&&req.method==='POST'){
           const input=await jsonBody(req);
           return await serialize(async()=>{

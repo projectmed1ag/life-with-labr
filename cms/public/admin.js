@@ -13,7 +13,7 @@ async function api(url,{method='GET',data,raw}={}){
   const headers={};if(data!==undefined)headers['Content-Type']='application/json';if(method!=='GET')headers['X-CSRF-Token']=csrf;
   const response=await fetch(url,{method,headers,body:raw|| (data===undefined?undefined:JSON.stringify(data)),credentials:'same-origin'});
   const result=await response.json();
-  if(!response.ok){if(response.status===401&&url!=='/api/login'){if(current)pendingEdit=clone(current);current=null;dirty=false;login();}throw new Error(result.error||'Не удалось выполнить действие.');}return result;
+  if(!response.ok){if(response.status===401&&url!=='/api/login'){if(current)pendingEdit=clone(current);current=null;dirty=false;login();}const error=new Error(result.error||'Не удалось выполнить действие.');error.status=response.status;throw error;}return result;
 }
 function login(){app.innerHTML=`<main class="login" aria-label="Life with Labr">
   <div class="login-panel">
@@ -27,14 +27,43 @@ function login(){app.innerHTML=`<main class="login" aria-label="Life with Labr">
     </form>
   </div>
 </main>`;}
-function chrome(content){app.innerHTML=`<header class="app-header"><a href="#" class="brand" data-action="home">Life with Labr</a><div class="app-header-actions"><a class="header-action header-action--site" href="${publicOrigin}" target="_blank" rel="noopener" aria-label="Открыть сайт в новой вкладке"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7M21 3l-9 9M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg><span>Открыть сайт</span></a><button type="button" data-action="logout" class="header-action header-action--logout"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h10"/></svg><span>Выйти</span></button></div></header><div class="workspace"><aside><nav aria-label="Разделы админки"><button data-section="litters" ${section==='litters'?'aria-current="page"':''}>Помёты и щенки</button><button data-section="dogs" ${section==='dogs'?'aria-current="page"':''}>Наши собаки</button><button data-section="gallery" ${section==='gallery'?'aria-current="page"':''}>Галерея</button></nav><p>${section==='gallery'?'Добавляйте фото и меняйте их порядок. Затем сохраните изменения.':section==='dogs'?'Изменения в профилях появляются после публикации. Порядок сохраняется сразу.':'Изменения на сайте появляются после публикации.'}</p></aside><main>${content}</main></div>`;}
+function chrome(content){app.innerHTML=`<header class="app-header"><a href="#" class="brand" data-action="home">Life with Labr</a><div class="app-header-actions"><a class="header-action header-action--site" href="${publicOrigin}" target="_blank" rel="noopener" aria-label="Открыть сайт в новой вкладке"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7M21 3l-9 9M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg><span>Открыть сайт</span></a><button type="button" data-action="logout" class="header-action header-action--logout"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h10"/></svg><span>Выйти</span></button></div></header><div class="workspace"><aside><nav aria-label="Разделы админки"><button data-section="litters" ${section==='litters'?'aria-current="page"':''}>Помёты и щенки</button><button data-section="dogs" ${section==='dogs'?'aria-current="page"':''}>Наши собаки</button><button data-section="gallery" ${section==='gallery'?'aria-current="page"':''}>Галерея</button></nav><p>${section==='gallery'?'Добавляйте фото и меняйте их порядок. Затем сохраните изменения.':section==='dogs'?'Изменения в профилях появляются после публикации. Порядок сохраняется сразу.':'Статусы щенков сохраняются сразу. Остальные изменения — после публикации.'}</p></aside><main>${content}</main></div>`;}
 const recordState=r=>r.archived?'В архиве':r.kind==='litters'&&r.closed&&r.published?'Все щенки проданы':r.published?(r.dirty?'Есть изменения':'Опубликовано'):'Черновик';
 function openGallery(){current=clone(records.find(r=>r.kind==='gallery'&&r.id==='gallery'));dirty=false;galleryEditor();}
+const quickStatusOptions=puppy=>[['available',puppy.sex==='female'?'Свободна':'Свободен'],['reserved','Бронь'],['home','В новой семье']];
+function litterListEntry(r){
+  const cover=r.data.puppies[0]?.photos[0],puppies=r.publishedPuppies||[];
+  const quick=r.published&&!r.archived&&!r.closed&&puppies.length;
+  return `<article class="litter-list-entry" data-litter="${e(r.id)}" data-search="${e([r.data.title,...puppies.map(p=>p.name)].join(' ').toLowerCase())}">
+    <div class="record-row"><button class="record-open" data-edit="${e(r.id)}">${cover?`<img src="${image(cover.src)}" alt="" width="88" height="88">`:'<span class="record-empty">Нет фото</span>'}<span class="record-info"><strong>${e(r.data.title||'Без названия')}</strong><span>${r.data.puppies.length} щенков · ${e(r.data.parents.map(p=>p.name).filter(Boolean).join(' и '))}</span></span><span class="state ${r.published&&!r.dirty?'live':''}">${recordState(r)}</span><span class="record-edit-label">Редактировать</span></button>${r.canReopen?`<button class="record-close" data-reopen-litter="${e(r.id)}">Вернуть в продажу</button>`:r.published?`<button class="record-close" data-close-litter="${e(r.id)}">Все щенки проданы!</button>`:''}</div>
+    ${quick?`<section class="quick-puppies" aria-label="Статусы щенков: ${e(r.data.title)}"><div class="quick-puppies-heading"><h2>Статусы щенков</h2><p>Нажмите статус — он сразу изменится на сайте.</p></div>${puppies.map(p=>`<div class="quick-puppy">${p.photo?`<img src="${image(p.photo)}" alt="" width="48" height="60" loading="lazy">`:'<span class="quick-puppy-placeholder" aria-hidden="true"></span>'}<div class="quick-puppy-name"><strong>${e(p.name)}</strong>${!p.status?'<span>Статус не указан</span>':''}</div><div class="quick-status-choices" role="group" aria-label="Статус: ${e(p.name)}">${quickStatusOptions(p).map(([value,label])=>`<button type="button" data-puppy-status="${value}" data-puppy-id="${e(p.id)}" data-litter-id="${e(r.id)}" aria-label="${e(p.name)}: ${label}" aria-pressed="${p.status===value}">${label}</button>`).join('')}</div></div>`).join('')}<p class="quick-status-feedback" data-status-feedback role="status" aria-live="polite"></p></section>`:''}
+  </article>`;
+}
+async function changePuppyStatus(button){
+  const litterId=button.dataset.litterId,puppyId=button.dataset.puppyId,status=button.dataset.puppyStatus;
+  const record=records.find(r=>r.kind==='litters'&&r.id===litterId),puppy=record?.publishedPuppies.find(p=>p.id===puppyId);
+  if(!puppy||puppy.status===status||busy)return;
+  const entry=document.querySelector(`[data-litter="${litterId}"]`),buttons=[...app.querySelectorAll('button:not(:disabled)')];
+  busy=true;buttons.forEach(b=>b.disabled=true);entry.querySelector('[data-status-feedback]').textContent='Сохраняем…';
+  try{
+    const result=await api(`/api/litters/${litterId}/puppy-status`,{method:'POST',data:{puppyId,status,version:record.version}});
+    records=records.map(r=>r.kind==='litters'&&r.id===litterId?result.record:r);
+    entry.outerHTML=litterListEntry(result.record);
+    document.querySelector(`[data-litter="${litterId}"] [data-status-feedback]`).textContent='Сохранено на сайте';
+    document.querySelector(`[data-litter-id="${litterId}"][data-puppy-id="${puppyId}"][data-puppy-status="${status}"]`)?.focus({preventScroll:true});
+  }catch(error){
+    if(error.status===409){
+      try{await refresh();const latest=records.find(r=>r.kind==='litters'&&r.id===litterId);if(entry.isConnected&&latest)entry.outerHTML=litterListEntry(latest);}catch{}
+    }
+    if(entry.isConnected)entry.querySelector('[data-status-feedback]').textContent='Статус не изменён';
+    say(error.message,true);
+  }finally{busy=false;buttons.forEach(b=>{if(b.isConnected)b.disabled=false;});}
+}
 function listing(){
   if(section==='gallery')return openGallery();
   if(section==='dogs')return dogListing();
   current=null;dirty=false;const items=records.filter(r=>r.kind==='litters'&&r.archived===archived);
-  chrome(`<div class="page-heading"><div><h1>Помёты и щенки</h1><p>Родители, фотографии малышей, цены и статусы.</p></div><button class="primary" data-action="new">Создать помёт</button></div><div class="list-toolbar"><label class="search-label">Поиск<input id="search" type="search" placeholder="Найти по названию"></label><button class="quiet" data-action="archive-list">${archived?'Показать текущие':'Архив'}</button></div><div class="record-list">${items.length?items.map(r=>{const cover=r.data.puppies[0]?.photos[0];return `<div class="record-row" data-search="${e(r.data.title.toLowerCase())}"><button class="record-open" data-edit="${e(r.id)}">${cover?`<img src="${image(cover.src)}" alt="" width="88" height="88">`:'<span class="record-empty">Нет фото</span>'}<span class="record-info"><strong>${e(r.data.title||'Без названия')}</strong><span>${r.data.puppies.length} щенков · ${e(r.data.parents.map(p=>p.name).filter(Boolean).join(' и '))}</span></span><span class="state ${r.published&&!r.dirty?'live':''}">${recordState(r)}</span><span aria-hidden="true">→</span></button>${r.canReopen?`<button class="record-close" data-reopen-litter="${e(r.id)}">Вернуть в продажу</button>`:r.published?`<button class="record-close" data-close-litter="${e(r.id)}">Все щенки проданы!</button>`:''}</div>`;}).join(''):`<div class="empty"><h2>${archived?'Архив пуст':'Здесь пока ничего нет'}</h2><p>${archived?'Сюда попадают помёты, которые вы убрали с сайта.':'Создайте помёт, добавьте родителей и щенков.'}</p></div>`}</div>`);
+  chrome(`<div class="page-heading"><div><h1>Помёты и щенки</h1><p>Родители, фотографии малышей, цены и статусы.</p></div><button class="primary" data-action="new">Создать помёт</button></div><div class="list-toolbar"><label class="search-label">Поиск<input id="search" type="search" placeholder="Найти по названию"></label><button class="quiet" data-action="archive-list">${archived?'Показать текущие':'Архив'}</button></div><div class="record-list">${items.length?items.map(litterListEntry).join(''):`<div class="empty"><h2>${archived?'Архив пуст':'Здесь пока ничего нет'}</h2><p>${archived?'Сюда попадают помёты, которые вы убрали с сайта.':'Создайте помёт, добавьте родителей и щенков.'}</p></div>`}</div>`);
 }
 const field=(label,key,value,type='text',extra='')=>`<label>${label}<input data-field="${key}" type="${type}" value="${e(value)}" ${extra}></label>`;
 const area=(label,key,value,max=3000)=>`<label>${label}<textarea data-field="${key}" rows="3" maxlength="${max}">${e(value)}</textarea></label>`;
@@ -186,6 +215,7 @@ app.addEventListener('click',async event=>{const b=event.target.closest('button,
     if(b.dataset.closeLitter)return save('close',records.find(r=>r.kind==='litters'&&r.id===b.dataset.closeLitter));
     if(b.dataset.reopenLitter)return save('reopen',records.find(r=>r.kind==='litters'&&r.id===b.dataset.reopenLitter));
     if(b.dataset.save)return save(b.dataset.save);
+    if(b.dataset.puppyStatus)return changePuppyStatus(b);
     if(b.dataset.dogMove)return moveDog(b.dataset.dogMove,Number(b.dataset.step));
     if(b.dataset.addDogRow){const key=b.dataset.addDogRow;get(key).push(key==='titles'?{title:'',description:''}:{title:'',value:''});dirty=true;editor();document.querySelector(`[data-field="${key}.${get(key).length-1}.title"]`)?.focus();}
     if(b.dataset.removeDogRow){get(b.dataset.removeDogRow).splice(+b.dataset.index,1);dirty=true;editor();}

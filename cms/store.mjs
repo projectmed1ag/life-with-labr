@@ -41,7 +41,7 @@ export function openStore(directory, {seed, assetDirectory}={}) {
     const entry=db.prepare("SELECT previous FROM history WHERE kind='litters' AND id=? AND json_extract(previous,'$.published') IS NOT NULL ORDER BY seq DESC LIMIT 1").get(id);
     return entry?JSON.parse(entry.previous).published:null;
   };
-  const unpack=row=>row?{kind:row.kind,id:row.id,data:JSON.parse(row.draft),version:row.version,archived:!!row.archived,published:!!row.published,closed:!!row.closed,canReopen:row.kind==='litters'&&(!!row.closed&&!!row.published||!!row.archived&&!!lastPublished(row.id)),dirty:row.draft!==row.published,updated:row.updated}:null;
+  const unpack=row=>row?{kind:row.kind,id:row.id,data:JSON.parse(row.draft),version:row.version,archived:!!row.archived,published:!!row.published,closed:!!row.closed,canReopen:row.kind==='litters'&&(!!row.closed&&!!row.published||!!row.archived&&!!lastPublished(row.id)),dirty:row.draft!==row.published,updated:row.updated,...(row.kind==='litters'?{publishedPuppies:row.published?JSON.parse(row.published).puppies.map(p=>({id:p.id,name:p.name,sex:p.sex,status:p.status??null,photo:p.photos[0]?.src||''})):[]}:{} )}:null;
   const get=(kind,id)=>unpack(db.prepare('SELECT * FROM records WHERE kind=? AND id=?').get(kind,id));
   const all=()=>db.prepare("SELECT * FROM records WHERE kind!='gallery' OR id='gallery' ORDER BY updated DESC,id").all().map(unpack);
   const published=()=>{
@@ -84,6 +84,31 @@ export function openStore(directory, {seed, assetDirectory}={}) {
       db.exec('COMMIT');return get('litters',id);
     }catch(error){db.exec('ROLLBACK');throw error;}
   };
+  const preparePuppyStatus=(id,puppyId,status,version)=>{
+    if(!Number.isInteger(version)||version<1||![null,'available','reserved','home'].includes(status))throw new HttpError(400,'Выберите статус щенка и повторите действие.');
+    const row=db.prepare("SELECT * FROM records WHERE kind='litters' AND id=?").get(id);
+    if(!row||row.version!==version)throw new HttpError(409,'Помёт изменён в другой вкладке. Обновите список и выберите статус ещё раз.');
+    if(row.archived||row.closed||!row.published)throw new HttpError(400,'Быстрые статусы доступны у открытого опубликованного помёта.');
+    const live=JSON.parse(row.published),draft=JSON.parse(row.draft);
+    const puppy=live.puppies.find(p=>p.id===puppyId);
+    if(!puppy)throw new HttpError(404,'Щенок не найден в опубликованном помёте. Обновите список.');
+    puppy.status=status;
+    const draftPuppy=draft.puppies.find(p=>p.id===puppyId);
+    if(draftPuppy)draftPuppy.status=status;
+    return {row,published:JSON.stringify(live),draft:JSON.stringify(draft)};
+  };
+  const setPuppyStatus=(id,puppyId,status,version)=>{
+    db.exec('BEGIN IMMEDIATE');
+    try{
+      const next=preparePuppyStatus(id,puppyId,status,version);
+      if(next.draft!==next.row.draft||next.published!==next.row.published){
+        const updated=new Date().toISOString();
+        db.prepare('INSERT INTO history(kind,id,action,previous,created) VALUES(?,?,?,?,?)').run('litters',id,'puppy-status',JSON.stringify(next.row),updated);
+        db.prepare("UPDATE records SET draft=?,published=?,version=version+1,updated=? WHERE kind='litters' AND id=?").run(next.draft,next.published,updated,id);
+      }
+      db.exec('COMMIT');return get('litters',id);
+    }catch(error){db.exec('ROLLBACK');throw error;}
+  };
   const prepareDogOrder=items=>{
     if(!Array.isArray(items)||items.length>1000||new Set(items.map(item=>item?.id)).size!==items.length) throw new HttpError(400,'Не удалось изменить порядок. Обновите список собак.');
     const rows=db.prepare("SELECT * FROM records WHERE kind='dogs' AND archived=0").all();
@@ -107,7 +132,7 @@ export function openStore(directory, {seed, assetDirectory}={}) {
       db.exec('COMMIT');return all();
     } catch(error){db.exec('ROLLBACK');throw error;}
   };
-  return {db,directory,mediaExists,get,all,published,save,prepareLitterAvailability,setLitterAvailability,prepareDogOrder,reorderDogs,
+  return {db,directory,mediaExists,get,all,published,save,prepareLitterAvailability,setLitterAvailability,preparePuppyStatus,setPuppyStatus,prepareDogOrder,reorderDogs,
     addMedia(photo){db.prepare('INSERT INTO media VALUES(?,?,?,?)').run(photo.src,photo.width,photo.height,new Date().toISOString());},
     backup:async()=>{const target=path.join(directory,'backups');mkdirSync(target,{recursive:true,mode:0o700});await backup(db,path.join(target,`content-${new Date().toISOString().slice(0,10)}.sqlite`));},
     close:()=>db.close()};
