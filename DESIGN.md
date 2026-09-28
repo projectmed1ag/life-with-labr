@@ -228,6 +228,8 @@ Album interactions use `cubic-bezier(.16,1,.3,1)` with short control transitions
 
 The public mobile menu closes with the supplied adult-and-puppy watercolor, adapted to sage, cream, and gold against forest. Its transparent 6:5 artwork is capped at 300px wide below the contact details and remains static. The former playing-puppy scene is no longer connected to the public menu. The main header logo and other site animations are unchanged.
 
+The floating contact control opens a cream chooser above its gold chat button. It offers the shared Telegram, WhatsApp, VK, Instagram and Facebook links under «Написать Евгении». The chooser is capped at 300px, keeps 48px link targets, and scrolls within short viewports. Native disclosure state switches the chat icon to a close icon; repeat activation, outside click, moving focus outside or Escape closes it. Escape restores focus to the trigger. The widget hides beside the contact section/footer and while a site dialog is open. On mobile, the trigger is an icon-only 52px control with safe-area spacing.
+
 ## Shapes
 
 Album frames have rounded outer corners from the frontmatter and small inner photograph corners; the green panel has rounded lower corners (or right corners in the horizontal catalogue). Puppy portraits use a (3:4) image ratio; parent photographs use (1.5). Frame padding is (8px) for puppy portraits and (10px) for parents, reducing on mobile.

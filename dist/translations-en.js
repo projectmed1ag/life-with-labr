@@ -1,4 +1,6 @@
 export default {
+  "Выбрать способ связи": "Choose how to contact us",
+  "Написать Евгении": "Message Evgeniya",
   "Отец": "Sire",
   "Родители:": "Parents of",
   "Показать родителей": "Show parents",

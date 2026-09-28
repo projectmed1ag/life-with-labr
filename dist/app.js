@@ -16,15 +16,34 @@ document.documentElement.classList.add('enhanced');
 document.querySelector('#year').textContent = new Date().getFullYear();
 
 // Direct contact links are already available at the end of the page.
-const floatingContact = document.querySelector('.floating-contact');
+const floatingContact = document.querySelector('.floating-contact-widget');
 const visibleContactSections = new Set();
 if (floatingContact) {
+  const contactToggle = floatingContact.querySelector('summary');
+  const closeContact = (restoreFocus = false) => {
+    if (!floatingContact.open) return;
+    floatingContact.open = false;
+    if (restoreFocus) contactToggle.focus({preventScroll:true});
+  };
+  document.addEventListener('click', event => {
+    if (!floatingContact.contains(event.target)) closeContact();
+  });
+  document.addEventListener('focusin', event => {
+    if (!floatingContact.contains(event.target)) closeContact();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !floatingContact.open) return;
+    event.preventDefault();
+    closeContact(true);
+  });
+  floatingContact.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeContact(true)));
   const contactObserver = new IntersectionObserver(entries => {
     entries.forEach(({target, isIntersecting}) => {
       if (isIntersecting) visibleContactSections.add(target);
       else visibleContactSections.delete(target);
     });
     floatingContact.classList.toggle('is-obscured', visibleContactSections.size > 0);
+    if (visibleContactSections.size > 0) closeContact();
   });
   document.querySelectorAll('#contacts, .site-footer').forEach(section => contactObserver.observe(section));
 }

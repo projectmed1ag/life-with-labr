@@ -24,11 +24,25 @@
 .contact-social{margin-top:32px;padding-top:25px;border-top:1px solid var(--line)}
 .contact-social>p{color:var(--muted)}
 .contact-social .social-icons a{color:var(--green);border-color:#253b3038}
-.floating-contact{position:fixed;right:26px;bottom:26px;z-index:20;display:flex;align-items:center;gap:11px;padding:14px 21px 14px 17px;min-height:56px;background:var(--gold);color:var(--green);border:1px solid #f6e2bc;border-radius:30px;box-shadow:0 5px 22px #0c1d2430;font-size:14px;font-weight:600;transition:transform .18s,background-color .18s}
+.floating-contact-widget{position:fixed;right:26px;bottom:26px;z-index:20;margin:0;padding:0;border:0}
+.floating-contact{display:flex;align-items:center;gap:11px;padding:14px 21px 14px 17px;min-height:56px;background:var(--gold);color:var(--green);border:1px solid #f6e2bc;border-radius:30px;box-shadow:0 5px 22px #0c1d2430;font:600 14px/1.4 var(--sans);list-style:none;cursor:pointer;transition:transform .18s,background-color .18s}
+.floating-contact::-webkit-details-marker{display:none}
+.floating-contact>span,.floating-contact-widget[open]>.floating-contact>span{font:inherit;transform:none;transition:none}
 .floating-contact svg{width:26px;height:26px}
-body:has(dialog[open]) .floating-contact{visibility:hidden}
+.floating-contact .contact-close-icon,.floating-contact-widget[open] .contact-chat-icon{display:none}
+.floating-contact-widget[open] .contact-close-icon{display:block}
+.floating-contact:focus-visible{outline:2px solid var(--green);outline-offset:4px}
+.floating-contact-options{position:absolute;right:0;bottom:calc(100% + 12px);width:min(300px,calc(100vw - 48px));max-height:calc(100vh - 112px);max-height:calc(100dvh - 112px - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;padding:12px;background:var(--cream);color:var(--green);border-radius:16px;box-shadow:0 12px 40px #172b2433;scrollbar-color:#929f95 var(--cream)}
+.floating-contact-options h2{margin:6px 8px 12px;font:500 27px/1.2 var(--serif)}
+.floating-contact-options a{display:flex;align-items:center;gap:14px;min-height:48px;padding:11px 12px;border-radius:8px;font:500 14px/1.5 var(--sans);text-decoration:none;transition:background-color .16s}
+.floating-contact-options a+a{margin-top:3px}
+.floating-contact-options svg{flex-shrink:0}
+.floating-contact-options .contact-channel-arrow{margin-left:auto;color:#5b665b}
+.floating-contact-options a:focus-visible{outline:2px solid var(--green);outline-offset:-2px;background:#e8ece2}
+.floating-contact-options a:active{background:#e8ece2}
+body:has(dialog[open]) .floating-contact-widget{visibility:hidden}
 .home-page .hero{min-height:calc(100svh - 238px)}
-@media(hover:hover){.social-icons a:hover{background:var(--gold);color:var(--green);transform:translateY(-2px)}.header .header-contact:hover,.floating-contact:hover{background:#ebd4a9;transform:translateY(-2px)}}
+@media(hover:hover){.social-icons a:hover{background:var(--gold);color:var(--green);transform:translateY(-2px)}.header .header-contact:hover,.floating-contact:hover{background:#ebd4a9;transform:translateY(-2px)}.floating-contact-options a:hover{background:#e8ece2}}
 @media(max-width:1050px) and (min-width:761px){.header-main{gap:22px}.header .brand-logo{width:270px}.social-icons{gap:7px}.header-social .social-icons{max-width:150px}.header .desktop-nav{gap:34px;font-size:16px}.header-actions{gap:10px}.header .header-contact{padding:11px 16px}}
 @media(max-width:760px){
  .header{padding:0 6%}.header-main{grid-template-columns:minmax(0,1fr) auto;gap:16px 10px;min-height:0;padding:21px 0 17px}
@@ -39,9 +53,9 @@ body:has(dialog[open]) .floating-contact{visibility:hidden}
  .language-switch{grid-column:2;grid-row:2;justify-self:end}
  .header .header-contact{grid-column:2;grid-row:3;font-size:12px;min-height:40px;padding:8px 12px;gap:7px}.header-contact svg{width:15px;height:15px}
  .header .desktop-nav{display:none}.header{border-bottom:1px solid #dec39640}.home-page .hero{min-height:calc(100svh - 210px)}
- .floating-contact{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));min-height:52px;padding:12px;gap:0}.floating-contact span{display:none}.floating-contact svg{width:26px;height:26px}
+ .floating-contact-widget{right:16px;bottom:calc(16px + env(safe-area-inset-bottom))}.floating-contact{min-height:52px;padding:12px;gap:0}.floating-contact span{display:none}.floating-contact svg{width:26px;height:26px}
  .mobile-menu nav{margin-top:42px}.mobile-menu .brand-logo{width:min(240px,70vw)}
 }
 @media(max-width:400px){.header-social .social-icons{gap:4px}.header-social .social-icons a{width:32px;height:34px}}
 @media(max-width:360px){.header-main{column-gap:8px}.header-social .social-icons{gap:3px}.header-social .social-icons a{width:30px}.header-phone{font-size:16px}}
-@media(prefers-reduced-motion:reduce){.social-icons a,.header-contact,.floating-contact,.language-switch a{transition:none}}
+@media(prefers-reduced-motion:reduce){.social-icons a,.header-contact,.floating-contact,.floating-contact-options a,.language-switch a{transition:none}}

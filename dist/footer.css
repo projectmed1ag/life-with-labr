@@ -1,5 +1,5 @@
 /* The contact block and footer form one shared ending on every page. */
-.floating-contact.is-obscured{visibility:hidden;pointer-events:none}
+.floating-contact-widget.is-obscured{visibility:hidden;pointer-events:none}
 .contacts.section{background:#e7e9df;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(48px,8vw,120px);padding-top:80px;padding-bottom:80px;border-top:1px solid #253b3020}
 .contacts .contact-heading{align-self:center}
 .contacts .contact-heading h2{font-size:clamp(58px,5.4vw,80px);line-height:1.02;letter-spacing:-.025em}

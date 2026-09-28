@@ -22,6 +22,7 @@ const navigationPages = pages.filter(page => page.key !== 'about');
 const brand = await readFile('src/brand.html', 'utf8');
 const socialSymbols = await readFile('src/social-symbols.html', 'utf8');
 const socialLinks = socials.map(([icon,label,url]) => `<a href="${url}" target="_blank" rel="noopener noreferrer" aria-label="${label}" title="${label}"><svg aria-hidden="true"><use href="#icon-${icon}"></use></svg></a>`).join('');
+const floatingContactLinks = socials.map(([icon,label,url]) => `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer"><svg class="contact-channel-icon" width="22" height="22" aria-hidden="true"><use href="#icon-${icon}"></use></svg><span>${escapeHtml(icon === 'instagram' ? 'Instagram' : label)}</span><svg class="contact-channel-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a>`).join('');
 const litters = contentData?.litters ?? JSON.parse(await readFile('src/data/litters.json','utf8'));
 const gallery = contentData?.gallery ?? JSON.parse(await readFile('src/data/gallery.json','utf8'));
 validateLitters(litters);
@@ -83,7 +84,7 @@ for (const page of allPages) {
   const share = page.litter ? [page.litter.puppies[0].photos[0].src,page.litter.puppies[0].photos[0].alt] : shareImages[page.key];
   const values = {
     title: escapeHtml(page.title), description: escapeHtml(page.description), page:page.litter ? 'litter' : page.key, brand,
-    canonical, routeJson: JSON.stringify(route), language, ogLocale:language === 'en' ? 'en_GB' : 'ru_RU', socialSymbols, socialLinks,
+    canonical, routeJson: JSON.stringify(route), language, ogLocale:language === 'en' ? 'en_GB' : 'ru_RU', socialSymbols, socialLinks, floatingContactLinks,
     languageSwitch:`<nav class="language-switch" aria-label="Язык сайта"><a href="${russianRoute}" lang="ru" hreflang="ru" aria-label="Русский" title="Русский"${language === 'ru' ? ' aria-current="true"' : ''}><img src="/assets/flag-ru.svg" width="33" height="22" alt=""></a><a href="/en${russianRoute}" lang="en" hreflang="en" aria-label="English" title="English"${language === 'en' ? ' aria-current="true"' : ''}><img src="/assets/flag-gb.svg" width="33" height="22" alt=""></a></nav>`,
     languageAlternates:['ru','en','x-default'].map(lang => `<link rel="alternate" hreflang="${lang}" href="${new URL((lang === 'en' ? '/en' : '') + russianRoute,origin).href}">`).join('\n'),
     shareImage:`${origin}assets/${share[0]}`,shareImageAlt:escapeHtml(share[1]),
@@ -91,7 +92,7 @@ for (const page of allPages) {
     nav:links(navigationPages), mobileNav:links(navigationPages),
     content,
     pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=ending-2">' : page.key === 'dogs' ? '<link rel="stylesheet" href="/dogs.css?v=aria-photo-2">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=mobile-family-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
-    appVersion:'family-3'
+    appVersion:'contact-choice-1'
   };
   const html = layout.replace(/\{\{(\w+)\}\}/g, (_, key) => {
     if (!(key in values)) throw new Error(`Unknown layout slot ${key}`);
