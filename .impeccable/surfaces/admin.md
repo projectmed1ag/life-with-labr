@@ -18,7 +18,7 @@ OWN-WORLD: Preserve the established forest, cream, Manrope fields and forest but
 
 STORY: Recognize the kennel, enter the username and password, sign in. A quiet link returns to the public website. Existing authentication and recovery behavior remain intact.
 
-FIRST VIEWPORT: One centered panel, at most 440px wide, with 16px corners and `0 20px 64px #07161055` shadow on a forest surface. Its logo sits above a cream form with two labelled fields, inline errors, a full-width primary action and a site link. Outer padding is `40px 20px`, logo padding `32px 36px`, and form padding `32px 36px 24px`, with a 22px form gap. The logo link is capped at 320px. At 480px and below, these paddings become `28px 20px`, `28px 24px`, and `28px 24px 18px` respectively. The surface has a `100svh` minimum height with a `100vh` fallback; short screens scroll naturally.
+FIRST VIEWPORT: One centered panel, at most 440px wide, with 16px corners and `0 20px 64px #172b241c` shadow on a warm sand (#e9e3d7) surface. Its logo sits above a cream form with two labelled fields, inline errors, a full-width primary action and a site link. Outer padding is `40px 20px`, logo padding `32px 36px`, and form padding `32px 36px 24px`, with a 22px form gap. The logo link is capped at 320px. At 480px and below, these paddings become `28px 20px`, `28px 24px`, and `28px 24px 18px` respectively. The surface has a `100svh` minimum height with a `100vh` fallback; short screens scroll naturally.
 
 FORM: Code-led refinement of the incumbent login, not a new visual world. No direction roll or comp round applies to this bounded extension. Native form behavior is the interaction contract.
 

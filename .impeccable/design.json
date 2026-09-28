@@ -356,8 +356,8 @@
       },
       {
         "name": "admin-login-panel",
-        "value": "0 20px 64px #07161055",
-        "purpose": "Branded login panel on the forest entrance surface."
+        "value": "0 20px 64px #172b241c",
+        "purpose": "Branded login panel on the warm sand (#e9e3d7) entrance surface."
       }
     ],
     "motion": [

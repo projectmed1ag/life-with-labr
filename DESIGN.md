@@ -208,13 +208,13 @@ Public sections use generous vertical space and percentage gutters: the base sec
 - Puppy name and price: a full-width two-column grid with centre alignment, a (12px) gap and (12px) bottom margin. The name takes the flexible column and can wrap; the price takes its natural width at the right edge. Each puppy entry is an inline-size container, so both type sizes follow the card width rather than the viewport.
 - Public navigation: the final header has a centred brand, social links, and contact controls above a separate navigation row. At (760px), it switches to the compact header and menu control. Do not infer the header breakpoint from the base stylesheet's older (700px) rules.
 - Admin: a centred (1500px) workspace with a (230px) sidebar and a flexible main column. At (850px), navigation becomes a horizontal strip above the content. At (600px), paired fields become one column, save actions use two equal columns, and record thumbnails reduce from (88px square) to (64px × 74px).
-- Admin login: a centred panel capped at (440px) on a forest surface, with viewport padding (40px 20px) and a minimum height of `100svh` with a `100vh` fallback. The logo area uses (32px 36px) padding and caps its link at (320px); the form uses (32px 36px 24px) padding and a (22px) grid gap. At (480px) and below, outer padding is (28px 20px), logo padding (28px 24px), and form padding (28px 24px 18px). Short screens scroll naturally.
+- Admin login: a centred panel capped at (440px) on a warm sand (#e9e3d7) surface, with viewport padding (40px 20px) and a minimum height of `100svh` with a `100vh` fallback. The logo area uses (32px 36px) padding and caps its link at (320px); the form uses (32px 36px 24px) padding and a (22px) grid gap. At (480px) and below, outer padding is (28px 20px), logo padding (28px 24px), and form padding (28px 24px 18px). Short screens scroll naturally.
 
 The sidecar lists breakpoints by purpose, because the public and admin surfaces deliberately use different thresholds. The admin surface brief preserves editor composition and workflow without turning it into a global page template.
 
 ## Elevation & Depth
 
-The public album uses soft shadows and restrained overlap to give photographs a physical edge. Green panels supply tonal depth. Gold CTA gradients and fine inset highlights are part of the incumbent style. Admin rows and fields remain flat. The login panel has a dedicated shadow on its forest ground; transient notices use their own elevated feedback treatment.
+The public album uses soft shadows and restrained overlap to give photographs a physical edge. Green panels supply tonal depth. Gold CTA gradients and fine inset highlights are part of the incumbent style. Admin rows and fields remain flat. The login panel has a soft shadow on its warm sand ground; transient notices use their own elevated feedback treatment.
 
 ### Shadow Vocabulary
 
@@ -222,7 +222,7 @@ The public album uses soft shadows and restrained overlap to give photographs a 
 - **Mobile catalogue photograph** (`0 8px 22px #172b241a`): the smaller stacked catalogue card.
 - **Status ribbon** (`0 4px 12px #172b2425`): the ribbon above a photograph.
 - **Admin notice** (`0 8px 28px #172b2430`): temporary save/error feedback above the editor.
-- **Admin login panel** (`0 20px 64px #07161055`): the branded entrance panel against its forest background.
+- **Admin login panel** (`0 20px 64px #172b241c`): the branded entrance panel against its warm sand (#e9e3d7) background.
 
 Album interactions use `cubic-bezier(.16,1,.3,1)` with short control transitions and slower photograph settling. Fine-pointer hover can straighten a tilted frame and gently enlarge the photograph. Reduced-motion rules disable the related animations and transforms. Admin controls use short color transitions (0.16s), disabled under reduced motion.
 
