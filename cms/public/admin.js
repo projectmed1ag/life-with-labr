@@ -15,7 +15,18 @@ async function api(url,{method='GET',data,raw}={}){
   const result=await response.json();
   if(!response.ok){if(response.status===401&&url!=='/api/login'){if(current)pendingEdit=clone(current);current=null;dirty=false;login();}throw new Error(result.error||'Не удалось выполнить действие.');}return result;
 }
-function login(){app.innerHTML=`<main class="login"><a class="brand" href="${publicOrigin}" target="_blank" rel="noopener">Life with Labr</a><h1>Вход в админку</h1><p>Галерея, помёты и щенки питомника.</p><form id="login-form"><label>Логин<input name="username" autocomplete="username" required value="admin"></label><label>Пароль<input name="password" type="password" autocomplete="current-password" required></label><p id="login-error" class="error" role="alert"></p><button class="primary" type="submit">Войти</button></form></main>`;}
+function login(){app.innerHTML=`<main class="login" aria-label="Life with Labr">
+  <div class="login-panel">
+    <div class="login-identity"><a href="${publicOrigin}" aria-label="Life with Labr — на главную"><svg viewBox="46 110 2082 500" role="img" aria-label="Life with Labr — kennel" focusable="false"><image href="/assets/brand-header-v1.webp" width="2172" height="724" /></svg></a></div>
+    <form id="login-form" aria-label="Авторизация">
+      <label>Логин<input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required value="admin"></label>
+      <label>Пароль<input name="password" type="password" autocomplete="current-password" required></label>
+      <p id="login-error" class="error" role="alert"></p>
+      <button class="primary" type="submit">Войти</button>
+      <a class="login-back" href="${publicOrigin}">На сайт питомника</a>
+    </form>
+  </div>
+</main>`;}
 function chrome(content){app.innerHTML=`<header class="app-header"><a href="#" class="brand" data-action="home">Life with Labr</a><a href="${publicOrigin}" target="_blank" rel="noopener">Открыть сайт ↗</a><button data-action="logout" class="quiet">Выйти</button></header><div class="workspace"><aside><nav aria-label="Разделы админки"><button data-section="litters" ${section==='litters'?'aria-current="page"':''}>Помёты и щенки</button><button data-section="gallery" ${section==='gallery'?'aria-current="page"':''}>Галерея</button></nav><p>${section==='gallery'?'Добавляйте фото и меняйте их порядок. Затем сохраните изменения.':'Изменения на сайте появляются после публикации.'}</p></aside><main>${content}</main></div>`;}
 const recordState=r=>r.archived?'В архиве':r.published?(r.dirty?'Есть изменения':'Опубликовано'):'Черновик';
 function openGallery(){current=clone(records.find(r=>r.kind==='gallery'&&r.id==='gallery'));dirty=false;galleryEditor();}
@@ -83,7 +94,7 @@ async function save(action, record=null){
   }finally{busy=false;}
 }
 app.addEventListener('submit',async event=>{event.preventDefault();if(event.target.id==='editor-form')return save(section==='gallery'?'publish':'draft');
-  const form=event.target,button=form.querySelector('button');button.disabled=true;button.textContent='Входим…';
+  const form=event.target,button=form.querySelector('[type="submit"]');document.querySelector('#login-error').textContent='';button.disabled=true;button.textContent='Входим…';
   try{const values=new FormData(form),result=await api('/api/login',{method:'POST',data:{username:values.get('username'),password:values.get('password')}});csrf=result.csrf;await refresh();if(pendingEdit){current=pendingEdit;section=current.kind;pendingEdit=null;dirty=true;editor();say('Вход восстановлен. Ваши изменения сохранены в форме.');}else{listing();say('');}}catch(error){const errorNode=document.querySelector('#login-error');if(errorNode)errorNode.textContent=error.message;button.disabled=false;button.textContent='Войти';}});
 app.addEventListener('input',event=>{const input=event.target;if(input.id==='search'){document.querySelectorAll('[data-search]').forEach(row=>row.hidden=!row.dataset.search.includes(input.value.toLowerCase()));return;}
   if(input.dataset.field){let value=input.value;if(input.type==='number')value=value===''?null:Number(value);if(input.dataset.field.endsWith('.status')&&!value)value=null;set(input.dataset.field,value);}});

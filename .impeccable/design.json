@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-25T11:41:43.724Z",
+  "generatedAt": "2026-09-28T06:10:57.482Z",
   "title": "Design System: Life with Labr",
   "extensions": {
     "colorMeta": {
@@ -353,6 +353,11 @@
         "name": "admin-notice",
         "value": "0 8px 28px #172b2430",
         "purpose": "Transient admin operation feedback."
+      },
+      {
+        "name": "admin-login-panel",
+        "value": "0 20px 64px #07161055",
+        "purpose": "Branded login panel on the forest entrance surface."
       }
     ],
     "motion": [
@@ -405,6 +410,10 @@
       {
         "name": "admin-single-column-fields",
         "value": "600px"
+      },
+      {
+        "name": "admin-login-compact",
+        "value": "480px"
       }
     ]
   },
@@ -424,6 +433,22 @@
       "description": "Publish, create, and other primary owner actions.",
       "html": "<button class=\"ds-admin-primary\">Опубликовать</button>",
       "css": ".ds-admin-primary{font:15px Manrope,system-ui,sans-serif;cursor:pointer;border:1px solid #7c8a80;border-radius:8px;padding:11px 18px;min-height:44px;transition:background .16s,color .16s;background:var(--green,#172b24);border-color:var(--green,#172b24);color:#fffdf8}.ds-admin-primary:hover{background:#304b3d}.ds-admin-primary:focus-visible{outline:3px solid #ae7025;outline-offset:3px}.ds-admin-primary:disabled{cursor:wait;opacity:.55}@media(prefers-reduced-motion:reduce){.ds-admin-primary{transition:none}}"
+    },
+    {
+      "name": "Admin login action",
+      "kind": "button",
+      "refersTo": "button-admin-login",
+      "description": "Full-width sign-in variant: 52px minimum height, 16px text, and 6px top margin; authentication controls its waiting label.",
+      "html": "<button class=\"ds-login-primary\" type=\"button\">Войти</button>",
+      "css": ".ds-login-primary{display:block;width:100%;font:16px Manrope,system-ui,sans-serif;cursor:pointer;border:1px solid var(--green,#172b24);border-radius:8px;padding:11px 18px;min-height:52px;margin-top:6px;transition:background .16s,color .16s;background:var(--green,#172b24);color:#fffdf8}.ds-login-primary:hover{background:#304b3d}.ds-login-primary:focus-visible{outline:3px solid #ae7025;outline-offset:3px}.ds-login-primary:disabled{cursor:wait;opacity:.55}@media(prefers-reduced-motion:reduce){.ds-login-primary{transition:none}}"
+    },
+    {
+      "name": "Admin login field",
+      "kind": "input",
+      "refersTo": "input-admin-login",
+      "description": "Login-specific labelled field: 52px minimum height, 16px text, and 13px 14px padding; base editor fields stay unchanged.",
+      "html": "<label class=\"ds-login-field\">Логин<input class=\"ds-login-input\" name=\"username\" autocomplete=\"username\" autocapitalize=\"none\" spellcheck=\"false\" required value=\"admin\"></label>",
+      "css": ".ds-login-field{display:grid;gap:8px;font:550 14px Manrope,system-ui,sans-serif;color:var(--green,#172b24)}.ds-login-input{width:100%;min-width:0;min-height:52px;padding:13px 14px;border:1px solid #9da79c;border-radius:6px;background:#fffefa;color:var(--green,#172b24);font:16px Manrope,system-ui,sans-serif;caret-color:var(--green,#172b24)}.ds-login-input::placeholder{color:#667268}.ds-login-input:focus-visible{outline:3px solid #ae7025;outline-offset:3px}"
     },
     {
       "name": "Admin secondary action",

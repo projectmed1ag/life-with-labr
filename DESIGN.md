@@ -96,6 +96,11 @@ components:
   button-admin-primary-hover:
     backgroundColor: "{colors.admin-hover}"
     textColor: "{colors.admin-primary-text}"
+  button-admin-login:
+    backgroundColor: "{colors.forest}"
+    textColor: "{colors.admin-primary-text}"
+    rounded: "{rounded.control}"
+    padding: "11px 18px"
   button-admin-secondary:
     backgroundColor: "transparent"
     textColor: "{colors.forest}"
@@ -111,6 +116,11 @@ components:
     textColor: "{colors.forest}"
     rounded: "{rounded.field}"
     padding: "12px"
+  input-admin-login:
+    backgroundColor: "{colors.admin-input}"
+    textColor: "{colors.forest}"
+    rounded: "{rounded.field}"
+    padding: "13px 14px"
   state-admin-draft:
     backgroundColor: "{colors.admin-state-draft}"
     textColor: "{colors.admin-state-draft-text}"
@@ -197,12 +207,13 @@ Public sections use generous vertical space and percentage gutters: the base sec
 - Puppy name and price: a full-width two-column grid with centre alignment, a (12px) gap and (12px) bottom margin. The name takes the flexible column and can wrap; the price takes its natural width at the right edge. Each puppy entry is an inline-size container, so both type sizes follow the card width rather than the viewport.
 - Public navigation: the final header has a centred brand, social links, and contact controls above a separate navigation row. At (760px), it switches to the compact header and menu control. Do not infer the header breakpoint from the base stylesheet's older (700px) rules.
 - Admin: a centred (1500px) workspace with a (230px) sidebar and a flexible main column. At (850px), navigation becomes a horizontal strip above the content. At (600px), paired fields become one column, save actions use two equal columns, and record thumbnails reduce from (88px square) to (64px × 74px).
+- Admin login: a centred panel capped at (440px) on a forest surface, with viewport padding (40px 20px) and a minimum height of `100svh` with a `100vh` fallback. The logo area uses (32px 36px) padding and caps its link at (320px); the form uses (32px 36px 24px) padding and a (22px) grid gap. At (480px) and below, outer padding is (28px 20px), logo padding (28px 24px), and form padding (28px 24px 18px). Short screens scroll naturally.
 
 The sidecar lists breakpoints by purpose, because the public and admin surfaces deliberately use different thresholds. The admin surface brief preserves editor composition and workflow without turning it into a global page template.
 
 ## Elevation & Depth
 
-The public album uses soft shadows and restrained overlap to give photographs a physical edge. Green panels supply tonal depth. Gold CTA gradients and fine inset highlights are part of the incumbent style. Admin rows and fields remain flat; only the transient notice is elevated.
+The public album uses soft shadows and restrained overlap to give photographs a physical edge. Green panels supply tonal depth. Gold CTA gradients and fine inset highlights are part of the incumbent style. Admin rows and fields remain flat. The login panel has a dedicated shadow on its forest ground; transient notices use their own elevated feedback treatment.
 
 ### Shadow Vocabulary
 
@@ -210,6 +221,7 @@ The public album uses soft shadows and restrained overlap to give photographs a 
 - **Mobile catalogue photograph** (`0 8px 22px #172b241a`): the smaller stacked catalogue card.
 - **Status ribbon** (`0 4px 12px #172b2425`): the ribbon above a photograph.
 - **Admin notice** (`0 8px 28px #172b2430`): temporary save/error feedback above the editor.
+- **Admin login panel** (`0 20px 64px #07161055`): the branded entrance panel against its forest background.
 
 Album interactions use `cubic-bezier(.16,1,.3,1)` with short control transitions and slower photograph settling. Fine-pointer hover can straighten a tilted frame and gently enlarge the photograph. Reduced-motion rules disable the related animations and transforms. Admin controls use short color transitions (0.16s), disabled under reduced motion.
 
@@ -244,6 +256,12 @@ Admin record rows are full-width buttons with a thumbnail or actual empty-photo 
 ### Inputs and fields
 
 Admin labels sit above inputs with an (8px) gap. Inputs, selects, and textareas have a visible muted border, the admin input surface, (12px) padding, and a (46px) minimum height. Textareas resize vertically. Help follows the field in muted text; errors remain readable text. Upload controls use a dashed border and a visible `focus-within` outline; uploaded photos have previews and explicit reorder/remove controls.
+
+### Admin login
+
+The login panel keeps the existing kennel artwork, `dist/assets/brand-header-v1.webp`, in the same SVG viewport (`46 110 2082 500`) used by `src/brand.html`. Its forest identity area sits above a cream form within (16px) outer corners. There is no visible login heading or gallery/litters subtitle. The logo link uses gold keyboard focus; form controls retain the admin focus treatment.
+
+The login field and primary action variants use (16px) text and a (52px) minimum height. The full-width action has (6px) top margin. The quiet site link has a (44px) minimum height, (13px) text, and (-8px) top margin. Labels stay visible; empty inline errors occupy no space. Submitting changes the action to «Входим…» and disables it; failure restores «Войти» and displays the error in the existing alert region. These variants belong to the entrance surface and do not change base editor controls.
 
 ### Navigation
 

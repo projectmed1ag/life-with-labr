@@ -2,11 +2,31 @@
 
 Status: implemented extension of the approved Life with Labr identity. Visual source: `cms/public/index.html`, `admin.css`, `admin.js`, and `photo-editor.js`; crop geometry is in `photo-geometry.js`. Shared tokens and component variants are recorded in the root `DESIGN.md`.
 
+Mode: Operate. The owner signs in and completes editing tasks, including from a phone.
+
 ## Purpose and sequence
 
 One owner manages a shared photo gallery and litters. Gallery opens directly into a photo grid with a multi-file uploader, captions, earlier/later controls, removal, reset, and one Save changes button. There are no gallery posts, titles, dates, search or archive controls. Litters follow section → record list → editor → save draft or publish. Archive remains a separate, reversible litter action; the archive view returns to the current list. Keep these operations explicit and labelled in Russian.
 
 ## Composition
+
+### Login direction contract
+
+THESIS: A compact branded entrance with the credentials and sign-in action. The visible «Вход в админку» heading and gallery/litters subtitle are removed as requested by the owner.
+
+OWN-WORLD: Preserve the established forest, cream, Manrope fields and forest buttons. The approved `dist/assets/brand-header-v1.webp` logo is reused in the `46 110 2082 500` SVG viewport from `src/brand.html`; its provenance is recorded beside the asset. No new illustration or display font.
+
+STORY: Recognize the kennel, enter the username and password, sign in. A quiet link returns to the public website. Existing authentication and recovery behavior remain intact.
+
+FIRST VIEWPORT: One centered panel, at most 440px wide, with 16px corners and `0 20px 64px #07161055` shadow on a forest surface. Its logo sits above a cream form with two labelled fields, inline errors, a full-width primary action and a site link. Outer padding is `40px 20px`, logo padding `32px 36px`, and form padding `32px 36px 24px`, with a 22px form gap. The logo link is capped at 320px. At 480px and below, these paddings become `28px 20px`, `28px 24px`, and `28px 24px 18px` respectively. The surface has a `100svh` minimum height with a `100vh` fallback; short screens scroll naturally.
+
+FORM: Code-led refinement of the incumbent login, not a new visual world. No direction roll or comp round applies to this bounded extension. Native form behavior is the interaction contract.
+
+FINISH: The reviewer approved the implemented UI and behavior in `.impeccable/review/login/{desktop,mobile,mobile-error,narrow}.png`. The requested documentation correction records the login variant in `DESIGN.md` and its sidecar; the reused logo has its provenance sidecar.
+
+Login controls retain visible labels and native required-field validation. The username is prefilled with `admin`, uses username autocomplete, and disables autocapitalization and spellcheck; the password uses current-password autocomplete. Inputs and the primary action have 52px minimum heights and 16px text. The action adds 6px top margin; the 44px-high site link uses 13px text and -8px top margin. Empty errors are hidden; failed authentication displays Russian feedback in the alert region without clearing entered values. Submission disables the action and shows «Входим…», then restores «Войти» on failure. Logo focus is gold on forest; other controls retain the warm admin outline. The existing session-expiry recovery restores the pending editor values after successful sign-in.
+
+### Authenticated workspace
 
 The forest header holds the existing text brand, a site-opening link, and logout. The cream workspace has a section sidebar and a broad main column. The list heading and create action precede a labelled search field, archive switch, and divided rows. A row combines photo, title, useful record details, and publication state. Published litters expose a separate «Все щенки проданы!» button beside the editor-opening control; the buttons are siblings. On narrow screens the close action moves below the record. A confirmation explains catalog removal, redirecting old public URLs and reversible archiving.
 
