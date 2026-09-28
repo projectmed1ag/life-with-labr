@@ -8,7 +8,8 @@ export const litterRoute = litter => `/puppies/${litter.id}/`;
 const asset = filename => `/assets/${filename}`;
 const puppyKind = litter => litter.puppies.every(puppy=>puppy.color==='Палевый')?'Палевые щенки лабрадора-ретривера':'Щенки лабрадора-ретривера';
 const statusText = puppy => ({available:puppy.sex === 'female' ? 'Свободна' : 'Свободен',reserved:puppy.sex === 'female' ? 'Забронирована' : 'Забронирован',home:puppy.sex === 'female'?'Уехала в новую семью':'Уехал в новую семью'}[puppy.status] || '');
-const status = puppy => puppy.status ? `<span class="puppy-status puppy-status--${puppy.status}">${puppy.status==='home'?'<svg viewBox="0 0 36 30" width="32" height="28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 11C10 1 2 3 3 11c1 6 8 5 13 2m4-2c6-10 14-8 13 0-1 6-8 5-13 2M15 15 10 27l6-2 3 3 1-13m1 0 5 12 2-5 5 1-10-9"/><rect x="15" y="9" width="6" height="7" rx="2"/></svg>':''}${statusText(puppy)}</span>` : '';
+const saleBow = '<img class="sale-bow" src="/assets/satin-gold-bow.png" width="56" height="56" alt="" aria-hidden="true">';
+const status = puppy => puppy.status ? `<span class="puppy-status puppy-status--${puppy.status}">${puppy.status==='home'?saleBow:''}${statusText(puppy)}</span>` : '';
 const date = value => new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(`${value}T12:00:00Z`));
 const price = value => `<span class="puppy-price-amount">${new Intl.NumberFormat('ru-RU').format(value).replaceAll('\u00a0','\u202f')}</span> <span class="puppy-price-currency">₽</span>`;
 const renderContactChoices = puppy => `<details class="puppy-contact" name="puppy-contact" data-puppy-inquiry="${puppy.id}">
@@ -43,7 +44,7 @@ export function renderLitterCatalog(litters) {
     const available = litter.puppies.some(puppy => puppy.status === 'available');
     const cover = litter.puppies[0].photos[0];
     return `<article class="litter-card${closed?' litter-card--closed':''}" aria-labelledby="catalog-${litter.id}-title">
-      <${closed?'div':'a'} class="litter-card-cover"${closed?'':` href="${litterRoute(litter)}" aria-label="Смотреть помёт: ${escapeHtml(litter.title)}"`}><span class="litter-card-photo"><img src="${asset(cover.src)}" alt="${escapeHtml(cover.alt)}" width="${cover.width}" height="${cover.height}" loading="lazy"></span>${closed?'<span class="litter-sold-ribbon"><svg viewBox="0 0 36 30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 11C10 1 2 3 3 11c1 6 8 5 13 2m4-2c6-10 14-8 13 0-1 6-8 5-13 2M15 15 10 27l6-2 3 3 1-13m1 0 5 12 2-5 5 1-10-9"/><rect x="15" y="9" width="6" height="7" rx="2"/></svg><span>Все щенки проданы</span></span>':''}</${closed?'div':'a'}>
+      <${closed?'div':'a'} class="litter-card-cover"${closed?'':` href="${litterRoute(litter)}" aria-label="Смотреть помёт: ${escapeHtml(litter.title)}"`}><span class="litter-card-photo"><img src="${asset(cover.src)}" alt="${escapeHtml(cover.alt)}" width="${cover.width}" height="${cover.height}" loading="lazy"></span>${closed?`<span class="litter-sold-ribbon">${saleBow}<span>Все щенки проданы</span></span>`:''}</${closed?'div':'a'}>
       <div class="litter-card-copy">
         <p class="litter-card-intro">${puppyKind(litter)} от пары</p>
         <h2 id="catalog-${litter.id}-title">${closed?escapeHtml(litter.title):`<a href="${litterRoute(litter)}">${escapeHtml(litter.title)}</a>`}</h2>

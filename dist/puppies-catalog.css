@@ -9,11 +9,11 @@
 .litter-card+.litter-card{margin-top:88px}
 .litter-sold-ribbon{position:absolute;top:28px;right:-8px;display:flex;align-items:center;gap:10px;max-width:calc(100% - 20px);padding:14px 22px;background:var(--gold);color:var(--green);font:500 22px/1.2 var(--serif);border-radius:4px 0 0 4px;box-shadow:0 5px 14px #172b2420}
 .litter-sold-ribbon::after{content:"";position:absolute;right:0;top:100%;border-top:8px solid #98773e;border-right:8px solid transparent}
-.litter-sold-ribbon svg{flex-shrink:0}.litter-closed-note{margin-top:28px;max-width:28ch;color:#d2d6cb;font-size:16px;line-height:1.7}
-@media(max-width:600px){.litter-sold-ribbon{top:22px;padding:12px 16px;font-size:20px;gap:8px}}
+.litter-sold-ribbon .sale-bow{display:block;flex-shrink:0;width:56px;height:56px;margin-block:-13px;object-fit:contain}.litter-closed-note{margin-top:28px;max-width:28ch;color:#d2d6cb;font-size:16px;line-height:1.7}
+@media(max-width:600px){.litter-sold-ribbon{top:22px;padding:12px 16px;font-size:20px;gap:8px}.litter-sold-ribbon .sale-bow{width:46px;height:46px;margin-block:-10px}}
 .litter-card-cover{position:relative;z-index:1;display:block;aspect-ratio:1.06;padding:12px;background:var(--cream);border-radius:12px;box-shadow:0 18px 42px #172b2420;transform:rotate(-1.3deg)}
 .litter-card-photo{display:block;width:100%;height:100%;overflow:hidden;border-radius:4px}
-.litter-card-cover img{object-position:50% 45%;transform:scale(1.04);transition:transform .65s var(--album-ease)}
+.litter-card-photo img{object-position:50% 45%;transform:scale(1.04);transition:transform .65s var(--album-ease)}
 .litter-card-copy{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:440px;margin-left:-36px;padding:58px 48px 58px 88px;background:var(--green);border-radius:0 16px 16px 0}
 .litter-card-copy::before{content:"";display:block;width:56px;height:1px;background:var(--gold);margin-bottom:28px;transform-origin:left}
 .litter-card-intro{font-size:15px;line-height:1.7;max-width:29ch;color:#d2d6cb}
@@ -145,12 +145,12 @@
   @keyframes album-print{from{clip-path:inset(0 0 4% 0 round 4px)}to{clip-path:inset(0 round 4px)}}
 }
 @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
-  .litter-card-cover:hover img{transform:translate(var(--photo-x,0px),var(--photo-y,0px)) scale(1.07)}
+  .litter-card-cover:hover .litter-card-photo img{transform:translate(var(--photo-x,0px),var(--photo-y,0px)) scale(1.07)}
   .parent-photo:hover,.puppy-portrait:hover{transform:rotate(0)}
   .parent-photo:hover img,.puppy-portrait:hover img{transform:translate(var(--photo-x,0px),var(--photo-y,0px)) scale(1.035)}
 }
 @media(prefers-reduced-motion:reduce){
-  .litter-card-cover img{transform:none}
+  .litter-card-photo img{transform:none}
   .parent-photo,.puppy-portrait,.parent-photo img,.puppy-portrait img{transition:none}
   .puppies-page .button:active,.litter-page .button:active{transform:none}
 }
@@ -213,7 +213,7 @@
 .puppy-pictures>.puppy-status::after{content:"";position:absolute;right:0;bottom:-7px;border-top:7px solid #98773e;border-right:8px solid transparent}
 .puppy-pictures>.puppy-status--available{background:#f4f1e9}
 .puppy-pictures>.puppy-status--home{background:#f4e4c5}
-.puppy-pictures>.puppy-status svg{flex-shrink:0}
+.puppy-pictures>.puppy-status .sale-bow{display:block;flex-shrink:0;width:42px;height:42px;margin-block:-7px;object-fit:contain}
 .pedigree-text{white-space:pre-wrap;line-height:1.8;padding-block:22px;max-width:75ch}
 .litter-empty{max-width:760px;margin-inline:auto;padding-block:28px 40px}.litter-empty h2{font-size:clamp(32px,4vw,54px)}.litter-empty p{margin-block:20px 28px;line-height:1.7}
 @media(max-width:600px){
