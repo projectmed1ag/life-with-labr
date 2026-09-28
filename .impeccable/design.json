@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-28T06:10:57.482Z",
+  "generatedAt": "2026-09-28T06:20:01.118Z",
   "title": "Design System: Life with Labr",
   "extensions": {
     "colorMeta": {
@@ -510,6 +510,13 @@
       "description": "Ribbon-and-bow excerpt that sits at the upper right of an actual puppy photograph.",
       "html": "<span class=\"ds-home-ribbon\"><svg viewBox=\"0 0 36 30\" width=\"32\" height=\"28\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M16 11C10 1 2 3 3 11c1 6 8 5 13 2m4-2c6-10 14-8 13 0-1 6-8 5-13 2M15 15 10 27l6-2 3 3 1-13m1 0 5 12 2-5 5 1-10-9\"/><rect x=\"15\" y=\"9\" width=\"6\" height=\"7\" rx=\"2\"/></svg>Уехал в новую семью</span>",
       "css": ".ds-home-ribbon{position:relative;display:inline-flex;align-items:center;gap:9px;max-width:calc(100% - 18px);padding:12px 20px;background:#f4e4c5;color:#172b24;font:12px/1.4 var(--sans,Manrope,Arial,sans-serif);border-radius:3px 0 0 3px;box-shadow:0 4px 12px #172b2425}.ds-home-ribbon::after{content:\"\";position:absolute;right:0;bottom:-7px;border-top:7px solid #98773e;border-right:8px solid transparent}.ds-home-ribbon svg{flex-shrink:0}"
+    },
+    {
+      "name": "Admin header actions",
+      "kind": "custom",
+      "description": "Cream site-opening link and outlined logout button, with labels and 18px stroke icons. 46px targets on desktop and mobile; grouped below the wordmark at 600px.",
+      "html": "<div class=\"app-header-actions\"><a class=\"header-action header-action--site\" href=\"#\">Открыть сайт</a><button class=\"header-action header-action--logout\" type=\"button\">Выйти</button></div>",
+      "css": ".app-header-actions{display:flex;align-items:center;gap:10px;margin-left:auto}\n.header-action{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:11px 16px;border:1px solid #7c8a80;border-radius:8px;font-size:14px;font-weight:550;line-height:1.4;text-decoration:none;white-space:nowrap;transition:background .16s,color .16s,border-color .16s}\n.header-action svg{flex-shrink:0}\n.header-action--site{background:#f4f1e9;border-color:#f4f1e9;color:var(--green)}\n.header-action--site:hover,.header-action--site:active{background:var(--gold);border-color:var(--gold)}\n.header-action--logout{background:transparent;color:#f4f1e9}\n.header-action--logout:hover,.header-action--logout:active{background:#304b3d;border-color:var(--gold)}\n.app-header :focus-visible{outline-color:var(--gold)}\n@media(max-width:600px){.app-header>.brand{flex-basis:100%}.app-header-actions{width:100%;margin-left:0}.header-action--site{flex:1}}"
     }
   ],
   "narrative": {

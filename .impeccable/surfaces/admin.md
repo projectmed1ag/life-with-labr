@@ -28,7 +28,7 @@ Login controls retain visible labels and native required-field validation. The u
 
 ### Authenticated workspace
 
-The forest header holds the existing text brand, a site-opening link, and logout. The cream workspace has a section sidebar and a broad main column. The list heading and create action precede a labelled search field, archive switch, and divided rows. A row combines photo, title, useful record details, and publication state. Published litters expose a separate «Все щенки проданы!» button beside the editor-opening control; the buttons are siblings. On narrow screens the close action moves below the record. A confirmation explains catalog removal, redirecting old public URLs and reversible archiving.
+The forest header holds the existing text brand and a grouped pair of 46px utility buttons: a cream site-opening link and an outlined logout action. Both retain visible labels and use matching 18px stroke icons. Gold focus outlines and hover accents stay legible on forest. At 600px and below the actions occupy a second row; the site link fills its spare width. The cream workspace has a section sidebar and a broad main column. The list heading and create action precede a labelled search field, archive switch, and divided rows. A row combines photo, title, useful record details, and publication state. Published litters expose a separate «Все щенки проданы!» button beside the editor-opening control; the buttons are siblings. On narrow screens the close action moves below the record. A confirmation explains catalog removal, redirecting old public URLs and reversible archiving.
 
 The editor begins with back navigation and record identity. Ruled sections group content, parents, puppy facts, and photos. Paired fields occupy two columns when space allows. Photo previews retain explicit reorder and remove controls. Saving/publishing stay in a sticky lower bar; record actions are separate from field editing. Draft state and published state remain distinguishable, including when a published record has new unpublished changes.
 
@@ -58,7 +58,7 @@ Use Manrope working headings and body text, cream page surfaces, forest primary 
 - At 850px and below: sidebar navigation becomes a top strip and its explanatory paragraph disappears. The first ancestry pair also becomes one column, with a separator before the mother's branch.
 - At 700px and below: the photo dialog stacks preview above controls; its footer actions wrap and the primary action fills the remaining space.
 - At 600px and below: main padding is `26px 18px 100px`; page headings stack; paired fields become one column; record rows wrap; photo previews use two columns; the sticky save area stacks its status and two equal action columns. Ancestry inputs use 16px text, and nested ancestry indentation reduces from 20px to 14px.
-- Base fields remain at least 46px high and base action buttons at least 44px high. Compact photo controls and header utility actions keep their implemented exceptions; these are not a new general target-size rule.
+- Base fields remain at least 46px high and base action buttons at least 44px high. Compact photo controls keep their implemented exceptions; header utility actions are at least 46px high on every viewport.
 
 The gallery grid uses flexible columns of at least 210px on desktop and two columns on mobile (one below 360px). Photo controls retain 44px targets; the Save changes button is first in the mobile save bar. Existing gallery publication records are merged without publishing pending edits; their original data remains in history.
 

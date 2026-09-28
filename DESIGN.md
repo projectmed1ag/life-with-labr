@@ -257,6 +257,10 @@ Admin record rows are full-width buttons with a thumbnail or actual empty-photo 
 
 Admin labels sit above inputs with an (8px) gap. Inputs, selects, and textareas have a visible muted border, the admin input surface, (12px) padding, and a (46px) minimum height. Textareas resize vertically. Help follows the field in muted text; errors remain readable text. Upload controls use a dashed border and a visible `focus-within` outline; uploaded photos have previews and explicit reorder/remove controls.
 
+### Admin header actions
+
+The site-opening link and logout use a grouped pair of labelled (46px) controls, (14px) Manrope text, (18px) stroke icons, (8px) corners and (11px 16px) padding. The site link has the cream surface and forest text; logout uses a transparent surface, cream text and the existing muted control border. Hover uses gold for the site link, and forest-hover with a gold border for logout. Keyboard outlines are gold. The group moves below the wordmark at (600px), retaining its full target size and labels.
+
 ### Admin login
 
 The login panel keeps the existing kennel artwork, `dist/assets/brand-header-v1.webp`, in the same SVG viewport (`46 110 2082 500`) used by `src/brand.html`. Its forest identity area sits above a cream form within (16px) outer corners. There is no visible login heading or gallery/litters subtitle. The logo link uses gold keyboard focus; form controls retain the admin focus treatment.
