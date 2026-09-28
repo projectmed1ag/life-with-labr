@@ -9,8 +9,8 @@
 .litter-card+.litter-card{margin-top:88px}
 .litter-sold-ribbon{position:absolute;top:28px;right:-8px;display:flex;align-items:center;gap:10px;max-width:calc(100% - 20px);padding:14px 22px;background:var(--gold);color:var(--green);font:500 22px/1.2 var(--serif);border-radius:4px 0 0 4px;box-shadow:0 5px 14px #172b2420}
 .litter-sold-ribbon::after{content:"";position:absolute;right:0;top:100%;border-top:8px solid #98773e;border-right:8px solid transparent}
-.litter-sold-ribbon .sale-bow{display:block;flex-shrink:0;width:56px;height:56px;margin-block:-13px;object-fit:contain}.litter-closed-note{margin-top:28px;max-width:28ch;color:#d2d6cb;font-size:16px;line-height:1.7}
-@media(max-width:600px){.litter-sold-ribbon{top:22px;padding:12px 16px;font-size:20px;gap:8px}.litter-sold-ribbon .sale-bow{width:46px;height:46px;margin-block:-10px}}
+.litter-sold-ribbon .sale-bow{display:block;flex-shrink:0;width:32px;height:32px;margin-block:-3px;object-fit:contain}.litter-closed-note{margin-top:28px;max-width:28ch;color:#d2d6cb;font-size:16px;line-height:1.7}
+@media(max-width:600px){.litter-sold-ribbon{top:22px;padding:12px 16px;font-size:20px;gap:8px}.litter-sold-ribbon .sale-bow{width:28px;height:28px;margin-block:-1px}}
 .litter-card-cover{position:relative;z-index:1;display:block;aspect-ratio:1.06;padding:12px;background:var(--cream);border-radius:12px;box-shadow:0 18px 42px #172b2420;transform:rotate(-1.3deg)}
 .litter-card-photo{display:block;width:100%;height:100%;overflow:hidden;border-radius:4px}
 .litter-card-photo img{object-position:50% 45%;transform:scale(1.04);transition:transform .65s var(--album-ease)}
@@ -209,11 +209,11 @@
 .puppy-name-row .puppy-price{display:flex;align-items:baseline;justify-self:end;gap:.22em;margin:0;font-family:var(--sans);font-size:clamp(18px,5.8cqi,22px);font-weight:400;line-height:1.2;letter-spacing:-.025em;color:var(--gold);white-space:nowrap;font-variant-numeric:tabular-nums lining-nums}
 .puppy-price-currency{font-size:.72em;letter-spacing:0}
 .puppy-pictures{position:relative}
-.puppy-pictures>.puppy-status{position:absolute;top:28px;right:0;z-index:3;display:flex;align-items:center;gap:9px;max-width:calc(100% - 18px);padding:12px 20px;background:#e8d1a7;color:#172b24;font-size:12px;line-height:1.4;border-radius:3px 0 0 3px;box-shadow:0 4px 12px #172b2425}
+.puppy-pictures>.puppy-status{position:absolute;top:28px;right:0;z-index:3;display:flex;align-items:center;gap:8px;max-width:calc(100% - 18px);min-height:52px;padding:12px 16px;background:#e8d1a7;color:#172b24;font-size:12px;line-height:1.4;border-radius:3px 0 0 3px;box-shadow:0 4px 12px #172b2425}
 .puppy-pictures>.puppy-status::after{content:"";position:absolute;right:0;bottom:-7px;border-top:7px solid #98773e;border-right:8px solid transparent}
 .puppy-pictures>.puppy-status--available{background:#f4f1e9}
 .puppy-pictures>.puppy-status--home{background:#f4e4c5}
-.puppy-pictures>.puppy-status .sale-bow{display:block;flex-shrink:0;width:42px;height:42px;margin-block:-7px;object-fit:contain}
+.puppy-pictures>.puppy-status .sale-bow{display:block;flex-shrink:0;width:28px;height:28px;object-fit:contain}
 .pedigree-text{white-space:pre-wrap;line-height:1.8;padding-block:22px;max-width:75ch}
 .litter-empty{max-width:760px;margin-inline:auto;padding-block:28px 40px}.litter-empty h2{font-size:clamp(32px,4vw,54px)}.litter-empty p{margin-block:20px 28px;line-height:1.7}
 @media(max-width:600px){
@@ -226,3 +226,5 @@
   .puppy-grid{grid-template-columns:minmax(0,1fr);gap:40px;max-width:480px;margin-inline:auto}
   .puppy-entry,.puppy-entry:nth-child(3n + 2),.puppy-entry:nth-child(3n){--photo-angle:-.6deg;--photo-delay:0ms}
 }
+
+.puppy-reserved-icon{display:block;flex-shrink:0}

@@ -8,8 +8,9 @@ export const litterRoute = litter => `/puppies/${litter.id}/`;
 const asset = filename => `/assets/${filename}`;
 const puppyKind = litter => litter.puppies.every(puppy=>puppy.color==='Палевый')?'Палевые щенки лабрадора-ретривера':'Щенки лабрадора-ретривера';
 const statusText = puppy => ({available:puppy.sex === 'female' ? 'Свободна' : 'Свободен',reserved:puppy.sex === 'female' ? 'Забронирована' : 'Забронирован',home:puppy.sex === 'female'?'Уехала в новую семью':'Уехал в новую семью'}[puppy.status] || '');
-const saleBow = '<img class="sale-bow" src="/assets/satin-gold-bow.png" width="56" height="56" alt="" aria-hidden="true">';
-const status = puppy => puppy.status ? `<span class="puppy-status puppy-status--${puppy.status}">${puppy.status==='home'?saleBow:''}${statusText(puppy)}</span>` : '';
+const saleBow = '<img class="sale-bow" src="/assets/matte-forest-bow.png" width="32" height="32" alt="" aria-hidden="true">';
+const reservationIcon='<svg class="puppy-reserved-icon" viewBox="0 0 24 24" width="20" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5h10a1 1 0 0 1 1 1V21l-6-4-6 4V4.5a1 1 0 0 1 1-1Z"/></svg>';
+const status = puppy => puppy.status ? `<span class="puppy-status puppy-status--${puppy.status}">${puppy.status==='home'?saleBow:puppy.status==='reserved'?reservationIcon:''}${statusText(puppy)}</span>` : '';
 const date = value => new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(`${value}T12:00:00Z`));
 const price = value => `<span class="puppy-price-amount">${new Intl.NumberFormat('ru-RU').format(value).replaceAll('\u00a0','\u202f')}</span> <span class="puppy-price-currency">₽</span>`;
 const renderContactChoices = puppy => `<details class="puppy-contact" name="puppy-contact" data-puppy-inquiry="${puppy.id}">
