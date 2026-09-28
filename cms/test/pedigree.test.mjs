@@ -7,7 +7,28 @@ import {openStore} from '../store.mjs';
 import {validateContent} from '../validation.mjs';
 import {editablePedigree, resolvePedigree, visiblePedigree} from '../../dist/pedigree-data.js';
 import {renderLitterSlots} from '../../src/render-litters.mjs';
+import {renderPedigree} from '../../dist/pedigree.js';
+import {translateMarkup} from '../../dist/localization.js';
 const litters=JSON.parse(await readFile('src/data/litters.json'));
+
+test('Mobile family disclosures retain whose parents are shown, missing siblings and safe names',()=>{
+  const tree=visiblePedigree([{}, {name:'Мама & дочь',parents:[{}, {name:'Бабушка',parents:[{name:'Прадед',title:'Титул <старший>'}]}]}]);
+  const markup=renderPedigree(tree,'<Щенок>');
+  const mobile=markup.slice(markup.indexOf('<div class="lineage-mobile">'));
+  assert(mobile.includes('<strong>&lt;Щенок&gt;</strong>'));
+  assert(mobile.includes('<strong>Мама &amp; дочь</strong>'));
+  assert(mobile.includes('<strong>Бабушка</strong>'));
+  assert.equal((mobile.match(/lineage-relative-role">Мать/g)||[]).length,2);
+  assert.equal((mobile.match(/lineage-relative-role">Отец/g)||[]).length,1);
+  assert.equal((mobile.match(/<details /g)||[]).length,2);
+  assert(!mobile.includes('<details class="lineage-more" open'));
+  assert(mobile.includes('Титул &lt;старший&gt;'));
+  assert.equal(renderPedigree([], 'Пустая родословная'),'');
+  const english=translateMarkup(mobile);
+  assert(english.includes('Parents of'));
+  assert(english.includes('Show parents'));
+  assert(!english.includes('Показать родителей'));
+});
 
 test('Ancestry preserves legacy facts, explicit clearing, partial branches and escaped text',()=>{
   const litter=structuredClone(litters[0]);

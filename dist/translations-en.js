@@ -1,5 +1,8 @@
 export default {
   "Отец": "Sire",
+  "Родители:": "Parents of",
+  "Показать родителей": "Show parents",
+  "Скрыть родителей": "Hide parents",
   "Мать": "Dam",
   "Отец · 2-е поколение": "Sire · Second generation",
   "Мать · 2-е поколение": "Dam · Second generation",

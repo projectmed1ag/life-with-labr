@@ -36,6 +36,8 @@
 .litter-jump-links{display:flex;gap:28px;flex-wrap:wrap;margin-top:24px}
 .litter-jump-links a,.parent-details{display:inline-flex;align-items:center;min-height:44px;font-size:14px;text-decoration:underline;text-underline-offset:6px;text-decoration-color:var(--line)}
 .litter-jump-links a:hover,.parent-details:hover{color:#637456;text-decoration-color:currentColor}
+.litter-family{display:flex;flex-direction:column}
+@media(min-width:701px){.litter-family>.litter-parents,.litter-jump-links>a[href="#litter-parents"]{order:-1}}
 .litter-parents{padding-top:30px;padding-bottom:80px}
 .litter-parents>h2{font-size:48px;margin:0 auto 30px;max-width:1200px}
 .litter-parent-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;max-width:1200px;margin-inline:auto}
@@ -192,7 +194,7 @@
   .parent-kennel>span,.parent-kennel>strong{display:block}
   .parent-kennel>strong{margin-top:4px}
   .parent-details{text-align:left}
-  .litter-puppies{padding-top:32px;padding-bottom:48px}
+  .litter-puppies{padding-top:22px;padding-bottom:48px;border-top:0}
   .puppy-group>h2{font-size:40px;margin-bottom:24px}
   .puppy-copy{padding:52px 22px 22px}
   .puppy-copy h3{font-size:40px}

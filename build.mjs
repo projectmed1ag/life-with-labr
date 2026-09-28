@@ -90,8 +90,8 @@ for (const page of allPages) {
     structuredData:JSON.stringify({'@context':'https://schema.org','@graph':graph}).replaceAll('<','\\u003c'),
     nav:links(navigationPages), mobileNav:links(navigationPages),
     content,
-    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=ending-2">' : page.key === 'dogs' ? '<link rel="stylesheet" href="/dogs.css?v=aria-photo-2">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=care-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
-    appVersion:'pedigree-2'
+    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=ending-2">' : page.key === 'dogs' ? '<link rel="stylesheet" href="/dogs.css?v=aria-photo-2">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=mobile-family-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
+    appVersion:'family-3'
   };
   const html = layout.replace(/\{\{(\w+)\}\}/g, (_, key) => {
     if (!(key in values)) throw new Error(`Unknown layout slot ${key}`);

@@ -1,4 +1,4 @@
-/* The nested lists retain ancestry order when the tree becomes vertical. */
+/* Shared ancestry uses a wide tree or compact, explicitly labelled family pairs. */
 .pedigree{container-type:inline-size;--lineage-line:#bec6b6;--lineage-gap:32px}
 .lineage-generations{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--lineage-gap);padding-bottom:16px;margin-bottom:8px;border-bottom:1px solid var(--line);color:#5b665b;font-size:12px}
 .lineage-tree,.lineage-children{list-style:none;margin:0;padding:0}
@@ -23,20 +23,34 @@
 .lineage-children>.lineage-branch:last-child::before{bottom:50%}
 .lineage-children>.lineage-branch>.lineage-node::before{content:"";position:absolute;left:calc(var(--lineage-gap)/-2);top:50%;width:calc(var(--lineage-gap)/2);border-top:1px solid var(--lineage-line)}
 .lineage-tree--short{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;align-items:start}
+.lineage-mobile{display:none}
+.lineage-family-caption{margin:0 0 8px;font:14px/1.6 var(--sans);color:#5b665b;overflow-wrap:anywhere}
+.lineage-family-caption strong{font-weight:500;color:var(--ink)}
+.lineage-relatives{list-style:none;margin:0;padding:0}
+.lineage-relative{padding:18px 0}
+.lineage-relative+.lineage-relative{border-top:1px solid var(--line)}
+.lineage-relative-heading{display:grid;grid-template-columns:48px minmax(0,1fr);gap:12px;align-items:baseline}
+.lineage-relative-role{font:500 13px/1.5 var(--sans);color:#5b665b}
+.lineage-relative h4{margin:0;font:500 26px/1.2 var(--serif);overflow-wrap:anywhere}
+.lineage-relative-title{margin:10px 0 0 60px;font:14px/1.65 var(--sans);color:#5b665b;overflow-wrap:anywhere}
+.lineage-more{border:0;margin:10px 0 0 60px}
+.lineage-more>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px;padding:8px 12px;border:1px solid var(--lineage-line);border-radius:8px;font:500 13px/1.4 var(--sans);color:var(--ink);list-style:none}
+.lineage-more>summary::-webkit-details-marker{display:none}
+.lineage-more>summary>span,.lineage-more[open]>summary>span{font:inherit;transform:none;transition:none}
+.lineage-more>summary>svg{flex-shrink:0}
+.lineage-more>summary:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.lineage-more>summary:active{background:#e8ece2}
+.lineage-collapse-label,.lineage-more[open]>summary>.lineage-expand-label{display:none}
+.lineage-more[open]>summary>.lineage-collapse-label{display:inline}
+.lineage-more[open]>summary>svg{transform:rotate(180deg)}
+.lineage-more>.lineage-family{margin-top:16px;padding:14px 0 0;border-top:1px solid var(--lineage-line)}
+/* Deeper pairs use the full available width instead of an ever-narrowing tree. */
+.lineage-more .lineage-relative-heading{display:block}
+.lineage-more .lineage-relative-role{display:block;margin-bottom:5px}
+.lineage-more .lineage-relative h4{font:500 16px/1.5 var(--sans)}
+.lineage-more .lineage-relative-title,.lineage-more .lineage-more{margin-left:0}
+@media(hover:hover){.lineage-more>summary:hover{background:#e8ece2;border-color:#7c8a76}}
 @container(max-width:700px){
-  .lineage-generations{display:none}
-  .lineage-tree{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
-  .lineage-tree .lineage-branch{display:block}
-  .lineage-tree>.lineage-branch>.lineage-node{padding:20px}
-  .lineage-tree>.lineage-branch>.lineage-node h4{font-size:26px}
-  .lineage-tree .lineage-children{display:block;margin:0 0 0 12px;padding:12px 0 0 16px;border-left:1px solid var(--lineage-line)}
-  .lineage-tree .lineage-node{padding:12px 0}
-  .lineage-tree .lineage-name h4{font-size:23px}
-  .lineage-tree .lineage-children .lineage-children{padding-top:0}
-  .lineage-tree .lineage-children .lineage-children h4{font-size:16px;line-height:1.55}
-  .lineage-tree .lineage-role--ancestor{display:block;font-size:12px;margin-top:5px}
-  .lineage-tree .lineage-node p{font-size:14px;line-height:1.6}
-  .lineage-tree .lineage-children>.lineage-branch+ .lineage-branch{margin-top:16px}
-  .lineage-tree .lineage-branch::before,.lineage-tree .lineage-node::after{display:none}
-  .lineage-tree .lineage-children>.lineage-branch>.lineage-node::before{left:-16px;width:10px}
+  .lineage-desktop{display:none}
+  .lineage-mobile{display:block}
 }

@@ -3,6 +3,20 @@ const english = document.documentElement.lang === 'en';
 const t = text => translateText(text, english ? 'en' : 'ru');
 const litter = JSON.parse(document.querySelector('#litter-data').textContent);
 const puppies = new Map(litter.puppies.map(puppy => [puppy.id, puppy]));
+// Keep reading and keyboard order aligned with the responsive layout.
+const mobileLitter = matchMedia('(max-width:700px)');
+function arrangeLitter() {
+  const firstId = mobileLitter.matches ? 'litter-puppies' : 'litter-parents';
+  const firstSection = document.getElementById(firstId);
+  const firstLink = document.querySelector(`.litter-jump-links a[href="#${firstId}"]`);
+  const focused = document.activeElement;
+  for (const element of [firstSection, firstLink]) {
+    if (element && element.parentElement.firstElementChild !== element) element.parentElement.prepend(element);
+  }
+  if (focused !== document.activeElement && focused instanceof HTMLElement) focused.focus({preventScroll:true});
+}
+arrangeLitter();
+mobileLitter.addEventListener('change', arrangeLitter);
 const photoDialog = document.querySelector('#puppy-photo-dialog');
 const photoImage = document.querySelector('#puppy-photo-image');
 const photoTitle = document.querySelector('#puppy-photo-title');

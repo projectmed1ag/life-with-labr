@@ -4,10 +4,12 @@
   <p>{{litterSubtitle}} · Life with Labr</p>
   {{litterDate}}
   {{litterDescription}}
-  <nav class="litter-jump-links" aria-label="Разделы помёта"><a href="#litter-parents">Родители</a><a href="#litter-puppies">Выбрать щенка</a><a href="#litter-pedigree">Родословная</a></nav>
+  <nav class="litter-jump-links" aria-label="Разделы помёта"><a href="#litter-puppies">Выбрать щенка</a><a href="#litter-parents">Родители</a><a href="#litter-pedigree">Родословная</a></nav>
 </section>
-<section class="litter-parents section" id="litter-parents" aria-labelledby="parents-title"><h2 id="parents-title">Родители</h2><div class="litter-parent-grid">{{parents}}</div></section>
+<div class="litter-family">
 <section class="litter-puppies section" id="litter-puppies" aria-label="Щенки помёта">{{puppyGroups}}</section>
+<section class="litter-parents section" id="litter-parents" aria-labelledby="parents-title"><h2 id="parents-title">Родители</h2><div class="litter-parent-grid">{{parents}}</div></section>
+</div>
 <section class="litter-pedigree section" id="litter-pedigree" aria-labelledby="pedigree-title"><h2 id="pedigree-title">Родословная</h2><p>Происхождение по материнской и отцовской линиям.</p>{{litterPedigree}}</section>
 <section class="litter-return section"><a class="button button-dark" href="/puppies/">Все помёты</a></section>
 
@@ -17,4 +19,4 @@
   <button class="puppy-photo-prev" aria-label="Предыдущее фото щенка">←</button><button class="puppy-photo-next" aria-label="Следующее фото щенка">→</button>
 </dialog>
 <script type="application/json" id="litter-data">{{puppyData}}</script>
-<script type="module" src="/puppies.js?v=social-choice-3"></script>
+<script type="module" src="/puppies.js?v=mobile-family-1"></script>
