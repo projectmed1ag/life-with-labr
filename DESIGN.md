@@ -225,6 +225,8 @@ The public album uses soft shadows and restrained overlap to give photographs a 
 
 Album interactions use `cubic-bezier(.16,1,.3,1)` with short control transitions and slower photograph settling. Fine-pointer hover can straighten a tilted frame and gently enlarge the photograph. Reduced-motion rules disable the related animations and transforms. Admin controls use short color transitions (0.16s), disabled under reduced motion.
 
+The public mobile menu closes with the supplied adult-and-puppy watercolor, adapted to sage, cream, and gold against forest. Its transparent 6:5 artwork is capped at 300px wide below the contact details and remains static. The former playing-puppy scene is no longer connected to the public menu. The main header logo and other site animations are unchanged.
+
 ## Shapes
 
 Album frames have rounded outer corners from the frontmatter and small inner photograph corners; the green panel has rounded lower corners (or right corners in the horizontal catalogue). Puppy portraits use a (3:4) image ratio; parent photographs use (1.5). Frame padding is (8px) for puppy portraits and (10px) for parents, reducing on mobile.

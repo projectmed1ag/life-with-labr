@@ -1,5 +1,13 @@
 # Исходные изображения
 
+## Акварель для мобильного меню — source-menu-watercolor-v1.png
+
+Метод: встроенный ImageGen, редактирование с прозрачным фоном. Источники: предоставленная пользователем акварель взрослого лабрадора и щенка с надписью Life with Labr, а также существующий `dist/assets/brand-watercolor-cutout-v1.webp`. Результат: 1374 × 1145, RGBA. Исходный логотип в шапке не меняется.
+
+Точный запрос:
+
+> Edit this exact supplied Life with Labr watercolor kennel illustration into a polished website menu asset. Preserve the recognizable same adult yellow Labrador on the left and puppy on the right looking up at it, the original poses, expressions, hand painted watercolor brush texture, anatomy, and flowing script wordmark 'Life with Labr' and small 'kennel'. Keep the composition compact and close to the second cutout reference. Color adaptation for display on a very dark forest green website (#172b24): pale warm ivory / champagne dogs with gentle muted honey shadows, warm cream and antique gold calligraphy (#dec396), muted sage and deep woodland foliage. Replace the vivid blue sky with a very subtle muted sage watercolor wash, no bright cyan, no saturated lime, no burgundy lettering. Remove all photographed paper and all rectangular background. Truly transparent background with clean soft painted organic edges, no glow, no drop shadow. Keep all of the lettering clearly legible and entirely within frame, retain its original calligraphic character. Art fills most of canvas with about 5 percent transparent padding. Aspect about 6:5, high quality detailed raster asset, no frame, no additional words or symbols. The goal is the same family watercolor emblem recolored to fit the site's forest/cream/gold identity, NOT a new logo design.
+
 ## Играющие щенки для меню — source-menu-puppies-v1.png
 
 Метод: встроенный ImageGen. Новый исходник для мобильного меню; видео генерируется схемой `menu-puppies-api.json`.

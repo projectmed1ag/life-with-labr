@@ -12,7 +12,7 @@
 .mobile-menu nav a[aria-current="page"]{color:var(--gold)}
 .mobile-menu nav{gap:14px;margin-top:45px}
 .mobile-menu nav a{font-size:clamp(31px,5vw,43px)}
-.menu-labradors{display:none}
+.menu-watercolor{display:none}
 .breadcrumbs{display:flex;align-items:center;gap:13px;padding:32px 7% 0;font-size:12px;color:var(--muted)}
 .breadcrumbs a{border-bottom:1px solid var(--line)}
 .breadcrumbs>span[aria-hidden]{opacity:.55}
@@ -86,9 +86,8 @@
   .header .menu-toggle:active{transform:translateY(1px)}
   .mobile-menu[open]{display:flex;flex-direction:column;min-height:100svh;height:100dvh;padding-bottom:max(22px,env(safe-area-inset-bottom))}
   .mobile-menu>.brand,.mobile-menu>nav,.mobile-menu>.menu-phone,.mobile-menu>p{flex-shrink:0}
-  .menu-labradors{display:block;flex-shrink:0;width:min(280px,100%);margin:18px auto 0;padding:0;pointer-events:none}
-  .menu-labradors picture{display:block}
-  .menu-labradors img{height:auto;aspect-ratio:480/200;object-fit:contain}
+  .menu-watercolor{display:block;flex-shrink:0;width:min(300px,100%);aspect-ratio:6/5;margin:20px auto 0;pointer-events:none}
+  .menu-watercolor>img{display:block;width:100%;height:auto;aspect-ratio:6/5;object-fit:contain}
   .breadcrumbs{padding:25px 6% 0;font-size:11px}
   .page-primary{padding-top:38px}
   .page-primary h1{font-size:clamp(43px,9.8vw,65px)}
