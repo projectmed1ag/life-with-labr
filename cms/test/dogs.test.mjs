@@ -61,7 +61,7 @@ test('Dog create, draft, publish, archive and restore update public pages, order
   assert(!(await (await request('/dogs/')).text()).includes('/dogs/new-dog/'));
   assert.equal((await save('publish',1)).status,200);
   let html=await (await request('/dogs/new-dog/')).text();assert(html.includes('Новая &lt;img'));assert(html.includes('Титул &lt;script&gt;'));assert(!html.includes('<img src=x'));assert(html.includes('Никсон Лаб Бонапарт'));assert(html.includes('data-gallery="1"'));assert(html.includes('<dt>Тест</dt><dd>Результат</dd>'));
-  const listing=await (await request('/dogs/')).text();assert(listing.indexOf('/dogs/new-dog/')<listing.indexOf('/dogs/edel/'));
+  const listing=await (await request('/dogs/')).text();assert(listing.indexOf('/dogs/new-dog/')>listing.indexOf('/dogs/aria/'));assert.equal(store.get('dogs','new-dog').data.order,50);
   assert((await (await request('/sitemap.xml')).text()).includes('/en/dogs/new-dog/'));assert.equal((await request('/en/dogs/new-dog/')).status,200);
   assert.equal((await save('draft',2,{...d,name:'Не опубликовано'})).status,200);assert(!(await (await request('/dogs/new-dog/')).text()).includes('Не опубликовано'));
   failRender=true;assert.equal((await save('publish',3)).status,500);failRender=false;assert.equal(store.get('dogs','new-dog').version,3);
@@ -72,4 +72,39 @@ test('Dog create, draft, publish, archive and restore update public pages, order
   assert.equal((await save('restore',5)).status,200);assert.equal((await request('/dogs/new-dog/')).status,404);
   assert.equal((await save('publish',6)).status,200);assert.equal((await request('/dogs/new-dog/')).status,200);
  }finally{await new Promise(resolve=>server.close(resolve));await rm(dir,{recursive:true,force:true});}
+});
+
+test('List ordering is authenticated, atomic, persists and never publishes pending dog edits',async()=>{
+ const dir=await mkdtemp(path.join(os.tmpdir(),'lwl-dog-order-')),origin='http://127.0.0.1:4192';let failRender=false;
+ const {server,store}=await createApplication({dataDir:dir,development:true,adminOrigin:origin,seed:{dogs,litters:[],gallery:[]},renderer:data=>{if(failRender)throw new Error('order renderer unavailable');return renderSite(data);}});
+ store.db.prepare('INSERT INTO users VALUES(?,?)').run('admin',await hashPassword('test-private'));
+ await new Promise(resolve=>server.listen(4192,'127.0.0.1',resolve));let cookie='',csrf='';
+ const request=(route,method='GET',data,headers={})=>fetch(origin+route,{method,headers:{Origin:origin,Cookie:cookie,'X-CSRF-Token':csrf,...(data?{'Content-Type':'application/json'}:{}),...headers},body:data?JSON.stringify(data):undefined});
+ const items=ids=>ids.map(id=>({id,version:store.get('dogs',id).version}));
+ try{
+  assert.equal((await request('/api/dogs/reorder','POST',{items:[]})).status,401);
+  const login=await request('/api/login','POST',{username:'admin',password:'test-private'});cookie=login.headers.get('set-cookie').split(';')[0];csrf=(await login.json()).csrf;
+  let edel=store.get('dogs','edel');store.save('dogs','edel',{...edel.data,name:'Private edit'},edel.version,'draft');
+  const aria=store.get('dogs','aria');store.save('dogs','aria',aria.data,aria.version,'archive');
+  store.save('dogs','hidden-dog',{...dogs[0],name:'Private draft'},0,'draft');
+  const ordered=items(['mars','hidden-dog','edel','vanessa']);
+  assert.equal((await request('/api/dogs/reorder','POST',{items:ordered},{'X-CSRF-Token':'bad'})).status,403);
+  assert.equal((await request('/api/dogs/reorder','POST',{items:[...ordered,ordered[0]]})).status,400);
+  assert.equal((await request('/api/dogs/reorder','POST',{items:ordered.slice(1)})).status,409);
+  const before=store.all();failRender=true;
+  assert.equal((await request('/api/dogs/reorder','POST',{items:ordered})).status,500);failRender=false;
+  assert.deepEqual(store.all(),before);
+  assert.equal((await request('/api/dogs/reorder','POST',{items:ordered})).status,200);
+  assert.deepEqual(store.published().dogs.map(d=>d.id),['mars','edel','vanessa']);
+  assert.equal(store.get('dogs','edel').data.name,'Private edit');assert(store.get('dogs','edel').dirty);
+  assert.equal(store.published().dogs.find(d=>d.id==='edel').name,'Эдель');
+  assert(!store.get('dogs','mars').dirty);assert(!store.get('dogs','hidden-dog').published);assert(store.get('dogs','aria').archived);
+  const html=await (await request('/dogs/')).text();assert(html.indexOf('/dogs/mars/')<html.indexOf('/dogs/edel/'));assert(!html.includes('Private edit'));assert(!html.includes('Private draft'));
+  assert.equal((await request('/api/dogs/reorder','POST',{items:ordered})).status,409);
+  edel=store.get('dogs','edel');
+  assert.equal((await request('/api/content/dogs/edel','PUT',{action:'draft',version:edel.version,data:{...edel.data,order:1}})).status,200);assert.equal(store.get('dogs','edel').data.order,30);
+  assert.equal((await request('/api/content/dogs/last-dog','PUT',{action:'draft',version:0,data:{...dogs[0],id:'last-dog',order:1}})).status,200);assert.equal(store.get('dogs','last-dog').data.order,50);
+ }finally{await new Promise(resolve=>server.close(resolve));}
+ const reopened=openStore(dir,{seed:{dogs},assetDirectory});
+ try{assert.deepEqual(reopened.published().dogs.map(d=>d.id),['mars','edel','vanessa']);assert.equal(reopened.get('dogs','edel').data.name,'Private edit');}finally{reopened.close();await rm(dir,{recursive:true,force:true});}
 });

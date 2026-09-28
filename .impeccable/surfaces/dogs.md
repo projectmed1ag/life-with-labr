@@ -6,7 +6,7 @@ Status: implemented extension of the approved Life with Labr identity. Sources: 
 
 ## Content and routes
 
-The catalogue at `/dogs/` contains published dog records ordered by their numeric position, smallest first, with stable identifier order for ties. The first saved photograph is the cover. Each entry shows breed and sex, color when supplied, the dog's name, optional short description, and «Подробнее». Both the cover and the text link open the individual `/dogs/<id>/` page. If there are no published records, show the existing brief empty-state message.
+The catalogue at `/dogs/` contains published dog records in the order selected with «Выше» / «Ниже» in the admin list. New dogs appear last. Position remains internal; the owner never needs to enter numbers. The first saved photograph is the cover. Each entry shows breed and sex, color when supplied, the dog's name, optional short description, and «Подробнее». Both the cover and the text link open the individual `/dogs/<id>/` page. If there are no published records, show the existing brief empty-state message.
 
 A profile's identifier is generated once and remains stable when its name changes. Russian and English profiles share it under `/dogs/` and `/en/dogs/`; navigation and language links retain the matching locale. Interface labels use the existing translation mechanism. Owner-entered content has no automatic translation or separate English editing fields.
 

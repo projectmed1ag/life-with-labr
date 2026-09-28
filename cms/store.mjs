@@ -61,7 +61,30 @@ export function openStore(directory, {seed, assetDirectory}={}) {
       db.exec('COMMIT');return get(kind,id);
     } catch(error) {db.exec('ROLLBACK');throw error;}
   };
-  return {db,directory,mediaExists,get,all,published,save,
+  const prepareDogOrder=items=>{
+    if(!Array.isArray(items)||items.length>1000||new Set(items.map(item=>item?.id)).size!==items.length) throw new HttpError(400,'Не удалось изменить порядок. Обновите список собак.');
+    const rows=db.prepare("SELECT * FROM records WHERE kind='dogs' AND archived=0").all();
+    const byId=new Map(rows.map(row=>[row.id,row]));
+    if(rows.length!==items.length||items.some(item=>!byId.has(item?.id)||item.version!==byId.get(item.id).version)) throw new HttpError(409,'Список собак изменился в другой вкладке. Обновите страницу и повторите действие.');
+    return items.map((item,index)=>{
+      const row=byId.get(item.id),order=(index+1)*10;
+      return {row,draft:JSON.stringify({...JSON.parse(row.draft),order}),published:row.published?JSON.stringify({...JSON.parse(row.published),order}):null};
+    });
+  };
+  const reorderDogs=items=>{
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      const updates=prepareDogOrder(items),updated=new Date().toISOString();
+      for(const entry of updates){
+        const {row,draft,published:live}=entry;
+        if(row.draft===draft&&row.published===live)continue;
+        db.prepare('INSERT INTO history(kind,id,action,previous,created) VALUES(?,?,?,?,?)').run('dogs',row.id,'reorder',JSON.stringify(row),updated);
+        db.prepare("UPDATE records SET draft=?,published=?,version=version+1,updated=? WHERE kind='dogs' AND id=?").run(draft,live,updated,row.id);
+      }
+      db.exec('COMMIT');return all();
+    } catch(error){db.exec('ROLLBACK');throw error;}
+  };
+  return {db,directory,mediaExists,get,all,published,save,prepareDogOrder,reorderDogs,
     addMedia(photo){db.prepare('INSERT INTO media VALUES(?,?,?,?)').run(photo.src,photo.width,photo.height,new Date().toISOString());},
     backup:async()=>{const target=path.join(directory,'backups');mkdirSync(target,{recursive:true,mode:0o700});await backup(db,path.join(target,`content-${new Date().toISOString().slice(0,10)}.sqlite`));},
     close:()=>db.close()};

@@ -68,6 +68,17 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
         if(route==='/api/session'&&req.method==='GET')return json(res,200,{username:current.username,csrf:current.csrf});
         if(route==='/api/logout'&&req.method==='POST'){store.db.prepare('DELETE FROM sessions WHERE token=?').run(current.token);res.setHeader('Set-Cookie',cookie('',0));return json(res,200,{ok:true});}
         if(route==='/api/content'&&req.method==='GET')return json(res,200,{records:store.all()});
+        if(route==='/api/dogs/reorder'&&req.method==='POST'){
+          const input=await jsonBody(req);
+          return await serialize(async()=>{
+            const updates=store.prepareDogOrder(input?.items),next=store.published();
+            // Reorder published snapshots only; pending edits must stay private.
+            next.dogs=updates.filter(entry=>entry.published).map(entry=>JSON.parse(entry.published));
+            const nextPages=await renderer(next);
+            const records=store.reorderDogs(input.items);
+            pages=nextPages;return json(res,200,{records});
+          });
+        }
         if(route==='/api/upload'&&req.method==='POST'){
           if(uploading)fail(429,'Дождитесь завершения загрузки фотографии.');
           uploading=true;let target;
@@ -86,6 +97,8 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
           if(kind==='gallery' && (id!=='gallery' || !['draft','publish'].includes(input.action)))fail(400,'Галерея единая. Обновите страницу, чтобы редактировать фотографии.');
           if(!Number.isInteger(input.version)||input.version<0)fail(400,'Обновите запись.');
           return await serialize(async()=>{
+            // Position is managed by the list controls, never by a stale editor form.
+            if(kind==='dogs')input.data={...input.data,order:store.get(kind,id)?.data.order??Math.max(0,...store.all().filter(record=>record.kind==='dogs'&&!record.archived).map(record=>record.data.order))+10};
             // Render first: failed publication leaves both the live pages and stored record intact.
             let nextPages;
             if(['publish','unpublish','archive'].includes(input.action)){

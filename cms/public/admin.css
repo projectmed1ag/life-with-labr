@@ -90,6 +90,9 @@ body:has(.photo-dialog[open]){overflow:hidden}
 .photo-dialog-footer{display:flex;align-items:center;gap:12px;padding:18px 28px;background:#f4f1e9;border-top:1px solid var(--line);position:sticky;bottom:0;z-index:1}.photo-dialog-footer .primary{margin-left:auto}
 @media(max-width:700px){.photo-dialog{width:calc(100% - 16px);max-height:calc(100dvh - 16px)}.photo-dialog-header{padding:18px}.photo-dialog-header h2{font-size:23px}.photo-dialog-body{grid-template-columns:1fr}.photo-stage{padding:20px;gap:12px}.photo-stage canvas{max-height:36dvh}.photo-settings{padding:20px;gap:18px}.photo-dialog-footer{padding:12px;gap:6px;flex-wrap:wrap}.photo-dialog-footer button{font-size:13px;padding:10px 12px}.photo-dialog-footer .primary{flex:1}}
 /* The dog editor shares the litter editor's controls and save bar. */
+.dog-order-help{margin:0 0 18px}.dog-order-controls{display:flex;gap:8px;flex-shrink:0}.dog-order-controls[hidden]{display:none}.dog-order-controls button{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 12px;font-size:13px;background:#fffefa}.dog-order-controls button:hover:not(:disabled){background:#e4e8df}.dog-order-controls button:disabled{cursor:default;opacity:.4}.dog-order-controls svg{width:18px;height:18px;flex-shrink:0}
+@media(max-width:1100px){.dog-order-controls{margin-left:118px}}
+@media(max-width:600px){.dog-order-controls{margin-left:84px;flex:1}.dog-order-controls button{flex:1}}
 .dog-editor-rows{display:grid;gap:24px}.dog-editor-row{padding-bottom:24px;border-bottom:1px solid var(--line)}.dog-editor-row>.quiet{margin-top:10px}.dog-editor-row .two-columns{align-items:start}.photo-edit--dog img{height:auto;aspect-ratio:3/2}
 @media(max-width:850px){.workspace aside nav{flex-wrap:wrap;gap:4px}}
 @media(max-width:600px){.workspace aside nav button{font-size:13px;padding:10px 12px}.photo-edit--dog{width:100%}.photo-edit--dog .photo-tools button{min-height:44px}}
