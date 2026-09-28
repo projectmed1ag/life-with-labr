@@ -97,6 +97,14 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
           if(kind==='gallery' && (id!=='gallery' || !['draft','publish'].includes(input.action)))fail(400,'Галерея единая. Обновите страницу, чтобы редактировать фотографии.');
           if(!Number.isInteger(input.version)||input.version<0)fail(400,'Обновите запись.');
           return await serialize(async()=>{
+            if(kind==='litters'&&['close','reopen'].includes(input.action)){
+              const update=store.prepareLitterAvailability(id,input.data,input.version,input.action),next=store.published();
+              next.litters=next.litters.filter(litter=>litter.id!==id);
+              next.litters.unshift({...JSON.parse(update.published),closed:!!update.closed});
+              const nextPages=await renderer(next);
+              const record=store.setLitterAvailability(id,input.data,input.version,input.action);
+              pages=nextPages;return json(res,200,{record});
+            }
             // Position is managed by the list controls, never by a stale editor form.
             if(kind==='dogs')input.data={...input.data,order:store.get(kind,id)?.data.order??Math.max(0,...store.all().filter(record=>record.kind==='dogs'&&!record.archived).map(record=>record.data.order))+10};
             // Render first: failed publication leaves both the live pages and stored record intact.
@@ -104,6 +112,7 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
             if(['publish','unpublish','archive'].includes(input.action)){
               const {validateContent}=await import('./validation.mjs');
               const data=validateContent(kind,{...input.data,id},{publish:input.action==='publish',mediaExists:store.mediaExists});
+              if(kind==='litters'&&store.get(kind,id)?.closed)data.closed=true;
               const next=store.published();next[kind]=next[kind].filter(item=>item.id!==id);if(input.action==='publish')next[kind].unshift(data);
               next.gallery.sort((a,b)=>(b.date||'').localeCompare(a.date||''));next.dogs.sort((a,b)=>a.order-b.order||a.id.localeCompare(b.id));nextPages=await renderer(next);
             }
@@ -133,7 +142,7 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
       if(pages.has(key)){res.writeHead(200,{'Content-Type':types[path.extname(key)],'Cache-Control':'no-cache'});return res.end(req.method==='HEAD'?undefined:pages.get(key));}
       if(pages.has(route+'/index.html')){res.writeHead(308,{Location:route+'/'+url.search});return res.end();}
       const closedLitter=/^\/(en\/)?puppies\/([a-z0-9-]+)(?:\/index\.html|\/)?$/.exec(route);
-      if(closedLitter && store.get('litters',closedLitter[2])?.archived){res.writeHead(302,{Location:closedLitter[1]?'/en/puppies/':'/puppies/','Cache-Control':'no-store'});return res.end();}
+      if(closedLitter){const record=store.get('litters',closedLitter[2]);if(record?.archived||record?.closed){res.writeHead(302,{Location:closedLitter[1]?'/en/puppies/':'/puppies/','Cache-Control':'no-store'});return res.end();}}
       const archivedDog=/^\/(en\/)?dogs\/([a-z0-9-]+)(?:\/index\.html|\/)?$/.exec(route);
       if(archivedDog && store.get('dogs',archivedDog[2])?.archived){res.writeHead(302,{Location:archivedDog[1]?'/en/dogs/':'/dogs/','Cache-Control':'no-store'});return res.end();}
       if(/^\/[a-zA-Z0-9-]+\.(css|js)$/.test(route)||['/favicon-64.png','/favicon.svg','/apple-touch-icon.png'].includes(route))return await file(req,res,path.join(ROOT,'dist',route));

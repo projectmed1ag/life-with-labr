@@ -1,4 +1,6 @@
 export default {
+  "Все щенки проданы": "All puppies are sold",
+  "Щенки этого помёта нашли свои семьи.": "The puppies from this litter have found their families.",
   "Лабрадор-ретривер ·": "Labrador Retriever ·",
   "Связаться с питомником": "Contact the kennel",
   "Скоро здесь появятся наши собаки.": "Meet our dogs here soon.",

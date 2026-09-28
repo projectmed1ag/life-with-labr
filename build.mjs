@@ -30,7 +30,7 @@ const dogs = (contentData?.dogs ?? JSON.parse(await readFile('src/data/dogs.json
 const dogProfiles=JSON.stringify(Object.fromEntries(dogs.map(dog=>[dog.id,{name:escapeHtml(dog.name),pedigreeName:dog.name,image:dog.photos[0].src,label:'Life with Labr',intro:escapeHtml(dog.description),facts:dogFacts(dog).map(pair=>pair.map(escapeHtml)),titles:dog.titles.map(row=>[escapeHtml(row.title),escapeHtml(row.description)]),health:dog.health?.map(row=>[escapeHtml(row.title),escapeHtml(row.value)]),pedigree:dog.pedigreeTree}]))).replaceAll('<','\\u003c');
 validateLitters(litters);
 const litterTemplate = await readFile('src/pages/litter.html','utf8');
-const allPages = [...pages, ...litters.map(litter => ({
+const allPages = [...pages, ...litters.filter(litter=>!litter.closed).map(litter => ({
   key:`litter-${litter.id}`, section:'puppies', route:litterRoute(litter), label:litter.title, litter,
   title:`Щенки: ${litter.title} — Life with Labr`,
   description:`Помёт ${litter.title} питомника Life with Labr. ${litter.puppies.map(puppy => puppy.name).join(', ')}: фотографии щенков, родители, родословная и знакомство с заводчиком.`
@@ -96,7 +96,7 @@ for (const page of allPages) {
     structuredData:JSON.stringify({'@context':'https://schema.org','@graph':graph}).replaceAll('<','\\u003c'),
     nav:links(navigationPages), mobileNav:links(navigationPages),
     content,
-    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=ending-2">' : (page.key === 'dogs' || page.dog) ? '<link rel="stylesheet" href="/dogs.css?v=cms-dogs-1">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=clean-links-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
+    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=ending-2">' : (page.key === 'dogs' || page.dog) ? '<link rel="stylesheet" href="/dogs.css?v=cms-dogs-1">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=litter-closed-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
     appVersion:'cms-dogs-1'
   };
   const html = layout.replace(/\{\{(\w+)\}\}/g, (_, key) => {

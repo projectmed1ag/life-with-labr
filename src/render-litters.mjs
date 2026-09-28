@@ -38,17 +38,18 @@ export function validateLitters(litters) {
 export function renderLitterCatalog(litters) {
   if(!litters.length)return `<div class="litter-empty"><h2>Сейчас нет открытых помётов</h2><p>Информацию о новых помётах уточняйте у Евгении.</p><a class="button button-dark" href="#contacts">Связаться с питомником</a></div>`;
   return litters.map(litter => {
+    const closed=!!litter.closed;
     const allHome = litter.puppies.every(puppy => puppy.status === 'home');
     const available = litter.puppies.some(puppy => puppy.status === 'available');
     const cover = litter.puppies[0].photos[0];
-    return `<article class="litter-card" aria-labelledby="catalog-${litter.id}-title">
-      <a class="litter-card-cover" href="${litterRoute(litter)}" aria-label="Смотреть помёт: ${escapeHtml(litter.title)}"><span class="litter-card-photo"><img src="${asset(cover.src)}" alt="${escapeHtml(cover.alt)}" width="${cover.width}" height="${cover.height}" loading="lazy"></span></a>
+    return `<article class="litter-card${closed?' litter-card--closed':''}" aria-labelledby="catalog-${litter.id}-title">
+      <${closed?'div':'a'} class="litter-card-cover"${closed?'':` href="${litterRoute(litter)}" aria-label="Смотреть помёт: ${escapeHtml(litter.title)}"`}><span class="litter-card-photo"><img src="${asset(cover.src)}" alt="${escapeHtml(cover.alt)}" width="${cover.width}" height="${cover.height}" loading="lazy"></span>${closed?'<span class="litter-sold-ribbon"><svg viewBox="0 0 36 30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 11C10 1 2 3 3 11c1 6 8 5 13 2m4-2c6-10 14-8 13 0-1 6-8 5-13 2M15 15 10 27l6-2 3 3 1-13m1 0 5 12 2-5 5 1-10-9"/><rect x="15" y="9" width="6" height="7" rx="2"/></svg><span>Все щенки проданы</span></span>':''}</${closed?'div':'a'}>
       <div class="litter-card-copy">
         <p class="litter-card-intro">${puppyKind(litter)} от пары</p>
-        <h2 id="catalog-${litter.id}-title"><a href="${litterRoute(litter)}">${escapeHtml(litter.title)}</a></h2>
+        <h2 id="catalog-${litter.id}-title">${closed?escapeHtml(litter.title):`<a href="${litterRoute(litter)}">${escapeHtml(litter.title)}</a>`}</h2>
         ${litter.birthDate ? `<p class="litter-date">Дата рождения: <time datetime="${litter.birthDate}">${date(litter.birthDate)}</time></p>` : ''}
-        ${available || allHome ? `<span class="puppy-status${allHome ? ' puppy-status--home' : ''}">${allHome ? 'Все щенки уже дома' : 'Есть свободные щенки'}</span>` : ''}
-        <a class="button button-dark litter-card-link" href="${litterRoute(litter)}"><span>Смотреть весь помёт</span></a>
+        ${!closed&&(available || allHome) ? `<span class="puppy-status${allHome ? ' puppy-status--home' : ''}">${allHome ? 'Все щенки уже дома' : 'Есть свободные щенки'}</span>` : ''}
+        ${closed?'<p class="litter-closed-note">Щенки этого помёта нашли свои семьи.</p>':`<a class="button button-dark litter-card-link" href="${litterRoute(litter)}"><span>Смотреть весь помёт</span></a>`}
       </div>
     </article>`;
   }).join('');

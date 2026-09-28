@@ -18,6 +18,7 @@ export function openStore(directory, {seed, assetDirectory}={}) {
     CREATE TABLE IF NOT EXISTS records(kind TEXT NOT NULL,id TEXT NOT NULL,draft TEXT NOT NULL,published TEXT,version INTEGER NOT NULL DEFAULT 1,archived INTEGER NOT NULL DEFAULT 0,updated TEXT NOT NULL,PRIMARY KEY(kind,id));
     CREATE TABLE IF NOT EXISTS history(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,id TEXT NOT NULL,action TEXT NOT NULL,previous TEXT,created TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS media(src TEXT PRIMARY KEY,width INTEGER NOT NULL,height INTEGER NOT NULL,created TEXT NOT NULL);`);
+  if(!db.prepare('PRAGMA table_info(records)').all().some(column=>column.name==='closed')) db.exec('ALTER TABLE records ADD COLUMN closed INTEGER NOT NULL DEFAULT 0');
   if(seed && !db.prepare('SELECT 1 FROM meta WHERE key=?').get('seeded')) {
     db.exec('BEGIN IMMEDIATE');
     try {
@@ -36,12 +37,16 @@ export function openStore(directory, {seed, assetDirectory}={}) {
     } catch(error) {db.exec('ROLLBACK');throw error;}
   }
   const mediaExists=src=> src.startsWith('upload-') ? !!db.prepare('SELECT 1 FROM media WHERE src=?').get(src) : !!assetDirectory && existsSync(path.join(assetDirectory,src));
-  const unpack=row=>row?{kind:row.kind,id:row.id,data:JSON.parse(row.draft),version:row.version,archived:!!row.archived,published:!!row.published,dirty:row.draft!==row.published,updated:row.updated}:null;
+  const lastPublished=id=>{
+    const entry=db.prepare("SELECT previous FROM history WHERE kind='litters' AND id=? AND json_extract(previous,'$.published') IS NOT NULL ORDER BY seq DESC LIMIT 1").get(id);
+    return entry?JSON.parse(entry.previous).published:null;
+  };
+  const unpack=row=>row?{kind:row.kind,id:row.id,data:JSON.parse(row.draft),version:row.version,archived:!!row.archived,published:!!row.published,closed:!!row.closed,canReopen:row.kind==='litters'&&(!!row.closed&&!!row.published||!!row.archived&&!!lastPublished(row.id)),dirty:row.draft!==row.published,updated:row.updated}:null;
   const get=(kind,id)=>unpack(db.prepare('SELECT * FROM records WHERE kind=? AND id=?').get(kind,id));
   const all=()=>db.prepare("SELECT * FROM records WHERE kind!='gallery' OR id='gallery' ORDER BY updated DESC,id").all().map(unpack);
   const published=()=>{
     const data={litters:[],gallery:[],dogs:[]};
-    for(const row of db.prepare('SELECT kind,published FROM records WHERE published IS NOT NULL AND archived=0 ORDER BY updated DESC,id').all()) data[row.kind].push(JSON.parse(row.published));
+    for(const row of db.prepare('SELECT kind,published,closed FROM records WHERE published IS NOT NULL AND archived=0 ORDER BY updated DESC,id').all()) data[row.kind].push({...JSON.parse(row.published),...(row.kind==='litters'&&row.closed?{closed:true}:{})});
     data.gallery.sort((a,b)=>(b.date||'').localeCompare(a.date||''));data.dogs.sort((a,b)=>a.order-b.order||a.id.localeCompare(b.id));return data;
   };
   const save=(kind,id,input,version,action='draft')=>{
@@ -60,6 +65,24 @@ export function openStore(directory, {seed, assetDirectory}={}) {
         ON CONFLICT(kind,id) DO UPDATE SET draft=excluded.draft,published=excluded.published,version=excluded.version,archived=excluded.archived,updated=excluded.updated`).run(kind,id,draft,live,version+1,action==='archive'?1:0,updated);
       db.exec('COMMIT');return get(kind,id);
     } catch(error) {db.exec('ROLLBACK');throw error;}
+  };
+  const prepareLitterAvailability=(id,input,version,action)=>{
+    if(!['close','reopen'].includes(action))throw new HttpError(400,'Неизвестное действие.');
+    const row=db.prepare("SELECT * FROM records WHERE kind='litters' AND id=?").get(id);
+    if(!row||row.version!==version)throw new HttpError(409,'Помёт изменён в другой вкладке. Обновите страницу.');
+    const live=row.published||(action==='reopen'&&row.archived?lastPublished(id):null);
+    if(!live||action==='close'&&row.archived)throw new HttpError(400,'Сначала восстановите и опубликуйте помёт.');
+    const draft=JSON.stringify(input)===row.draft?row.draft:JSON.stringify(validateContent('litters',{...input,id},{mediaExists}));
+    return {row,draft,published:live,closed:action==='close'?1:0};
+  };
+  const setLitterAvailability=(id,input,version,action)=>{
+    db.exec('BEGIN IMMEDIATE');
+    try{
+      const next=prepareLitterAvailability(id,input,version,action),updated=new Date().toISOString();
+      db.prepare('INSERT INTO history(kind,id,action,previous,created) VALUES(?,?,?,?,?)').run('litters',id,action,JSON.stringify(next.row),updated);
+      db.prepare("UPDATE records SET draft=?,published=?,closed=?,archived=0,version=version+1,updated=? WHERE kind='litters' AND id=?").run(next.draft,next.published,next.closed,updated,id);
+      db.exec('COMMIT');return get('litters',id);
+    }catch(error){db.exec('ROLLBACK');throw error;}
   };
   const prepareDogOrder=items=>{
     if(!Array.isArray(items)||items.length>1000||new Set(items.map(item=>item?.id)).size!==items.length) throw new HttpError(400,'Не удалось изменить порядок. Обновите список собак.');
@@ -84,7 +107,7 @@ export function openStore(directory, {seed, assetDirectory}={}) {
       db.exec('COMMIT');return all();
     } catch(error){db.exec('ROLLBACK');throw error;}
   };
-  return {db,directory,mediaExists,get,all,published,save,prepareDogOrder,reorderDogs,
+  return {db,directory,mediaExists,get,all,published,save,prepareLitterAvailability,setLitterAvailability,prepareDogOrder,reorderDogs,
     addMedia(photo){db.prepare('INSERT INTO media VALUES(?,?,?,?)').run(photo.src,photo.width,photo.height,new Date().toISOString());},
     backup:async()=>{const target=path.join(directory,'backups');mkdirSync(target,{recursive:true,mode:0o700});await backup(db,path.join(target,`content-${new Date().toISOString().slice(0,10)}.sqlite`));},
     close:()=>db.close()};
