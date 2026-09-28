@@ -6,7 +6,7 @@ Mode: Operate. The owner signs in and completes editing tasks, including from a 
 
 ## Purpose and sequence
 
-One owner manages a shared photo gallery and litters. Gallery opens directly into a photo grid with a multi-file uploader, captions, earlier/later controls, removal, reset, and one Save changes button. There are no gallery posts, titles, dates, search or archive controls. Litters follow section → record list → editor → save draft or publish. Archive remains a separate, reversible litter action; the archive view returns to the current list. Keep these operations explicit and labelled in Russian.
+One owner manages a shared photo gallery and litters. Gallery opens directly into a photo grid with a multi-file uploader, earlier/later controls, removal, reset, and one Save changes button. There are no gallery posts, titles, dates, search, caption fields or archive controls. Photo caption editing was removed at the owner’s request because the public gallery has no visible captions; existing alternative image descriptions remain in stored data. Litters follow section → record list → editor → save draft or publish. Archive remains a separate, reversible litter action; the archive view returns to the current list. Keep these operations explicit and labelled in Russian.
 
 ## Composition
 
