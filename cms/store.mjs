@@ -26,14 +26,23 @@ export function openStore(directory, {seed, assetDirectory}={}) {
     } catch(error) {db.exec('ROLLBACK');throw error;}
   }
   migrateGallery(db);
+  // Existing installations already have the original seed marker. Import dogs once,
+  // without replacing any owner edits or resurrecting archived records on restart.
+  if(seed?.dogs && !db.prepare('SELECT 1 FROM meta WHERE key=?').get('dogs-seeded-v1')) {
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      for(const dog of seed.dogs) db.prepare('INSERT OR IGNORE INTO records(kind,id,draft,published,updated) VALUES(?,?,?,?,?)').run('dogs',dog.id,JSON.stringify(dog),JSON.stringify(dog),new Date().toISOString());
+      db.prepare('INSERT INTO meta VALUES(?,?)').run('dogs-seeded-v1','1');db.exec('COMMIT');
+    } catch(error) {db.exec('ROLLBACK');throw error;}
+  }
   const mediaExists=src=> src.startsWith('upload-') ? !!db.prepare('SELECT 1 FROM media WHERE src=?').get(src) : !!assetDirectory && existsSync(path.join(assetDirectory,src));
   const unpack=row=>row?{kind:row.kind,id:row.id,data:JSON.parse(row.draft),version:row.version,archived:!!row.archived,published:!!row.published,dirty:row.draft!==row.published,updated:row.updated}:null;
   const get=(kind,id)=>unpack(db.prepare('SELECT * FROM records WHERE kind=? AND id=?').get(kind,id));
   const all=()=>db.prepare("SELECT * FROM records WHERE kind!='gallery' OR id='gallery' ORDER BY updated DESC,id").all().map(unpack);
   const published=()=>{
-    const data={litters:[],gallery:[]};
+    const data={litters:[],gallery:[],dogs:[]};
     for(const row of db.prepare('SELECT kind,published FROM records WHERE published IS NOT NULL AND archived=0 ORDER BY updated DESC,id').all()) data[row.kind].push(JSON.parse(row.published));
-    data.gallery.sort((a,b)=>(b.date||'').localeCompare(a.date||''));return data;
+    data.gallery.sort((a,b)=>(b.date||'').localeCompare(a.date||''));data.dogs.sort((a,b)=>a.order-b.order||a.id.localeCompare(b.id));return data;
   };
   const save=(kind,id,input,version,action='draft')=>{
     if(kind==='gallery' && (id!=='gallery' || !['draft','publish'].includes(action))) throw new HttpError(400,'Галерея единая. Обновите страницу, чтобы редактировать фотографии.');

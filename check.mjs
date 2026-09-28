@@ -9,7 +9,8 @@ const origin = 'https://lifewithlabr.ru';
 const mainRoutes = ['/','/about/','/dogs/','/puppies/','/gallery/'];
 const litters = JSON.parse(fs.readFileSync('src/data/litters.json', 'utf8'));
 validateLitters(litters);
-const russianRoutes = [...mainRoutes, ...litters.map(litterRoute)];
+const dogs=JSON.parse(fs.readFileSync('src/data/dogs.json','utf8'));
+const russianRoutes = [...mainRoutes, ...litters.map(litterRoute), ...dogs.map(dog=>`/dogs/${dog.id}/`)];
 const routes = [...russianRoutes, ...russianRoutes.map(route => '/en' + route)];
 const fileFor = pathname => path.join(root, pathname, pathname.endsWith('/') ? 'index.html' : '');
 const pages = new Map(routes.map(route => [route, fs.readFileSync(fileFor(route), 'utf8')]));
@@ -54,10 +55,10 @@ for (const [route, html] of pages) {
   assert(html.includes(`<meta property="og:url" content="${origin}${route}">`), `${route}: social URL matches canonical`);
   if (sourceRoute !== '/') {
     const breadcrumb = graph['@graph'].find(item => item['@type'] === 'BreadcrumbList');
-    assert.deepEqual(breadcrumb?.itemListElement.map(item => item.item), [origin + prefix + '/', ...(!mainRoutes.includes(sourceRoute) ? [origin + prefix + '/puppies/'] : []), origin + route], `${route}: breadcrumb URLs`);
+    assert.deepEqual(breadcrumb?.itemListElement.map(item => item.item), [origin + prefix + '/', ...(!mainRoutes.includes(sourceRoute) ? [origin + prefix + (sourceRoute.startsWith('/dogs/')?'/dogs/':'/puppies/')] : []), origin + route], `${route}: breadcrumb URLs`);
   }
   for (const target of mainRoutes.filter(target => target !== '/about/')) assert(navigation?.includes(`href="${prefix}${target}"`), `${route}: link to ${target}`);
-  if (sourceRoute !== '/about/') assert(navigation.includes(`href="${prefix}${mainRoutes.includes(sourceRoute) ? sourceRoute : '/puppies/'}" aria-current="page"`), `${route}: active navigation`);
+  if (sourceRoute !== '/about/') assert(navigation.includes(`href="${prefix}${mainRoutes.includes(sourceRoute) ? sourceRoute : sourceRoute.startsWith('/dogs/')?'/dogs/':'/puppies/'}" aria-current="page"`), `${route}: active navigation`);
   const references = [...html.matchAll(/\b(href|src|poster|data-loop-src)="([^"]*)"/g)];
   for (const [, value] of html.matchAll(/\bsrcset="([^"]*)"/g)) {
     for (const candidate of value.split(',')) references.push(['','srcset',candidate.trim().split(/\s+/)[0]]);
@@ -85,7 +86,7 @@ for (const [route, html] of pages) {
   console.log(`OK ${route}: navigation, assets, anchors and metadata`);
 }
 assert(!pages.get('/').includes('id="dogs"'), 'Home should link to independent content');
-assert.deepEqual([...new Set([...pages.get('/dogs/').matchAll(/data-dog="([^"]+)"/g)].map(match => match[1]))], ['edel','vanessa','mars','aria'], 'Four confirmed kennel dogs are displayed');
+assert.deepEqual([...new Set([...pages.get('/dogs/').matchAll(/data-dog-record="([^"]+)"/g)].map(match => match[1]))], ['edel','vanessa','mars','aria'], 'Four confirmed kennel dogs are displayed');
 assert.equal([...pages.get('/gallery/').matchAll(/data-gallery="/g)].length, 7, 'Seven gallery photos retained');
 for (const litter of litters) {
   const html = pages.get(litterRoute(litter));

@@ -103,58 +103,6 @@ document.querySelectorAll('dialog').forEach(dialog => {
 });
 
 const dogs = {
-  edel: {
-    name: 'Эдель', image: 'edel.jpg', label: 'LIFE WITH LABR',
-    intro: 'Грандчемпион России, НКП, Армении, Грузии и Беларуси.',
-    facts: [['Дата рождения', '4 марта 2024'], ['Окрас', 'Палевый'], ['Владелец', 'Евгения Скобликова'], ['Заводчик', 'Илона Монахова'], ['Питомник', 'Время Мечты']],
-    titles: [
-      ['Грандчемпион', 'России, НКП, Армении, Грузии, Беларуси'],
-      ['Чемпион', 'России, НКП, Армении, Грузии, Беларуси · 3 × Чемпион РКФ'],
-      ['Победитель Дерби Шоу', 'На Национальной выставке'],
-      ['Юный Грандчемпион', 'России, НКП'],
-      ['Юный Чемпион', 'России, НКП, Армении · 8 × Юный Чемпион РКФ'],
-      ['Кандидат', 'В Шоу Чемпионы, Интерчемпионы и Чемпионы Золотого Кольца']
-    ],
-    pedigree: knownPedigrees.edel
-  },
-  vanessa: {
-    name: 'Ванесса', image: 'vanessa-show.jpg', portrait: true, label: 'LIFE WITH LABR',
-    intro: 'Победитель выставочных групп и специализированных выставок. Многократный победитель породы.',
-    facts: [['Порода', 'Лабрадор-ретривер'], ['Пол', 'Сука'], ['Окрас', 'Палевый']],
-    titles: [
-      ['12 × Best in Group', 'Победитель группы'],
-      ['4 × Reserve Best in Group', 'Резервный победитель группы'],
-      ['6 × Best in Group-3', 'Третье место в группе'],
-      ['6 × Best in Show Specialty', 'Победитель специализированной выставки'],
-      ['Многократный BOB', 'Лучший представитель породы']
-    ]
-  },
-  mars: {
-    name: 'Марс', image: 'mars-show.jpg', portrait: true, label: 'LIFE WITH LABR',
-    intro: 'Юный грандчемпион России и НКП. Юный победитель клуба года — 2026.',
-    facts: [['Порода', 'Лабрадор-ретривер'], ['Пол', 'Кобель'], ['Окрас', 'Палевый']],
-    titles: [
-      ['Юный грандчемпион', 'России и НКП'],
-      ['Юный чемпион', 'России, Армении и клуба'],
-      ['3 × Юный чемпион РКФ', 'Три титула'],
-      ['Юный чемпион РФЛС и РФСС', 'Титулы федераций'],
-      ['Юный победитель клуба года', '2026'],
-      ['Кандидат', 'В юные интерчемпионы']
-    ]
-  },
-  aria: {
-    name: 'Ария', image: 'aria-show.jpg', portrait: true, label: 'LIFE WITH LABR',
-    intro: 'Юный грандчемпион России и НКП. Многократный победитель BIS, JBIS, JBISS, BIS Baby и BIS Puppy.',
-    facts: [['Порода', 'Лабрадор-ретривер'], ['Пол', 'Сука'], ['Окрас', 'Палевый']],
-    titles: [
-      ['Юный грандчемпион', 'России и НКП'],
-      ['Юный чемпион', 'России и НКП'],
-      ['8 × Юный чемпион РКФ', 'Восемь титулов'],
-      ['Победы в бестах', 'Многократный победитель BIS, JBIS, JBISS, BIS Baby и BIS Puppy']
-    ],
-    pedigreeTitle: 'Родословная · 3 поколения',
-    pedigree: knownPedigrees.aria
-  },
   enot: {
     name: 'Русмайрас Енот', image: 'enot.jpg', label: 'ОТЕЦ ЩЕНКОВ',
     intro: 'Чемпион России, юный грандчемпион России. Отец щенков от Эдель.',
@@ -164,6 +112,7 @@ const dogs = {
     pedigree: knownPedigrees.enot
   }
 };
+Object.assign(dogs,JSON.parse(document.querySelector('#kennel-dogs-data')?.textContent||'{}'));
 const dogDialog = document.querySelector('#dog-dialog');
 const escapeContent=value=>String(value||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const litterParents=JSON.parse(document.querySelector('#litter-data')?.textContent||'{}').parents||[];
@@ -184,7 +133,7 @@ document.querySelectorAll('[data-dog]').forEach(button => button.addEventListene
   const dog = dogs[button.dataset.dog];
   if(!dog) return;
   dogDialog.dataset.dog = button.dataset.dog;
-  document.querySelector('#dog-dialog-content').innerHTML = localize(`<div class="profile-cover${dog.portrait ? ' profile-cover--portrait' : ''}"><img src="/assets/${dog.image}" alt="${dog.name}"></div><div class="profile-body"><p class="eyebrow">${dog.label}</p><h2 id="dog-dialog-title">${dog.name}</h2><p class="profile-intro">${dog.intro}</p><dl class="profile-facts">${dog.facts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl><details open><summary>Достижения <span aria-hidden="true">+</span></summary><div class="title-list">${dog.titles.map(([title, description]) => `<div><h4>${title}</h4><p>${description}</p></div>`).join('')}</div></details>${dog.health ? `<details><summary>Тесты здоровья <span aria-hidden="true">+</span></summary><dl class="health-list">${dog.health.map(([title, value]) => `<div><dt>${title}</dt><dd>${value}</dd></div>`).join('')}</dl></details>` : ''}${dog.pedigree?.length ? `<details><summary>${dog.pedigreeTitle || (button.dataset.dog === 'edel' ? 'Родословная · 3 поколения' : 'Происхождение')} <span aria-hidden="true">+</span></summary><div class="pedigree">${renderPedigree(dog.pedigree, dog.pedigreeName || dog.name)}</div></details>` : ''}<a class="button button-dark" href="https://wa.me/79251448648" target="_blank" rel="noopener noreferrer">Узнать о щенках</a></div>`);
+  document.querySelector('#dog-dialog-content').innerHTML = localize(`<div class="profile-cover${dog.portrait ? ' profile-cover--portrait' : ''}"><img src="/assets/${dog.image}" alt="${dog.name}"></div><div class="profile-body"><p class="eyebrow">${dog.label}</p><h2 id="dog-dialog-title">${dog.name}</h2><p class="profile-intro">${dog.intro}</p><dl class="profile-facts">${dog.facts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl><details open><summary>Достижения <span aria-hidden="true">+</span></summary><div class="title-list">${dog.titles.map(([title, description]) => `<div><h4>${title}</h4><p>${description}</p></div>`).join('')}</div></details>${dog.health?.length ? `<details><summary>Тесты здоровья <span aria-hidden="true">+</span></summary><dl class="health-list">${dog.health.map(([title, value]) => `<div><dt>${title}</dt><dd>${value}</dd></div>`).join('')}</dl></details>` : ''}${dog.pedigree?.length ? `<details><summary>${dog.pedigreeTitle || (button.dataset.dog === 'edel' ? 'Родословная · 3 поколения' : 'Происхождение')} <span aria-hidden="true">+</span></summary><div class="pedigree">${renderPedigree(dog.pedigree, dog.pedigreeName || dog.name)}</div></details>` : ''}<a class="button button-dark" href="https://wa.me/79251448648" target="_blank" rel="noopener noreferrer">Узнать о щенках</a></div>`);
   const parent=litterParents.find(parent=>parent.id===button.dataset.dog);
   if(parent?.pedigree){const detail=document.createElement('p');detail.className='pedigree-text';detail.textContent=parent.pedigree;dogDialog.querySelector('.profile-body').append(detail);}
   dogDialog.showModal();

@@ -32,3 +32,24 @@
   .dogs-page .dog-meta{flex-wrap:wrap}
   .dogs-page .profile-cover--portrait{height:min(48svh,360px)}
 }
+/* Dog profiles use the same photography, type and spacing as the catalogue. */
+.dogs-page .dog-card h2{font-size:48px;line-height:1.1;margin:22px 0 18px;overflow-wrap:anywhere}
+.dogs-page .dog-photo{display:block}
+.dogs-page .dog-meta{text-transform:uppercase}
+.dogs-page .dog-card .text-button{display:inline-flex}
+.dog-profile{padding-top:20px}
+.dog-profile-intro{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(28px,5vw,76px);align-items:start}
+.dog-profile-cover{min-width:0;overflow:hidden}
+.dog-profile-cover button{display:block;width:100%;border:0;padding:0;background:none;cursor:zoom-in}
+.dog-profile-cover img{display:block;width:100%;height:auto;max-height:700px;object-fit:contain;object-position:top}
+.dog-profile-cover--aria{aspect-ratio:988/1470;position:relative}
+.dog-profile-cover--aria img{position:absolute;left:calc(-100% * 24 / 988);top:calc(-100% * 130 / 1470);width:calc(100% * 1036 / 988);height:calc(100% * 1600 / 1470);max-width:none;max-height:none;object-fit:fill}
+.dog-profile-cover--aria button{height:100%}
+.dog-profile-copy{min-width:0}.dog-profile-copy h1{font-size:clamp(48px,6vw,80px);overflow-wrap:anywhere;line-height:1.08;margin-bottom:24px}
+.dog-profile-description{max-width:65ch;margin-bottom:24px}.dog-profile .profile-facts{margin:24px 0 32px}.dog-profile .profile-facts div{min-width:0}.dog-profile dd{overflow-wrap:anywhere}
+.dog-profile-section{padding-top:40px;margin-top:56px;border-top:1px solid var(--line)}
+.dog-profile-section>h2{margin-bottom:28px;font-size:clamp(36px,4vw,52px)}
+.dog-title-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 48px}.dog-title-list h3{font-size:30px;margin-bottom:8px;overflow-wrap:anywhere}.dog-title-list p{max-width:60ch;color:var(--muted)}
+.dog-profile-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.dog-profile-photos button{padding:0;border:0;background:none;cursor:zoom-in}.dog-profile-photos img{display:block;width:100%;height:auto}
+.dog-profile-back{display:inline-block;margin-top:48px}
+@media(max-width:700px){.dog-profile-intro{grid-template-columns:minmax(0,1fr);gap:28px}.dog-profile-cover{max-width:100%}.dog-profile-cover img{max-height:none}.dog-profile-section{margin-top:36px;padding-top:28px}.dog-title-list{grid-template-columns:minmax(0,1fr);gap:24px}.dog-profile-photos{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.dogs-page .dog-card h2{font-size:42px}}

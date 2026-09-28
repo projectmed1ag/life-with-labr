@@ -6,7 +6,7 @@ Mode: Operate. The owner signs in and completes editing tasks, including from a 
 
 ## Purpose and sequence
 
-One owner manages a shared photo gallery and litters. Gallery opens directly into a photo grid with a multi-file uploader, earlier/later controls, removal, reset, and one Save changes button. There are no gallery posts, titles, dates, search, caption fields or archive controls. Photo caption editing was removed at the owner’s request because the public gallery has no visible captions; existing alternative image descriptions remain in stored data. Litters follow section → record list → editor → save draft or publish. Archive remains a separate, reversible litter action; the archive view returns to the current list. Keep these operations explicit and labelled in Russian.
+One owner manages a shared photo gallery, litters, and kennel dogs. The section navigation contains «Помёты и щенки», «Наши собаки», and «Галерея». Gallery opens directly into a photo grid with a multi-file uploader, earlier/later controls, removal, reset, and one Save changes button. There are no gallery posts, titles, dates, search, caption fields or archive controls. Photo caption editing was removed at the owner’s request because the public gallery has no visible captions; existing alternative image descriptions remain in stored data. Litters and dogs follow section → record list → editor → save draft or publish. Archive remains a separate, reversible record action; the archive view returns to the current list. Keep these operations explicit and labelled in Russian.
 
 ## Composition
 
@@ -40,13 +40,23 @@ Store at most three generations, two ancestors per pair, names up to 120 charact
 
 Previously published ancestry is shared through `dist/pedigree-data.js`, which also supplies the editor's complete editable pairs. An explicitly empty tree remains empty after saving and reloading instead of restoring those original facts. Existing free-text ancestry remains editable as «Примечание к родословной» and is retained alongside the tree. A legacy note on its own takes precedence over the original tree fallback. New ancestry fields do not publish until the owner uses the existing publication action.
 
+## Kennel dogs
+
+«Наши собаки» opens a record list with «Добавить собаку», a labelled search by name, and «Архив» / «Показать текущих». Rows reuse the litter list's photo or empty-photo placeholder, name, sex and optional color, publication state, and editor-opening control. Both admin and public lists sort by «Порядок на сайте», smallest first; equal values use the stable record identifier. An empty current list invites the owner to create a profile, while an empty archive explains its purpose.
+
+The editor groups «О собаке», «Фотографии», «Достижения», «Тесты здоровья», and «Родословная» into the existing ruled sections. Facts include name, sex, color, birth date, kennel of origin, owner, breeder, and numeric order from 0 to 10,000. Keep the catalogue summary distinct from the full page description. Achievements and health tests use repeatable labelled rows with an explicit add and remove action. Health help asks for confirmed results only. Blank rows are omitted; a row with details or a result needs a title before publication. A profile may have up to 20 photos, with the first photo as its cover; photos retain alternative descriptions, reorder, remove, and «Кадр и предпросмотр» controls. The dog uses the same three-generation ancestor editor, with its own tree and any retained legacy note.
+
+Publication requires a name and at least one photo. «Сохранить черновик» preserves pending edits without replacing the public version; «Опубликовать» updates the catalogue and individual page. The sticky bar distinguishes unsaved changes from saved, unpublished changes. A published record exposes «Посмотреть на сайте». The generated identifier gives the profile a stable `/dogs/<id>/` address independent of later name edits; no slug field is exposed.
+
+«Снять с публикации» keeps the draft. «В архив» saves the record and photos, removes its public page and catalogue/sitemap entries, and redirects old Russian and English addresses to the matching catalogue. Both actions use a native confirmation. Archived fields are disabled and the sticky bar offers «Восстановить в черновики»; restoring does not publish. The initial four dogs are imported once from `src/data/dogs.json` using the `dogs-seeded-v1` migration marker, preserving their existing facts and photographs and avoiding overwriting owner edits or reviving archived records on restart. Public presentation is recorded in [dogs.md](dogs.md).
+
 ## Photo preparation
 
-Selecting a file opens a modal preview before upload. Puppy photos use a fixed 3:4 frame and parent photos use 3:2; gallery photos start with their original proportions and may use 3:4, 3:2 or 1:1. The preview and exported image use the same crop. Owners can drag with a mouse or finger, move the frame with arrow keys, zoom, rotate in quarter turns, and reset. The desktop dialog pairs the preview with labelled controls and keeps its actions in a sticky footer. It uses the established cream, green, Manrope, and plain admin controls.
+Selecting a file opens a modal preview before upload. Puppy photos use a fixed 3:4 frame; parent and kennel dog photos use 3:2. Gallery photos start with their original proportions and may use 3:4, 3:2 or 1:1. The preview and exported image use the same crop. Owners can drag with a mouse or finger, move the frame with arrow keys, zoom, rotate in quarter turns, and reset. The desktop dialog pairs the preview with labelled controls and keeps its actions in a sticky footer. It uses the established cream, green, Manrope, and plain admin controls.
 
-Show the original and final dimensions, with a readable warning when the crop's shorter side is below 800 px. Export WebP at no more than 2400 px on the longer side without enlargement. Each selected file is handled in sequence; Skip advances to the next, while Cancel stops the remaining selection and keeps photos already added. Uploads remain unsaved changes until the owner saves the gallery or saves/publishes the litter.
+Show the original and final dimensions, with a readable warning when the crop's shorter side is below 800 px. Export WebP at no more than 2400 px on the longer side without enlargement. Each selected file is handled in sequence; Skip advances to the next, while Cancel stops the remaining selection and keeps photos already added. Uploads remain unsaved changes until the owner saves the gallery or saves/publishes the litter or dog.
 
-Existing previews show saved dimensions and a «Кадр и предпросмотр» action. Gallery previews retain the saved proportions; puppy and parent previews match their respective frames. Re-editing starts from the saved file, so restoring an already cropped-out area requires selecting the original again. After the upload or edit sequence, keyboard focus returns to its initiating control.
+Existing previews show saved dimensions and a «Кадр и предпросмотр» action. Gallery previews retain the saved proportions; puppy, parent and dog previews match their respective frames. Re-editing starts from the saved file, so restoring an already cropped-out area requires selecting the original again. After the upload or edit sequence, keyboard focus returns to its initiating control.
 
 ## Visual expression
 
@@ -55,12 +65,14 @@ Use Manrope working headings and body text, cream page surfaces, forest primary 
 ## Responsive behavior
 
 - Above 850px: 230px sidebar within a maximum 1500px workspace; main padding uses `44px clamp(24px,5vw,72px) 110px`.
-- At 850px and below: sidebar navigation becomes a top strip and its explanatory paragraph disappears. The first ancestry pair also becomes one column, with a separator before the mother's branch.
+- At 850px and below: sidebar navigation becomes a wrapping top strip and its explanatory paragraph disappears. The first ancestry pair also becomes one column, with a separator before the mother's branch.
 - At 700px and below: the photo dialog stacks preview above controls; its footer actions wrap and the primary action fills the remaining space.
 - At 600px and below: main padding is `26px 18px 100px`; page headings stack; paired fields become one column; record rows wrap; photo previews use two columns; the sticky save area stacks its status and two equal action columns. Ancestry inputs use 16px text, and nested ancestry indentation reduces from 20px to 14px.
 - Base fields remain at least 46px high and base action buttons at least 44px high. Compact photo controls keep their implemented exceptions; header utility actions are at least 46px high on every viewport.
 
 The gallery grid uses flexible columns of at least 210px on desktop and two columns on mobile (one below 360px). Photo controls retain 44px targets; the Save changes button is first in the mobile save bar. Existing gallery publication records are merged without publishing pending edits; their original data remains in history.
+
+Dog photo previews use a 3:2 frame. At 600px and below they take the available width and their reorder/remove targets are at least 44px high. The three section buttons wrap with 13px text and retain visible labels.
 
 ## Feedback
 
@@ -71,3 +83,7 @@ Keep saving state in the sticky bar and use the existing transient notice for op
 ## Existing details not promoted into the shared system
 
 The current implementation includes a Georgia text wordmark and text glyph direction/external-link cues. These are recorded as incumbent details rather than reusable display or icon standards. This documentation pass does not change them.
+
+## Dog extension verification
+
+The finish review disposition is ship. Local desktop (1280 × 900) and mobile (390 × 844) evidence is saved in `.impeccable/review/dogs-cms/`, with the recorded checks in `verification.txt`. The pass covered the initial records, creating a dog, 3:2 photo preparation, titles, health and ancestry entry, draft saving, publication, public profiles, and the photo viewer. The native archive confirmation stalled browser automation; archive and restore behavior were verified independently through API/store checks, and the local QA record was subsequently archived through the authenticated local API. No production content was edited. The later empty-health guard in the existing parent dialog was accepted by the finish reviewer. This extends the approved visual system; root `DESIGN.md` and `.impeccable/design.json` remain unchanged by the documentation pass.

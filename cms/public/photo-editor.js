@@ -28,15 +28,15 @@ export async function preparePhoto(file,{kind='gallery',index=1,total=1,editing=
   try{await img.decode();}catch{URL.revokeObjectURL(url);throw new Error('Не удалось открыть фото. Выберите другой файл JPG, PNG или WebP.');}
   if(img.naturalWidth*img.naturalHeight>40_000_000){URL.revokeObjectURL(url);throw new Error('Фото больше 40 мегапикселей. Уменьшите его и загрузите снова.');}
   return new Promise((resolve,reject)=>{
-    const initialRatio=kind==='puppy'?.75:kind==='parent'?1.5:0;
+    const initialRatio=kind==='puppy'?.75:['parent','dog'].includes(kind)?1.5:0;
     const state={ratio:initialRatio,zoom:1,x:.5,y:.5,turns:0};
     const dialog=document.createElement('dialog');dialog.className='photo-dialog';
     dialog.setAttribute('aria-labelledby','photo-editor-title');
-    const purpose=kind==='puppy'?'Карточка щенка · 3:4':kind==='parent'?'Карточка родителя · 3:2':'Фото в галерее';
+    const purpose=kind==='puppy'?'Карточка щенка · 3:4':kind==='parent'?'Карточка родителя · 3:2':kind==='dog'?'Карточка собаки · 3:2':'Фото в галерее';
     dialog.innerHTML=`<header class="photo-dialog-header"><div><h2 id="photo-editor-title">${editing?'Кадр и предпросмотр':'Подготовить фото'}</h2><p>${purpose}${total>1?` · ${index} из ${total}`:''}</p></div><button type="button" class="quiet photo-dialog-close" aria-label="Отменить обработку фото">${icon('m6 6 12 12M18 6 6 18')}</button></header>
       <div class="photo-dialog-body"><div class="photo-stage"><canvas tabindex="0" role="img" aria-label="Предпросмотр кадра. Перемещайте фото мышью, пальцем или стрелками клавиатуры."></canvas><p>Переместите фото, чтобы выбрать кадр.</p></div>
       <div class="photo-settings"><p class="photo-file-name">${escape(file.name||'Фотография')}</p><p class="photo-original-size">Исходное фото: ${img.naturalWidth} × ${img.naturalHeight} px</p>
-      ${kind==='gallery'?'<label>Формат<select data-photo-ratio><option value="0">Исходные пропорции</option><option value="0.75">Вертикальный · 3:4</option><option value="1.5">Горизонтальный · 3:2</option><option value="1">Квадрат · 1:1</option></select></label><p class="photo-format-note">Исходные пропорции и масштаб 100% сохранят фото целиком.</p>':`<p class="photo-format-note">${kind==='puppy'?'Вертикальная рамка для щенка.':'Горизонтальная рамка для родителя.'} В рамке видна область, которая сохранится на сайте.</p>`}
+      ${kind==='gallery'?'<label>Формат<select data-photo-ratio><option value="0">Исходные пропорции</option><option value="0.75">Вертикальный · 3:4</option><option value="1.5">Горизонтальный · 3:2</option><option value="1">Квадрат · 1:1</option></select></label><p class="photo-format-note">Исходные пропорции и масштаб 100% сохранят фото целиком.</p>':`<p class="photo-format-note">${kind==='puppy'?'Вертикальная рамка для щенка.':kind==='dog'?'Горизонтальная рамка для собаки.':'Горизонтальная рамка для родителя.'} В рамке видна область, которая сохранится на сайте.</p>`}
       <label class="photo-zoom-label">Масштаб <output>100%</output><input type="range" min="1" max="3" step="0.01" value="1" aria-label="Масштаб фото"></label>
       <div class="photo-adjustments"><button type="button" data-photo-rotate>${icon('M3 10a9 9 0 1 1 2 8M3 4v6h6')}Повернуть</button><button type="button" data-photo-reset>Сбросить</button></div>
       <p class="photo-result-size" aria-live="polite"></p><p class="photo-quality" role="status"></p><p class="photo-save-note">Фото автоматически уменьшим до 2400 px по длинной стороне, без растяжения.</p><p class="photo-error" role="alert"></p></div></div>

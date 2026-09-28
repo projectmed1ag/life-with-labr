@@ -1,0 +1,316 @@
+[
+  {
+    "id": "edel",
+    "name": "Эдель",
+    "sex": "female",
+    "color": "Палевый",
+    "birthDate": "2024-03-04",
+    "kennel": "Время Мечты",
+    "owner": "Евгения Скобликова",
+    "breeder": "Илона Монахова",
+    "order": 10,
+    "summary": "Грандчемпион России, НКП, Армении, Грузии и Беларуси.",
+    "description": "Грандчемпион России, НКП, Армении, Грузии и Беларуси.",
+    "photos": [
+      {
+        "src": "edel.jpg",
+        "alt": "Эдель в выставочной стойке на фоне гор",
+        "width": 964,
+        "height": 646
+      }
+    ],
+    "titles": [
+      {
+        "title": "Грандчемпион",
+        "description": "России, НКП, Армении, Грузии, Беларуси"
+      },
+      {
+        "title": "Чемпион",
+        "description": "России, НКП, Армении, Грузии, Беларуси · 3 × Чемпион РКФ"
+      },
+      {
+        "title": "Победитель Дерби Шоу",
+        "description": "На Национальной выставке"
+      },
+      {
+        "title": "Юный Грандчемпион",
+        "description": "России, НКП"
+      },
+      {
+        "title": "Юный Чемпион",
+        "description": "России, НКП, Армении · 8 × Юный Чемпион РКФ"
+      },
+      {
+        "title": "Кандидат",
+        "description": "В Шоу Чемпионы, Интерчемпионы и Чемпионы Золотого Кольца"
+      }
+    ],
+    "health": [],
+    "pedigreeTree": [
+      {
+        "role": "ОТЕЦ",
+        "name": "Никсон Лаб Бонапарт",
+        "title": "Грандчемпион России · Чемпион России, НКП, РКФ",
+        "parents": [
+          {
+            "name": "Кристофер Строллер Сан",
+            "title": "Интерчемпион · Грандчемпион",
+            "parents": [
+              {
+                "name": "Rocheby Step Ahead"
+              },
+              {
+                "name": "Юффо Лондон Блю Топаз"
+              }
+            ]
+          },
+          {
+            "name": "Kelly for Nikson Dvaruva",
+            "title": "Чемпион России · Литва",
+            "parents": [
+              {
+                "name": "Big Bang Magic Power"
+              },
+              {
+                "name": "Rocheby Pastelshades"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "МАТЬ",
+        "name": "Время Мечты Вера",
+        "title": "Чемпион России, РКФ",
+        "parents": [
+          {
+            "name": "Жерминаль Мисти Шоу Мэйкер",
+            "title": "Интерчемпион · Грандчемпион",
+            "parents": [
+              {
+                "name": "Rocheby Step Ahead"
+              },
+              {
+                "name": "Жерминаль Мисти Чарминг Чанс"
+              }
+            ]
+          },
+          {
+            "name": "Флэми Стар Тестаросса",
+            "title": "Чемпион России · Чемпион-производитель",
+            "parents": [
+              {
+                "name": "Jentleman Jim Down the Hill"
+              },
+              {
+                "name": "Флэми Стар Нирвана"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "pedigree": ""
+  },
+  {
+    "id": "vanessa",
+    "name": "Ванесса",
+    "sex": "female",
+    "color": "Палевый",
+    "birthDate": null,
+    "kennel": "",
+    "owner": "",
+    "breeder": "",
+    "order": 20,
+    "summary": "12 побед в Best in Group.\n6 побед в Best in Show Specialty.",
+    "description": "Победитель выставочных групп и специализированных выставок. Многократный победитель породы.",
+    "photos": [
+      {
+        "src": "vanessa-show.jpg",
+        "alt": "Ванесса с хендлером в выставочной стойке на траве",
+        "width": 1084,
+        "height": 1600
+      }
+    ],
+    "titles": [
+      {
+        "title": "12 × Best in Group",
+        "description": "Победитель группы"
+      },
+      {
+        "title": "4 × Reserve Best in Group",
+        "description": "Резервный победитель группы"
+      },
+      {
+        "title": "6 × Best in Group-3",
+        "description": "Третье место в группе"
+      },
+      {
+        "title": "6 × Best in Show Specialty",
+        "description": "Победитель специализированной выставки"
+      },
+      {
+        "title": "Многократный BOB",
+        "description": "Лучший представитель породы"
+      }
+    ],
+    "health": [],
+    "pedigreeTree": [],
+    "pedigree": ""
+  },
+  {
+    "id": "mars",
+    "name": "Марс",
+    "sex": "male",
+    "color": "Палевый",
+    "birthDate": null,
+    "kennel": "",
+    "owner": "",
+    "breeder": "",
+    "order": 30,
+    "summary": "Юный грандчемпион России и НКП.\nЮный победитель клуба года — 2026.",
+    "description": "Юный грандчемпион России и НКП. Юный победитель клуба года — 2026.",
+    "photos": [
+      {
+        "src": "mars-show.jpg",
+        "alt": "Марс с хендлером в выставочной стойке в ринге",
+        "width": 1067,
+        "height": 1600
+      }
+    ],
+    "titles": [
+      {
+        "title": "Юный грандчемпион",
+        "description": "России и НКП"
+      },
+      {
+        "title": "Юный чемпион",
+        "description": "России, Армении и клуба"
+      },
+      {
+        "title": "3 × Юный чемпион РКФ",
+        "description": "Три титула"
+      },
+      {
+        "title": "Юный чемпион РФЛС и РФСС",
+        "description": "Титулы федераций"
+      },
+      {
+        "title": "Юный победитель клуба года",
+        "description": "2026"
+      },
+      {
+        "title": "Кандидат",
+        "description": "В юные интерчемпионы"
+      }
+    ],
+    "health": [],
+    "pedigreeTree": [],
+    "pedigree": ""
+  },
+  {
+    "id": "aria",
+    "name": "Ария",
+    "sex": "female",
+    "color": "Палевый",
+    "birthDate": null,
+    "kennel": "",
+    "owner": "",
+    "breeder": "",
+    "order": 40,
+    "summary": "Юный грандчемпион России и НКП.\nМногократный победитель выставочных бестов.",
+    "description": "Юный грандчемпион России и НКП. Многократный победитель BIS, JBIS, JBISS, BIS Baby и BIS Puppy.",
+    "photos": [
+      {
+        "src": "aria-show.jpg",
+        "alt": "Ария на выставке рядом с хендлером и судьёй с наградами",
+        "width": 1036,
+        "height": 1600
+      }
+    ],
+    "titles": [
+      {
+        "title": "Юный грандчемпион",
+        "description": "России и НКП"
+      },
+      {
+        "title": "Юный чемпион",
+        "description": "России и НКП"
+      },
+      {
+        "title": "8 × Юный чемпион РКФ",
+        "description": "Восемь титулов"
+      },
+      {
+        "title": "Победы в бестах",
+        "description": "Многократный победитель BIS, JBIS, JBISS, BIS Baby и BIS Puppy"
+      }
+    ],
+    "health": [],
+    "pedigreeTree": [
+      {
+        "role": "ОТЕЦ",
+        "name": "Rocheby Squadron Leader",
+        "title": "Чемпион России, РКФ · Англия",
+        "parents": [
+          {
+            "name": "Silver Suede Over Rocheby",
+            "title": "Чемпион Англии",
+            "parents": [
+              {
+                "name": "Anti Aspen of Finnwoods"
+              },
+              {
+                "name": "Bridgeford Chrystal Clear"
+              }
+            ]
+          },
+          {
+            "name": "Rocheby Serenade",
+            "title": "Палевый · Англия",
+            "parents": [
+              {
+                "name": "Rocheby Old Smokey"
+              },
+              {
+                "name": "Rocheby Sensational"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "МАТЬ",
+        "name": "Время Мечты Вера",
+        "title": "Чемпион России, РКФ",
+        "parents": [
+          {
+            "name": "Жерминаль Мисти Шоу Мэйкер",
+            "title": "Интерчемпион · Грандчемпион",
+            "parents": [
+              {
+                "name": "Rocheby Step Ahead"
+              },
+              {
+                "name": "Жерминаль Мисти Чарминг Чанс"
+              }
+            ]
+          },
+          {
+            "name": "Флэми Стар Тестаросса",
+            "title": "Чемпион России · Чемпион-производитель",
+            "parents": [
+              {
+                "name": "Jentleman Jim Down the Hill"
+              },
+              {
+                "name": "Флэми Стар Нирвана"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "pedigree": ""
+  }
+]

@@ -14,7 +14,7 @@ const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8'
 export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adminOrigin='http://127.0.0.1:4180',development=false,seed,renderer=renderSite}={}) {
   if(!development && !adminOrigin.startsWith('https://')) throw new Error('Production admin requires HTTPS.');
   const assetDirectory=path.join(ROOT,'dist/assets');
-  seed??={litters:JSON.parse(await readFile(path.join(ROOT,'src/data/litters.json'))),gallery:JSON.parse(await readFile(path.join(ROOT,'src/data/gallery.json')))};
+  seed??={litters:JSON.parse(await readFile(path.join(ROOT,'src/data/litters.json'))),gallery:JSON.parse(await readFile(path.join(ROOT,'src/data/gallery.json'))),dogs:JSON.parse(await readFile(path.join(ROOT,'src/data/dogs.json')))};
   const store=openStore(dataDir,{seed,assetDirectory});
   let pages=await renderer(store.published()),queue=Promise.resolve(),hashing=0,uploading=false;
   const dummyPassword=await hashPassword(token());
@@ -80,7 +80,7 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
             const photo={src,width:result.width,height:result.height,alt:''};store.addMedia(photo);return json(res,201,photo);
           }catch(error){if(target)await unlink(target).catch(()=>{});if(error instanceof HttpError)throw error;fail(400,'Не удалось прочитать фото. Выберите JPG, PNG или WebP до 12 МБ.');}finally{uploading=false;}
         }
-        const match=/^\/api\/content\/(litters|gallery)\/([a-z0-9-]+)$/.exec(route);
+        const match=/^\/api\/content\/(litters|gallery|dogs)\/([a-z0-9-]+)$/.exec(route);
         if(match&&req.method==='PUT'){
           const input=await jsonBody(req),[,kind,id]=match;if(!validId(id))fail(400,'Некорректный адрес.');
           if(kind==='gallery' && (id!=='gallery' || !['draft','publish'].includes(input.action)))fail(400,'Галерея единая. Обновите страницу, чтобы редактировать фотографии.');
@@ -92,7 +92,7 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
               const {validateContent}=await import('./validation.mjs');
               const data=validateContent(kind,{...input.data,id},{publish:input.action==='publish',mediaExists:store.mediaExists});
               const next=store.published();next[kind]=next[kind].filter(item=>item.id!==id);if(input.action==='publish')next[kind].unshift(data);
-              next.gallery.sort((a,b)=>(b.date||'').localeCompare(a.date||''));nextPages=await renderer(next);
+              next.gallery.sort((a,b)=>(b.date||'').localeCompare(a.date||''));next.dogs.sort((a,b)=>a.order-b.order||a.id.localeCompare(b.id));nextPages=await renderer(next);
             }
             const record=store.save(kind,id,input.data,input.version,input.action);
             if(nextPages)pages=nextPages;
@@ -121,6 +121,8 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
       if(pages.has(route+'/index.html')){res.writeHead(308,{Location:route+'/'+url.search});return res.end();}
       const closedLitter=/^\/(en\/)?puppies\/([a-z0-9-]+)(?:\/index\.html|\/)?$/.exec(route);
       if(closedLitter && store.get('litters',closedLitter[2])?.archived){res.writeHead(302,{Location:closedLitter[1]?'/en/puppies/':'/puppies/','Cache-Control':'no-store'});return res.end();}
+      const archivedDog=/^\/(en\/)?dogs\/([a-z0-9-]+)(?:\/index\.html|\/)?$/.exec(route);
+      if(archivedDog && store.get('dogs',archivedDog[2])?.archived){res.writeHead(302,{Location:archivedDog[1]?'/en/dogs/':'/dogs/','Cache-Control':'no-store'});return res.end();}
       if(/^\/[a-zA-Z0-9-]+\.(css|js)$/.test(route)||['/favicon-64.png','/favicon.svg','/apple-touch-icon.png'].includes(route))return await file(req,res,path.join(ROOT,'dist',route));
       fail(404,'Страница не найдена.');
     }catch(error){if(res.headersSent)return res.destroy();json(res,error.status||500,{error:error.status?error.message:'Не удалось сохранить изменения. Повторите попытку.'});if(!error.status)console.error('Request failed:',error.message);}

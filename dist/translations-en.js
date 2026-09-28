@@ -1,4 +1,13 @@
 export default {
+  "Лабрадор-ретривер ·": "Labrador Retriever ·",
+  "Связаться с питомником": "Contact the kennel",
+  "Скоро здесь появятся наши собаки.": "Meet our dogs here soon.",
+  "Эдель — Life with Labr": "Edel — Life with Labr",
+  "Ванесса — Life with Labr": "Vanessa — Life with Labr",
+  "Марс — Life with Labr": "Mars — Life with Labr",
+  "Ария — Life with Labr": "Aria — Life with Labr",
+  "4 марта 2024 г.": "4 March 2024",
+  "Лабрадоры питомника Life with Labr. Фотографии, выставочные достижения и родословные наших собак.": "Labradors of Life with Labr kennel. Photos, show achievements and pedigrees of our dogs.",
   "Выбрать способ связи": "Choose how to contact us",
   "Написать Евгении": "Message Evgeniya",
   "Отец": "Sire",

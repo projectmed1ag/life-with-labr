@@ -43,6 +43,22 @@ export function validateContent(kind, input, {publish=false, mediaExists=()=>tru
     return values;
   };
   if(kind==='gallery') return {id:id(input.id),title:'',text:'',date:null,photos:photos(input.photos,false,500)};
+  if(kind==='dogs') {
+    if(!['female','male'].includes(input.sex)) fail('Укажите пол собаки.');
+    const order=Number(input.order??0);
+    if(!Number.isInteger(order)||order<0||order>10000) fail('Порядок должен быть целым числом от 0 до 10 000.');
+    const entries=(items,label,second)=>list(items||[],50,label).map(raw=>{
+      if(!raw||typeof raw!=='object'||Array.isArray(raw)) fail(`Проверьте раздел «${label}».`);
+      const title=text(raw.title??'',label,160),value=text(raw[second]??'',label,1000);
+      if(publish && !title && value) fail(`Добавьте название в разделе «${label}».`);
+      return {title,[second]:value};
+    }).filter(row=>row.title||row[second]);
+    return {id:id(input.id),name:text(input.name||'','Кличка',120,publish),sex:input.sex,color:text(input.color||'','Окрас',80),birthDate:date(input.birthDate),
+      kennel:text(input.kennel||'','Питомник происхождения',160),owner:text(input.owner||'','Владелец',160),breeder:text(input.breeder||'','Заводчик',160),order,
+      summary:text(input.summary||'','Краткое описание',600),description:text(input.description||'','О собаке',5000),photos:photos(input.photos,publish),
+      titles:entries(input.titles,'Достижения','description'),health:entries(input.health,'Тесты здоровья','value'),
+      pedigree:text(input.pedigree||'','Примечание к родословной',5000),pedigreeTree:pedigreeTree(input.pedigreeTree??[])};
+  }
   if(kind!=='litters') fail('Неизвестный раздел.');
   const common={id:id(input.id),title:text(input.title||'','Название',120,publish)};
   const parents=unique(list(input.parents||[],2,'родители').map(raw=>{
