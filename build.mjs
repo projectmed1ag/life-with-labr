@@ -12,10 +12,10 @@ const origin = 'https://lifewithlabr.ru/';
 export async function renderSite(contentData) {
 const output = new Map();
 const pages = [
-  {key:'home', file:'index.html', label:'Главная', title:'Питомник лабрадоров в Московской области — Life with Labr', description:'Life with Labr — питомник лабрадоров Евгении Скобликовой в Образцово, Московская область. Палевые щенки, фотографии родителей, родословные и поддержка владельцев.'},
+  {key:'home', file:'index.html', label:'Главная', title:'Питомник лабрадоров — Москва | Life with Labr', description:'Life with Labr — питомник лабрадоров Евгении Скобликовой. Палевые щенки для Москвы и области, фотографии родителей, родословные и поддержка владельцев.'},
   {key:'about', file:'about.html', label:'О питомнике', title:'О питомнике лабрадоров и заводчике — Life with Labr', description:'Питомник лабрадоров Life with Labr в Образцово, Московская область. Заводчик Евгения Скобликова: знакомство со щенками, их родителями и поддержка владельцев.'},
   {key:'dogs', file:'dogs.html', label:'Наши собаки', title:'Наши собаки, достижения и родословные — Life with Labr', description:'Лабрадоры питомника Life with Labr. Фотографии, выставочные достижения и родословные наших собак.'},
-  {key:'puppies', file:'puppies.html', label:'Щенки', title:'Щенки лабрадора в Московской области — Life with Labr', description:'Щенки лабрадора из питомника Life with Labr в Образцово, Московская область. Фотографии, даты рождения, родители, родословные, цены и актуальные статусы щенков.'},
+  {key:'puppies', file:'puppies.html', label:'Щенки', title:'Купить щенка лабрадора — Москва | Life with Labr', description:'Щенки лабрадора в Москве и области: фотографии, цены, наличие, родители и родословные. Питомник Life with Labr. Знакомство и бронирование по договорённости.'},
   {key:'moments', route:'/gallery/', file:'gallery.html', label:'Галерея', title:'Галерея: фотоальбом лабрадоров — Life with Labr', description:'Фотографии собак и щенков лабрадора питомника Life with Labr.'}
 ];
 const layout = await readFile('src/layout.html', 'utf8');
@@ -70,6 +70,12 @@ for (const page of allPages) {
     ...(page.litter||page.dog ? [{'@type':'ListItem',position:2,name:t(page.dog?'Наши собаки':'Щенки'),item:`${localHome}${page.dog?'dogs':'puppies'}/`}] : []),
     {'@type':'ListItem',position:page.litter||page.dog ? 3 : 2,name:t(page.label),item:canonical}
   ]});
+  if (page.key === 'puppies') {
+    const openLitters = litters.filter(litter => !litter.closed);
+    graph.find(item => item['@id'] === `${canonical}#webpage`).mainEntity = {'@id':`${canonical}#litters`};
+    graph.push({'@type':'ItemList','@id':`${canonical}#litters`,name:t('Помёты питомника'),numberOfItems:openLitters.length,
+      itemListElement:openLitters.map((litter,index) => ({'@type':'ListItem',position:index+1,name:t(litter.title),url:new URL((language === 'en' ? '/en' : '') + litterRoute(litter),origin).href}))});
+  }
   const links = list => list.map(item => `<a href="${routeFor(item)}"${item.key === (page.section || page.key) ? ' aria-current="page"' : ''}>${item.label}</a>`).join('');
   let content;
   if(page.dog) content=renderDogPage(page.dog);
@@ -83,6 +89,7 @@ for (const page of allPages) {
     content = (await readFile(`src/pages/${page.key}.html`, 'utf8'))
       .replace('{{sittingLabradors}}', page.key === 'about' ? await readFile('src/sitting-labradors.html','utf8') : '')
       .replace('{{litterCatalog}}', page.key === 'puppies' ? renderLitterCatalog(litters) : '')
+      .replace('{{puppiesHeading}}', language === 'en' ? 'Labrador Retriever <em>puppies</em>' : 'Щенки <em>лабрадора</em>')
       .replace('{{gallery}}', page.key === 'moments' ? renderGallery(gallery) : '')
       .replace('{{dogCatalog}}',page.key === 'dogs' ? renderDogCatalog(dogs) : '');
   }
@@ -96,7 +103,7 @@ for (const page of allPages) {
     structuredData:JSON.stringify({'@context':'https://schema.org','@graph':graph}).replaceAll('<','\\u003c'),
     nav:links(navigationPages), mobileNav:links(navigationPages),
     content,
-    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=ending-2">' : (page.key === 'dogs' || page.dog) ? '<link rel="stylesheet" href="/dogs.css?v=cms-dogs-1">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=quiet-ribbons-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
+    pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=ending-2">' : (page.key === 'dogs' || page.dog) ? '<link rel="stylesheet" href="/dogs.css?v=cms-dogs-1">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=puppy-questions-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
     appVersion:'cms-dogs-1'
   };
   const html = layout.replace(/\{\{(\w+)\}\}/g, (_, key) => {

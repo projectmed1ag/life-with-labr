@@ -3,7 +3,7 @@
 .puppies-intro{background:var(--green);color:var(--cream);padding-top:52px;padding-bottom:72px;display:flex;align-items:flex-end;justify-content:space-between;gap:48px}
 .puppies-intro h1{font-size:clamp(64px,6.7vw,96px);margin:0;max-width:none;line-height:1.04}
 .puppies-intro h1 em{display:inline;color:var(--gold);font-size:1em;line-height:inherit}
-.puppies-intro>p{font-size:14px;max-width:310px;color:#d2d6cb;padding-bottom:6px}
+.puppies-intro>p{font-size:14px;max-width:360px;color:#d2d6cb;padding-bottom:6px}
 .litter-catalog{padding-top:72px;padding-bottom:112px}
 .litter-card{position:relative;display:grid;grid-template-columns:1.06fr 1fr;align-items:center;max-width:1180px;margin-inline:auto;color:var(--cream)}
 .litter-card+.litter-card{margin-top:88px}
@@ -228,3 +228,18 @@
 }
 
 .puppy-reserved-icon{display:block;flex-shrink:0}
+.puppy-questions{padding-top:0;padding-bottom:80px}
+.puppy-questions-inner{max-width:1180px;margin-inline:auto}
+.puppy-questions h2{font-size:clamp(40px,4.5vw,64px);line-height:1.1;margin-bottom:32px;text-wrap:balance}
+.puppy-questions details{border-top:1px solid var(--line);padding-bottom:0}
+.puppy-questions details:last-child{border-bottom:1px solid var(--line)}
+.puppy-questions summary{display:flex;align-items:center;justify-content:space-between;gap:24px;cursor:pointer;list-style:none;padding:22px 0;font:400 clamp(25px,2.5vw,32px)/1.2 var(--serif);color:var(--ink)}
+.puppy-questions summary::-webkit-details-marker{display:none}
+.puppy-questions summary:hover{color:#536259}
+.puppy-questions summary:focus-visible{outline-offset:5px}
+.puppy-questions summary svg{flex-shrink:0}
+.puppy-questions details[open] summary svg path{d:path('M5 12h14')}
+.puppy-questions details[open]{padding-bottom:24px}
+.puppy-questions p{max-width:74ch;color:#536259;font-size:15px;line-height:1.85}
+.puppy-questions details>a{display:inline-block;margin-top:16px;padding-block:8px;font-size:15px;text-decoration:underline;text-underline-offset:5px}
+@media(max-width:700px){.puppy-questions{padding-bottom:52px}.puppy-questions h2{margin-bottom:24px}.puppy-questions summary{padding:20px 0;gap:16px}.puppy-questions p{font-size:14px}}
