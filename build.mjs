@@ -12,10 +12,10 @@ const origin = 'https://lifewithlabr.ru/';
 export async function renderSite(contentData) {
 const output = new Map();
 const pages = [
-  {key:'home', file:'index.html', label:'Главная', title:'Питомник лабрадоров в Москве — Life with Labr', description:'Life with Labr — питомник лабрадоров Евгении Скобликовой в Москве. Палевые щенки, фотографии родителей, достижения и поддержка после переезда.'},
-  {key:'about', file:'about.html', label:'О питомнике', title:'О питомнике лабрадоров и заводчике — Life with Labr', description:'Питомник лабрадоров Life with Labr в Москве. Заводчик Евгения Скобликова: знакомство со щенками, их родителями и поддержка владельцев.'},
+  {key:'home', file:'index.html', label:'Главная', title:'Питомник лабрадоров в Московской области — Life with Labr', description:'Life with Labr — питомник лабрадоров Евгении Скобликовой в Образцово, Московская область. Палевые щенки, фотографии родителей, родословные и поддержка владельцев.'},
+  {key:'about', file:'about.html', label:'О питомнике', title:'О питомнике лабрадоров и заводчике — Life with Labr', description:'Питомник лабрадоров Life with Labr в Образцово, Московская область. Заводчик Евгения Скобликова: знакомство со щенками, их родителями и поддержка владельцев.'},
   {key:'dogs', file:'dogs.html', label:'Наши собаки', title:'Наши собаки, достижения и родословные — Life with Labr', description:'Лабрадоры питомника Life with Labr. Фотографии, выставочные достижения и родословные наших собак.'},
-  {key:'puppies', file:'puppies.html', label:'Щенки', title:'Палевые щенки лабрадора в Москве — Life with Labr', description:'Палевые щенки лабрадора от Эдель и Енота в питомнике Life with Labr, Москва. Знакомство с малышами, фотографии родителей и поддержка заводчика.'},
+  {key:'puppies', file:'puppies.html', label:'Щенки', title:'Щенки лабрадора в Московской области — Life with Labr', description:'Щенки лабрадора из питомника Life with Labr в Образцово, Московская область. Фотографии, даты рождения, родители, родословные, цены и актуальные статусы щенков.'},
   {key:'moments', route:'/gallery/', file:'gallery.html', label:'Галерея', title:'Галерея: фотоальбом лабрадоров — Life with Labr', description:'Фотографии собак и щенков лабрадора питомника Life with Labr.'}
 ];
 const layout = await readFile('src/layout.html', 'utf8');
@@ -55,10 +55,10 @@ for (const page of allPages) {
   const canonical = new URL(route, origin).href;
   const graph = [
     {'@type':'Organization','@id':organizationId,name:'Life with Labr',url:origin,
-      description:t('Питомник лабрадоров Евгении Скобликовой в Москве.'),
+      description:t('Питомник лабрадоров Евгении Скобликовой в Образцово, Московская область.'),
       logo:`${origin}assets/brand-header-v1.webp`,telephone:'+79251448648',
       sameAs:socials.map(([, , url]) => url),
-      address:{'@type':'PostalAddress',addressLocality:t('Москва'),addressCountry:'RU'}},
+      address:{'@type':'PostalAddress',streetAddress:t('Спортивная улица'),addressLocality:t('Образцово'),addressRegion:t('Московская область'),addressCountry:'RU'}},
     {'@type':'WebSite','@id':websiteId,url:origin,name:'Life with Labr',inLanguage:['ru-RU','en'],publisher:{'@id':organizationId}},
     {'@type':page.key === 'about' ? 'AboutPage' : ['dogs','moments','puppies'].includes(page.section || page.key) ? 'CollectionPage' : 'WebPage',
       '@id':`${canonical}#webpage`,url:canonical,name:t(page.title),description:t(page.description),
