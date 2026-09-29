@@ -58,7 +58,7 @@ for (const page of allPages) {
       description:t('Питомник лабрадоров Евгении Скобликовой в Образцово, Московская область.'),
       logo:`${origin}assets/brand-header-v1.webp`,telephone:'+79251448648',
       sameAs:socials.map(([, , url]) => url),
-      address:{'@type':'PostalAddress',streetAddress:t('Спортивная улица'),addressLocality:t('Образцово'),addressRegion:t('Московская область'),addressCountry:'RU'}},
+      address:{'@type':'PostalAddress',addressLocality:t('Образцово'),addressRegion:t('Московская область'),addressCountry:'RU'}},
     {'@type':'WebSite','@id':websiteId,url:origin,name:'Life with Labr',inLanguage:['ru-RU','en'],publisher:{'@id':organizationId}},
     {'@type':page.key === 'about' ? 'AboutPage' : ['dogs','moments','puppies'].includes(page.section || page.key) ? 'CollectionPage' : 'WebPage',
       '@id':`${canonical}#webpage`,url:canonical,name:t(page.title),description:t(page.description),
