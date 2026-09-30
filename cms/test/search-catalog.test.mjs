@@ -4,7 +4,23 @@ import {readFile} from 'node:fs/promises';
 import {renderSite} from '../../build.mjs';
 
 const seed=JSON.parse(await readFile('src/data/litters.json','utf8'))[0];
+const dogs=JSON.parse(await readFile('src/data/dogs.json','utf8'));
 const graph=html=>JSON.parse(html.match(/<script type="application\/ld\+json">([^]*?)<\/script>/)[1])['@graph'];
+
+test('Search metadata remains concise with a large litter or a long dog description',async()=>{
+  const litter=structuredClone(seed);
+  litter.puppies=Array.from({length:12},(_,i)=>({...structuredClone(seed.puppies[0]),id:`puppy-${i}`,name:`Щенок ${i}`}));
+  const dog={...structuredClone(dogs[0]),summary:'Описание собаки. '.repeat(100)};
+  const pages=await renderSite({litters:[litter],dogs:[dog],gallery:[]});
+  for(const route of [`/puppies/${litter.id}/`,`/dogs/${dog.id}/`]){
+    const html=pages.get(`${route}index.html`),data=graph(html);
+    const meta=html.match(/name="description" content="([^"]+)"/)[1];
+    assert(meta.length<=180);
+    assert.match(html.match(/<title>(.*?)<\/title>/)[1],/лабрадор/i);
+    assert.equal(data.find(item=>item['@id'].endsWith('#webpage'))['@type'],'WebPage');
+    assert.match(html,/<nav class="footer-nav"[^]*?href="\/about\/"/);
+  }
+});
 
 test('Search catalogue lists only public litter pages, in both languages, for any litter count',async()=>{
   const litters=[

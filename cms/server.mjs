@@ -149,8 +149,11 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
         const content=await readFile(path.join(ROOT,'cms/public',name));res.writeHead(200,{'Content-Type':types[path.extname(name)]});return res.end(req.method==='HEAD'?undefined:content);
       }
       if(isAdmin&&!development && !['/fonts.css','/pedigree-data.js'].includes(route))fail(404,'Страница не найдена.');
-      const old={'/moments/':'/gallery/','/moments.html':'/gallery/','/en/moments/':'/en/gallery/'};
-      if(old[route]){res.writeHead(308,{Location:old[route]+url.search});return res.end();}
+      // Resolve existing public aliases in one hop; unknown and closed pages keep their own status.
+      const withoutIndex=route.replace(/\/index\.html$/,'/');
+      const old={'/moments':'/gallery/','/moments/':'/gallery/','/moments.html':'/gallery/','/en/moments':'/en/gallery/','/en/moments/':'/en/gallery/','/en/moments.html':'/en/gallery/'};
+      const clean=old[withoutIndex]||withoutIndex.replace(/^(\/(?:en\/)?(?:about|dogs|puppies|gallery))\.html$/,'$1/');
+      if(clean!==route&&pages.has(clean+'index.html')){res.writeHead(308,{Location:clean+url.search});return res.end();}
       const key=route.endsWith('/')?route+'index.html':route;
       if(pages.has(key)){res.writeHead(200,{'Content-Type':types[path.extname(key)],'Cache-Control':'no-cache'});return res.end(req.method==='HEAD'?undefined:pages.get(key));}
       if(pages.has(route+'/index.html')){res.writeHead(308,{Location:route+'/'+url.search});return res.end();}

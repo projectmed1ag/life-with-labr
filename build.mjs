@@ -9,6 +9,12 @@ import {renderGallery} from './src/render-gallery.mjs';
 import {dogRoute,renderDogCatalog,renderDogPage,dogFacts} from './src/render-dogs.mjs';
 
 const origin = 'https://lifewithlabr.ru/';
+const metaDescription = text => {
+  const clean = text.replace(/\s+/g, ' ').trim();
+  if (clean.length <= 180) return clean;
+  const cut = clean.slice(0, 179);
+  return cut.slice(0, cut.lastIndexOf(' ') > 120 ? cut.lastIndexOf(' ') : cut.length) + '…';
+};
 export async function renderSite(contentData) {
 const output = new Map();
 const pages = [
@@ -32,9 +38,9 @@ validateLitters(litters);
 const litterTemplate = await readFile('src/pages/litter.html','utf8');
 const allPages = [...pages, ...litters.filter(litter=>!litter.closed).map(litter => ({
   key:`litter-${litter.id}`, section:'puppies', route:litterRoute(litter), label:litter.title, litter,
-  title:`Щенки: ${litter.title} — Life with Labr`,
-  description:`Помёт ${litter.title} питомника Life with Labr. ${litter.puppies.map(puppy => puppy.name).join(', ')}: фотографии щенков, родители, родословная и знакомство с заводчиком.`
-})), ...dogs.map(dog=>({key:`dog-${dog.id}`,section:'dogs',route:dogRoute(dog),label:dog.name,dog,title:`${dog.name} — Life with Labr`,description:dog.summary||dog.description||dog.name}))];
+  title:`Щенки лабрадора: ${litter.title} — Life with Labr`,
+  description:`Щенки лабрадора от пары ${litter.title}. Фотографии, цены и наличие щенков, родители и родословные. Знакомство и бронирование через мессенджеры.`
+})), ...dogs.map(dog=>({key:`dog-${dog.id}`,section:'dogs',route:dogRoute(dog),label:dog.name,dog,title:`Лабрадор ${dog.name} — Life with Labr`,description:`Лабрадор ${dog.name} питомника Life with Labr. ${dog.summary||dog.description||'Фотографии, сведения о собаке и родословная.'}`}))];
 const routeFor = page => page.route || (page.key === 'home' ? '/' : `/${page.key}/`);
 const organizationId = `${origin}#organization`;
 const websiteId = `${origin}#website`;
@@ -49,6 +55,11 @@ const builtRoutes = [];
 for (const language of ['ru','en']) {
 for (const page of allPages) {
   const t = text => translateText(text, language);
+  const title = language === 'en' && page.litter ? `Labrador Retriever puppies: ${t(page.litter.title)} — Life with Labr`
+    : language === 'en' && page.dog ? `Labrador Retriever ${t(page.dog.name)} — Life with Labr` : t(page.title);
+  const description = metaDescription(language === 'en' && page.litter
+    ? `Labrador Retriever puppies from ${t(page.litter.title)}. Photos, prices, availability, parents and pedigrees. Arrange a visit or reservation through a messaging app.`
+    : language === 'en' && page.dog ? `Labrador Retriever ${t(page.dog.name)} at Life with Labr. ${t(page.dog.summary||page.dog.description)||'Photos, dog details and pedigree.'}` : t(page.description));
   const russianRoute = routeFor(page);
   const route = (language === 'en' ? '/en' : '') + russianRoute;
   const localHome = new URL(language === 'en' ? '/en/' : '/', origin).href;
@@ -60,8 +71,8 @@ for (const page of allPages) {
       sameAs:socials.map(([, , url]) => url),
       address:{'@type':'PostalAddress',addressLocality:t('Образцово'),addressRegion:t('Московская область'),addressCountry:'RU'}},
     {'@type':'WebSite','@id':websiteId,url:origin,name:'Life with Labr',inLanguage:['ru-RU','en'],publisher:{'@id':organizationId}},
-    {'@type':page.key === 'about' ? 'AboutPage' : ['dogs','moments','puppies'].includes(page.section || page.key) ? 'CollectionPage' : 'WebPage',
-      '@id':`${canonical}#webpage`,url:canonical,name:t(page.title),description:t(page.description),
+    {'@type':page.key === 'about' ? 'AboutPage' : ['dogs','moments','puppies'].includes(page.key) ? 'CollectionPage' : 'WebPage',
+      '@id':`${canonical}#webpage`,url:canonical,name:title,description,
       inLanguage:language,isPartOf:{'@id':websiteId},about:{'@id':organizationId},
       ...(page.key !== 'home' ? {breadcrumb:{'@id':`${canonical}#breadcrumb`}} : {})}
   ];
@@ -95,13 +106,13 @@ for (const page of allPages) {
   }
   const share = page.dog ? [page.dog.photos[0].src,page.dog.name] : page.litter ? [page.litter.puppies[0].photos[0].src,page.litter.puppies[0].photos[0].alt] : shareImages[page.key];
   const values = {
-    title: escapeHtml(page.title), description: escapeHtml(page.description), page:page.dog ? 'dog' : page.litter ? 'litter' : page.key, brand, dogProfiles,
+    title: escapeHtml(title), description: escapeHtml(description), page:page.dog ? 'dog' : page.litter ? 'litter' : page.key, brand, dogProfiles,
     canonical, routeJson: JSON.stringify(route), language, ogLocale:language === 'en' ? 'en_GB' : 'ru_RU', socialSymbols, socialLinks, floatingContactLinks,
     languageSwitch:`<nav class="language-switch" aria-label="Язык сайта"><a href="${russianRoute}" lang="ru" hreflang="ru" aria-label="Русский" title="Русский"${language === 'ru' ? ' aria-current="true"' : ''}><img src="/assets/flag-ru.svg" width="33" height="22" alt=""></a><a href="/en${russianRoute}" lang="en" hreflang="en" aria-label="English" title="English"${language === 'en' ? ' aria-current="true"' : ''}><img src="/assets/flag-gb.svg" width="33" height="22" alt=""></a></nav>`,
     languageAlternates:['ru','en','x-default'].map(lang => `<link rel="alternate" hreflang="${lang}" href="${new URL((lang === 'en' ? '/en' : '') + russianRoute,origin).href}">`).join('\n'),
     shareImage:`${origin}assets/${share[0]}`,shareImageAlt:escapeHtml(share[1]),
     structuredData:JSON.stringify({'@context':'https://schema.org','@graph':graph}).replaceAll('<','\\u003c'),
-    nav:links(navigationPages), mobileNav:links(navigationPages),
+    nav:links(navigationPages), mobileNav:links(navigationPages), footerNav:links(pages),
     content,
     pageAssets:page.key === 'home' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7"><link rel="stylesheet" href="/home.css?v=ending-2">' : (page.key === 'dogs' || page.dog) ? '<link rel="stylesheet" href="/dogs.css?v=cms-dogs-1">' : (page.litter || page.key === 'puppies') ? '<link rel="stylesheet" href="/puppies-catalog.css?v=puppy-questions-1"><script type="module" src="/puppies-motion.js?v=album-2"></script>' : page.key === 'about' ? '<link rel="stylesheet" href="/living-puppies.css?v=photo-motion-7">' : '',
     appVersion:'cms-dogs-1'
