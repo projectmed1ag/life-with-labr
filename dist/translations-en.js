@@ -1,6 +1,6 @@
 export default {
-  "Питомник лабрадоров — Москва | Life with Labr": "Labrador Retriever kennel — Moscow | Life with Labr",
-  "Life with Labr — питомник лабрадоров Евгении Скобликовой. Палевые щенки для Москвы и области, фотографии родителей, родословные и поддержка владельцев.": "Life with Labr is Evgeniya Skoblikova’s Labrador Retriever kennel. Yellow puppies for Moscow and the surrounding region, parent photos, pedigrees and support for owners.",
+  "Щенки лабрадора в Москве | Life with Labr": "Labrador Retriever puppies in Moscow | Life with Labr",
+  "Палевые щенки лабрадора от титулованных родителей. Фото, цены и наличие на сайте Life with Labr. Знакомство и бронирование через мессенджеры.": "Yellow Labrador Retriever puppies from titled parents. Photos, prices and availability at Life with Labr. Arrange a visit or reservation through a messaging app.",
   "Купить щенка лабрадора — Москва | Life with Labr": "Labrador Retriever puppies for sale — Moscow | Life with Labr",
   "Щенки лабрадора в Москве и области: фотографии, цены, наличие, родители и родословные. Питомник Life with Labr. Знакомство и бронирование по договорённости.": "Labrador Retriever puppies in Moscow and the surrounding region: photos, prices, availability, parents and pedigrees. Life with Labr kennel. Visits and reservations by arrangement.",
   "лабрадора": "Labrador Retriever",

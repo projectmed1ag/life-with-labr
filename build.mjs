@@ -18,7 +18,7 @@ const metaDescription = text => {
 export async function renderSite(contentData) {
 const output = new Map();
 const pages = [
-  {key:'home', file:'index.html', label:'Главная', title:'Питомник лабрадоров — Москва | Life with Labr', description:'Life with Labr — питомник лабрадоров Евгении Скобликовой. Палевые щенки для Москвы и области, фотографии родителей, родословные и поддержка владельцев.'},
+  {key:'home', file:'index.html', label:'Главная', title:'Щенки лабрадора в Москве | Life with Labr', description:'Палевые щенки лабрадора от титулованных родителей. Фото, цены и наличие на сайте Life with Labr. Знакомство и бронирование через мессенджеры.'},
   {key:'about', file:'about.html', label:'О питомнике', title:'О питомнике лабрадоров и заводчике — Life with Labr', description:'Питомник лабрадоров Life with Labr в Образцово, Московская область. Заводчик Евгения Скобликова: знакомство со щенками, их родителями и поддержка владельцев.'},
   {key:'dogs', file:'dogs.html', label:'Наши собаки', title:'Наши собаки, достижения и родословные — Life with Labr', description:'Лабрадоры питомника Life with Labr. Фотографии, выставочные достижения и родословные наших собак.'},
   {key:'puppies', file:'puppies.html', label:'Щенки', title:'Купить щенка лабрадора — Москва | Life with Labr', description:'Щенки лабрадора в Москве и области: фотографии, цены, наличие, родители и родословные. Питомник Life with Labr. Знакомство и бронирование по договорённости.'},
