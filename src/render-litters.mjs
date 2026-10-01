@@ -5,6 +5,7 @@ import {renderPedigree} from '../dist/pedigree.js';
 
 export const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 export const litterRoute = litter => `/puppies/${litter.id}/`;
+export const litterCover = litter => litter.cover ?? litter.puppies[0]?.photos[0];
 const asset = filename => `/assets/${filename}`;
 const puppyKind = litter => litter.puppies.every(puppy=>puppy.color==='Палевый')?'Палевые щенки лабрадора-ретривера':'Щенки лабрадора-ретривера';
 const statusText = puppy => ({available:puppy.sex === 'female' ? 'Свободна' : 'Свободен',reserved:puppy.sex === 'female' ? 'Забронирована' : 'Забронирован',home:puppy.sex === 'female'?'Уехала в новую семью':'Уехал в новую семью'}[puppy.status] || '');
@@ -25,6 +26,7 @@ export function validateLitters(litters) {
     litterIds.add(litter.id);
     if (!litter.title || !litter.parents?.length || !litter.puppies?.length) throw new Error(`Incomplete litter: ${litter.id}`);
     if (litter.birthDate && (!/^\d{4}-\d{2}-\d{2}$/.test(litter.birthDate) || Number.isNaN(Date.parse(litter.birthDate)))) throw new Error(`Invalid birth date: ${litter.id}`);
+    if (litter.cover && (!/^[a-zA-Z0-9_.-]+$/.test(litter.cover.src) || !(litter.cover.width > 0 && litter.cover.height > 0))) throw new Error(`Invalid cover: ${litter.id}`);
     const puppyIds = new Set();
     for (const puppy of litter.puppies) {
       if (!/^[a-z0-9-]+$/.test(puppy.id) || puppyIds.has(puppy.id)) throw new Error(`Invalid puppy id: ${puppy.id}`);
@@ -43,7 +45,7 @@ export function renderLitterCatalog(litters) {
     const closed=!!litter.closed;
     const allHome = litter.puppies.every(puppy => puppy.status === 'home');
     const available = litter.puppies.some(puppy => puppy.status === 'available');
-    const cover = litter.puppies[0].photos[0];
+    const cover = litterCover(litter);
     return `<article class="litter-card${closed?' litter-card--closed':''}" aria-labelledby="catalog-${litter.id}-title">
       <${closed?'div':'a'} class="litter-card-cover"${closed?'':` href="${litterRoute(litter)}" aria-label="Смотреть помёт: ${escapeHtml(litter.title)}"`}><span class="litter-card-photo"><img src="${asset(cover.src)}" alt="${escapeHtml(cover.alt)}" width="${cover.width}" height="${cover.height}" loading="lazy"></span>${closed?`<span class="litter-sold-ribbon">${saleBow}<span>Все щенки проданы</span></span>`:''}</${closed?'div':'a'}>
       <div class="litter-card-copy">

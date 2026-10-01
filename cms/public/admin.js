@@ -33,7 +33,7 @@ const recordState=r=>r.archived?'В архиве':r.kind==='litters'&&r.closed&&
 function openGallery(){current=clone(records.find(r=>r.kind==='gallery'&&r.id==='gallery'));dirty=false;galleryEditor();}
 const quickStatusOptions=puppy=>[['','Не указан'],['available',puppy.sex==='female'?'Свободна':'Свободен'],['reserved',puppy.sex==='female'?'Забронирована':'Забронирован'],['home','В новой семье']];
 function litterListEntry(r,quickOpen=false){
-  const cover=r.data.puppies[0]?.photos[0],puppies=r.publishedPuppies||[];
+  const cover=r.data.cover??r.data.puppies[0]?.photos[0],puppies=r.publishedPuppies||[];
   const quick=r.published&&!r.archived&&!r.closed&&puppies.length;
   return `<article class="litter-list-entry" data-litter="${e(r.id)}" data-search="${e([r.data.title,...puppies.map(p=>p.name)].join(' ').toLowerCase())}">
     <div class="record-row"><button class="record-open" data-edit="${e(r.id)}">${cover?`<img src="${image(cover.src)}" alt="" width="88" height="88">`:'<span class="record-empty">Нет фото</span>'}<span class="record-info"><strong>${e(r.data.title||'Без названия')}</strong><span>${r.data.puppies.length} щенков · ${e(r.data.parents.map(p=>p.name).filter(Boolean).join(' и '))}</span></span><span class="state ${r.published&&!r.dirty?'live':''}">${recordState(r)}</span><span class="record-edit-label">Редактировать</span></button>${r.canReopen?`<button class="record-close" data-reopen-litter="${e(r.id)}">Вернуть в продажу</button>`:r.published?`<button class="record-close" data-close-litter="${e(r.id)}">Все щенки проданы!</button>`:''}</div>
@@ -113,6 +113,11 @@ function pedigreeEditor(parent,key){
   const prefix=key?key+'.':'';
   return `<div class="pedigree-editor"><h3>Родословная</h3><p class="help">${key?`Предки ${parent.role==='Мама'?'мамы':'папы'} помёта. `:''}Начните с отца и матери, затем раскройте следующие поколения. Заполняйте только известные данные.</p>${ancestorFields(parent.pedigreeTree,prefix+'pedigreeTree')}${parent.pedigree?area('Примечание к родословной',prefix+'pedigree',parent.pedigree,5000):''}</div>`;
 }
+function litterCoverEditor(d){
+  const cover=d.cover??d.puppies[0]?.photos[0];
+  const choices=d.puppies.flatMap((puppy,p)=>puppy.photos.map((photo,i)=>`<option value="${p}:${i}">${e(puppy.name||'Щенок '+(p+1))} · фото ${i+1}</option>`));
+  return `<section class="editor-section" aria-labelledby="litter-cover-title"><div><h2 id="litter-cover-title">Обложка помёта</h2><p class="help">Главное фото в списке помётов на сайте.</p></div><div class="litter-cover-editor"><div class="litter-cover-preview">${cover?`<img src="${image(cover.src)}" alt="Обложка: ${e(d.title||'новый помёт')}" width="${cover.width}" height="${cover.height}">`:'<span>Обложка пока не выбрана</span>'}</div><div class="litter-cover-controls"><p class="help">${d.cover?'Выбрана отдельная обложка.':cover?'Сейчас используется первое фото первого щенка.':'Можно загрузить отдельное фото. Если его не выбирать, обложкой станет первое фото первого щенка.'}</p><label class="upload-label">${d.cover?'Заменить обложку':'Загрузить обложку'}<input type="file" data-upload="cover" accept="image/jpeg,image/png,image/webp"></label>${choices.length?`<label>Или выбрать фото щенка<select data-cover-photo><option value="">Выберите фото</option>${choices.join('')}</select></label>`:''}${d.cover?'<div class="inline-actions"><button type="button" data-edit-photo="cover" data-index="0">Кадр и предпросмотр</button><button type="button" class="quiet" data-remove-photo="cover">Использовать автоматическое фото</button></div>':''}<p class="help">JPG, PNG или WebP до 12 МБ. Перед загрузкой можно выбрать кадр. На сайте обложка изменится после публикации.</p></div></div></section>`;
+}
 function parentEditor(parent,i){const key=`parents.${i}`;
   return `<section class="editor-section"><div class="section-title"><h2>${parent.role}</h2><button type="button" class="quiet" data-remove-parent="${i}">Убрать родителя</button></div><div class="two-columns">${field('Кличка',key+'.name',parent.name,'text','maxlength="120"')}${field('Питомник происхождения',key+'.kennel',parent.kennel,'text','maxlength="160"')}</div>${photoEditor(key+'.image',parent.image?[{src:parent.image,width:parent.width,height:parent.height,alt:parent.name}]:[],true)}${area('Достижения и описание',key+'.description',parent.description)}${pedigreeEditor(parent,key)}</section>`;}
 function puppyEditor(puppy,i){const key=`puppies.${i}`;
@@ -165,7 +170,7 @@ function editor(){
   if(current.kind==='gallery')return galleryEditor();
   if(current.kind==='dogs')return dogEditor();
   const d=current.data;
-  chrome(`<button class="back quiet" data-action="back">← Все помёты</button><div class="page-heading"><div><h1>${e(d.title||'Новый помёт')}</h1><span class="state">${recordState(current)}</span></div>${current.published?`<a class="quiet" href="${publicOrigin}/puppies/${current.closed?'':d.id+'/'}" target="_blank" rel="noopener">Посмотреть на сайте ↗</a>`:''}</div><form id="editor-form"><fieldset ${current.archived?'disabled':''}><section class="editor-section"><h2>О помёте</h2>${field('Название','title',d.title,'text','maxlength="120"')}<div>${field('Дата рождения помёта','birthDate',d.birthDate,'date','aria-describedby="litter-birth-help"')}<p class="help" id="litter-birth-help">После публикации дата появится в карточке и на странице помёта. Можно заполнить позже.</p></div>${area('Описание помёта','description',d.description)}</section><div class="section-divider"><h2>Родители</h2><span>Мама и папа помёта</span></div>${d.parents.map(parentEditor).join('')}<div class="inline-actions">${!d.parents.some(p=>p.role==='Мама')?'<button type="button" data-add-parent="Мама">Добавить маму</button>':''}${!d.parents.some(p=>p.role==='Папа')?'<button type="button" data-add-parent="Папа">Добавить папу</button>':''}</div><div class="section-divider"><h2>Щенки</h2><span>${d.puppies.length} в этом помёте</span></div>${d.puppies.map(puppyEditor).join('')}<button type="button" data-action="add-puppy">Добавить щенка</button></fieldset><div class="save-bar"><div id="save-state" role="status">${dirty?'Есть несохранённые изменения':'Изменения сохранены'}</div><div class="inline-actions">${current.archived?(current.canReopen?'<button type="button" class="primary" data-save="reopen">Вернуть в продажу</button>':'<button type="button" class="primary" data-save="restore">Восстановить в черновики</button>'):'<button type="submit">Сохранить черновик</button><button type="button" class="primary" data-save="publish">Опубликовать</button>'}</div></div></form>${current.version&&!current.archived?`<div class="record-actions">${current.published?`${current.closed?'<button data-save="reopen">Вернуть в продажу</button>':'<button data-save="close">Все щенки проданы!</button>'}<button class="quiet" data-save="unpublish">Снять с публикации</button>`:'<button class="quiet" data-save="archive">В архив</button>'}<p class="help">После закрытия карточка останется на сайте с лентой «Все щенки проданы». Страницу помёта можно снова открыть кнопкой «Вернуть в продажу».</p></div>`:''}`);
+  chrome(`<button class="back quiet" data-action="back">← Все помёты</button><div class="page-heading"><div><h1>${e(d.title||'Новый помёт')}</h1><span class="state">${recordState(current)}</span></div>${current.published?`<a class="quiet" href="${publicOrigin}/puppies/${current.closed?'':d.id+'/'}" target="_blank" rel="noopener">Посмотреть на сайте ↗</a>`:''}</div><form id="editor-form"><fieldset ${current.archived?'disabled':''}><section class="editor-section"><h2>О помёте</h2>${field('Название','title',d.title,'text','maxlength="120"')}<div>${field('Дата рождения помёта','birthDate',d.birthDate,'date','aria-describedby="litter-birth-help"')}<p class="help" id="litter-birth-help">После публикации дата появится в карточке и на странице помёта. Можно заполнить позже.</p></div>${area('Описание помёта','description',d.description)}</section>${litterCoverEditor(d)}<div class="section-divider"><h2>Родители</h2><span>Мама и папа помёта</span></div>${d.parents.map(parentEditor).join('')}<div class="inline-actions">${!d.parents.some(p=>p.role==='Мама')?'<button type="button" data-add-parent="Мама">Добавить маму</button>':''}${!d.parents.some(p=>p.role==='Папа')?'<button type="button" data-add-parent="Папа">Добавить папу</button>':''}</div><div class="section-divider"><h2>Щенки</h2><span>${d.puppies.length} в этом помёте</span></div>${d.puppies.map(puppyEditor).join('')}<button type="button" data-action="add-puppy">Добавить щенка</button></fieldset><div class="save-bar"><div id="save-state" role="status">${dirty?'Есть несохранённые изменения':'Изменения сохранены'}</div><div class="inline-actions">${current.archived?(current.canReopen?'<button type="button" class="primary" data-save="reopen">Вернуть в продажу</button>':'<button type="button" class="primary" data-save="restore">Восстановить в черновики</button>'):'<button type="submit">Сохранить черновик</button><button type="button" class="primary" data-save="publish">Опубликовать</button>'}</div></div></form>${current.version&&!current.archived?`<div class="record-actions">${current.published?`${current.closed?'<button data-save="reopen">Вернуть в продажу</button>':'<button data-save="close">Все щенки проданы!</button>'}<button class="quiet" data-save="unpublish">Снять с публикации</button>`:'<button class="quiet" data-save="archive">В архив</button>'}<p class="help">После закрытия карточка останется на сайте с лентой «Все щенки проданы». Страницу помёта можно снова открыть кнопкой «Вернуть в продажу».</p></div>`:''}`);
 }
 async function refresh(){records=(await api('/api/content')).records;}
 const canLeave=()=>!dirty||confirm('Есть несохранённые изменения. Выйти без сохранения?');
@@ -198,7 +203,7 @@ app.addEventListener('input',event=>{const input=event.target;if(input.id==='sea
   if(input.dataset.field){let value=input.value;if(input.type==='number')value=value===''?null:Number(value);if(input.dataset.field.endsWith('.status')&&!value)value=null;set(input.dataset.field,value);}});
 async function uploadPhotos(files,key,replaceIndex=null){
   if(busy)return;
-  const single=key.endsWith('.image'),kind=single?'parent':section==='gallery'?'gallery':section==='dogs'?'dog':'puppy';
+  const isCover=key==='cover',single=isCover||key.endsWith('.image'),kind=isCover?'litter':single?'parent':section==='gallery'?'gallery':section==='dogs'?'dog':'puppy';
   const limit=section==='gallery'?500:20;
   if(!single&&replaceIndex===null&&get(key).length+files.length>limit){say(`Можно добавить до ${limit} фотографий.`,true);return;}
   busy=true;document.querySelector('#editor-form fieldset').disabled=true;
@@ -209,7 +214,8 @@ async function uploadPhotos(files,key,replaceIndex=null){
       if(!prepared)break;if(prepared.skip)continue;
       say('Загружаем фото…');
       const photo=await api('/api/upload',{method:'POST',raw:prepared.blob});
-      if(single){const parent=get(key.slice(0,-6));parent.image=photo.src;parent.width=photo.width;parent.height=photo.height;}
+      if(isCover){photo.alt=current.data.title||'Помёт лабрадоров';current.data.cover=photo;}
+      else if(single){const parent=get(key.slice(0,-6));parent.image=photo.src;parent.width=photo.width;parent.height=photo.height;}
       else if(replaceIndex!==null){photo.alt=get(key)[replaceIndex].alt;get(key)[replaceIndex]=photo;}
       else{photo.alt=kind==='puppy'?get(key.slice(0,-7)).name||'':current.data.name||current.data.title||'';get(key).push(photo);}
       dirty=true;added++;
@@ -226,7 +232,7 @@ async function uploadPhotos(files,key,replaceIndex=null){
   }
 }
 async function editPhoto(key,index){
-  const single=key.endsWith('.image'),src=single?get(key):get(key)[index].src;
+  const single=key.endsWith('.image'),src=key==='cover'?current.data.cover.src:single?get(key):get(key)[index].src;
   busy=true;
   try{
     const response=await fetch(image(src));if(!response.ok)throw new Error('Не удалось открыть фото. Обновите страницу и попробуйте снова.');
@@ -235,6 +241,7 @@ async function editPhoto(key,index){
   }catch(error){say(error.message,true);}finally{busy=false;}
 }
 app.addEventListener('change',event=>{const input=event.target;
+  if(input.hasAttribute('data-cover-photo')){if(!input.value||busy)return;const [p,i]=input.value.split(':').map(Number);current.data.cover=clone(current.data.puppies[p].photos[i]);dirty=true;editor();document.querySelector('[data-cover-photo]')?.focus();return;}
   if(input.hasAttribute('data-quick-status'))return void changePuppyStatus(input);
   if(!input.dataset.upload)return;
   const files=[...input.files];input.value='';if(files.length)void uploadPhotos(files,input.dataset.upload);
@@ -252,7 +259,7 @@ app.addEventListener('click',async event=>{const b=event.target.closest('button,
     if(b.dataset.addParent){current.data.parents.push({id:id('parent'),role:b.dataset.addParent,name:'',kennel:'',image:'',width:0,height:0,description:'',pedigree:''});dirty=true;editor();}
     if(b.dataset.removeParent!==undefined){if(confirm('Убрать родителя из этого помёта?')){current.data.parents.splice(+b.dataset.removeParent,1);dirty=true;editor();}}
     if(b.dataset.removePuppy!==undefined){if(confirm('Убрать щенка из этого помёта?')){current.data.puppies.splice(+b.dataset.removePuppy,1);dirty=true;editor();}}
-    if(b.dataset.removePhoto){const key=b.dataset.removePhoto;if(key.endsWith('.image')){const p=get(key.slice(0,-6));p.image='';p.width=p.height=0;}else get(key).splice(+b.dataset.index,1);dirty=true;editor();}
+    if(b.dataset.removePhoto){const key=b.dataset.removePhoto;if(key==='cover')current.data.cover=null;else if(key.endsWith('.image')){const p=get(key.slice(0,-6));p.image='';p.width=p.height=0;}else get(key).splice(+b.dataset.index,1);dirty=true;editor();if(key==='cover')document.querySelector('[data-upload="cover"]')?.focus();}
     if(b.dataset.editPhoto)return editPhoto(b.dataset.editPhoto,+b.dataset.index);
     if(b.dataset.move){const photos=get(b.dataset.move),i=+b.dataset.index,next=i+Number(b.dataset.step||-1);if(next>=0&&next<photos.length){[photos[next],photos[i]]=[photos[i],photos[next]];dirty=true;editor();document.querySelector(`[data-move="${b.dataset.move}"][data-index="${next}"]:not(:disabled)`)?.focus();}}
     const action=b.dataset.action;

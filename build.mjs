@@ -1,5 +1,5 @@
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
-import {escapeHtml, litterRoute, renderLitterCatalog, renderLitterSlots, validateLitters} from './src/render-litters.mjs';
+import {escapeHtml, litterRoute, litterCover, renderLitterCatalog, renderLitterSlots, validateLitters} from './src/render-litters.mjs';
 import {translateText, translateMarkup} from './dist/localization.js';
 import {localizeLinks} from './src/localize-links.mjs';
 import {socials} from './src/data/socials.mjs';
@@ -104,7 +104,7 @@ for (const page of allPages) {
       .replace('{{gallery}}', page.key === 'moments' ? renderGallery(gallery) : '')
       .replace('{{dogCatalog}}',page.key === 'dogs' ? renderDogCatalog(dogs) : '');
   }
-  const share = page.dog ? [page.dog.photos[0].src,page.dog.name] : page.litter ? [page.litter.puppies[0].photos[0].src,page.litter.puppies[0].photos[0].alt] : shareImages[page.key];
+  const share = page.dog ? [page.dog.photos[0].src,page.dog.name] : page.litter ? [litterCover(page.litter).src,litterCover(page.litter).alt] : shareImages[page.key];
   const values = {
     title: escapeHtml(title), description: escapeHtml(description), page:page.dog ? 'dog' : page.litter ? 'litter' : page.key, brand, dogProfiles,
     canonical, routeJson: JSON.stringify(route), language, ogLocale:language === 'en' ? 'en_GB' : 'ru_RU', socialSymbols, socialLinks, floatingContactLinks,

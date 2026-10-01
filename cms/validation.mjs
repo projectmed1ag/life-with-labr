@@ -78,5 +78,5 @@ export function validateContent(kind, input, {publish=false, mediaExists=()=>tru
     return {id:id(raw.id),name:text(raw.name||'','Кличка щенка',120,publish),sex:raw.sex,color:text(raw.color||'','Окрас',80,publish),price,status:raw.status??null,description:text(raw.description||'','О щенке',2000),photos:photos(raw.photos,publish)};
   }));
   if(publish && (parents.length!==2 || !puppies.length)) fail('Для публикации добавьте обоих родителей и хотя бы одного щенка.');
-  return {...common,birthDate:date(input.birthDate),description:text(input.description||'','О помёте',3000),parents,puppies};
+  return {...common,birthDate:date(input.birthDate),description:text(input.description||'','О помёте',3000),...(input.cover!==undefined?{cover:input.cover===null?null:photo(input.cover)}:{}),parents,puppies};
 }

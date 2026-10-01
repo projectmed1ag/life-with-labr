@@ -68,6 +68,10 @@ The editor begins with back navigation and record identity. Ruled sections group
 
 ## Parent ancestry
 
+### Litter cover
+
+After «О помёте», before parents, both create and edit forms expose «Обложка помёта». A 220px preview sits beside the upload, existing-puppy-photo select, crop and automatic-photo reset controls. At 600px and below the preview stacks above the controls, capped at 260px; the select retains 16px text. Empty drafts explain the automatic first-puppy-photo fallback. Uploads reuse photo preparation with a 1.06 cover ratio. The independent optional `cover` photo survives draft/publish/restart, does not reorder or replace puppy photographs, and supplies public catalogue and social-link images. Existing records remain unchanged until edited; reset stores null and restores the automatic fallback. Controls reuse the existing cream, Manrope, forest and muted-border styles.
+
 The litter's «О помёте» section places the optional «Дата рождения помёта» date picker directly after its title. A connected helper explains that publishing shows the date in the catalogue card and litter page. It stays empty for unknown dates. Opening a new litter starts at the top so these basic fields are immediately visible.
 
 Each mother's and father's section includes a «Родословная» group after the description, both for new litters and existing records. The first ancestor pair is visible immediately, with «Отец» and «Мать» fieldset legends and labelled name and optional title fields. Names are optional too; the helper asks the owner to enter only known facts. Native inline disclosures labelled «Родители отца» or «Родители матери», with the next generation number, reveal the second and third generations. Deeper pairs stack within a lightly indented, ruled branch. The disclosure chevron follows the open state and respects reduced motion. This is part of the existing editor and uses its save draft and publish actions.
