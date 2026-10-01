@@ -83,9 +83,8 @@ async function loadVisitors(){
     const stats=await api('/api/visitors?period='+period);
     if(request!==visitorRequest||!target.isConnected)return;
     const number=value=>stats.collecting?Number(value).toLocaleString('ru-RU'):'—';
-    const since=new Date(stats.startedAt).toLocaleString('ru-RU',{timeZone:'Europe/Moscow',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'});
     const updated=new Date(stats.updatedAt).toLocaleTimeString('ru-RU',{timeZone:'Europe/Moscow',hour:'2-digit',minute:'2-digit'});
-    target.innerHTML=`<dl class="visitor-totals">${[['На сайте',stats.site],['Раздел «Щенки»',stats.puppies],['Страницы помётов',stats.litters]].map(([label,count])=>`<div><dt>${label}</dt><dd>${number(count)}</dd></div>`).join('')}</dl><p class="help">Один браузер — один посетитель за период. Учёт с ${e(since)} · время московское.</p><p class="visitor-updated">${!stats.collecting?'За этот период данных нет: счётчик ещё не работал. ':stats.site===0?'За этот период посещений пока нет. ':''}Обновлено в ${e(updated)}. <a href="https://metrika.yandex.ru/overview?id=113161968" target="_blank" rel="noopener">История в Метрике</a></p>`;
+    target.innerHTML=`<dl class="visitor-totals">${[['На сайте',stats.site],['Раздел «Щенки»',stats.puppies],['Страницы помётов',stats.litters]].map(([label,count])=>`<div><dt>${label}</dt><dd>${number(count)}</dd></div>`).join('')}</dl><p class="visitor-updated">${!stats.collecting?'За этот период данных нет: счётчик ещё не работал. ':stats.site===0?'За этот период посещений пока нет. ':''}Обновлено в ${e(updated)}. <a href="https://metrika.yandex.ru/overview?id=113161968" target="_blank" rel="noopener">История в Метрике</a></p>`;
     for(const litter of stats.byLitter){
       const entry=[...document.querySelectorAll('[data-litter]')].find(node=>node.dataset.litter===litter.id);
       const info=entry?.querySelector('.record-info');
