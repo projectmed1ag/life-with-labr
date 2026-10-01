@@ -4,6 +4,36 @@ Status: implemented extension of the approved Life with Labr identity. Visual so
 
 Mode: Operate. The owner signs in and completes editing tasks, including from a phone.
 
+## Visitor counts direction contract
+
+THESIS: Show the owner how many browsers reached the site, puppy catalogue and litter pages directly above the litter list, with a count alongside each litter.
+
+OWN-WORLD: Extend the cream, forest and Manrope working interface with ruled numeric columns and native controls; no decorative charts or new visual identity.
+
+STORY: Pick today, yesterday or seven days, read unique visitors, then continue editing the same litter list. Empty and failed requests remain distinct.
+
+FIRST VIEWPORT: Below the list heading, a compact «Посетители» section has a labelled period select and refresh button. Three labelled numbers share a ruled row on desktop and become rows on a phone. A short note states the collection start, Moscow time and browser-based counting. Each litter row shows its own visitor count for the same period.
+
+FORM: Code-led bounded extension of the incumbent admin; no direction seed or comp round applies. Changing the period updates only the statistics and preserves list state.
+
+FINISH: SHIP — no material findings. The visitor extension is documented below, with desktop and 390px mobile evidence in `.impeccable/review/visitors/`. It preserves root `DESIGN.md` and `.impeccable/design.json`; no new shipping raster was introduced. This closeout covers the local implementation, not production deployment.
+
+### Visitor count behavior
+
+The labelled native period select offers «Сегодня», «Вчера» and «7 дней». Days use Moscow time; seven days includes today and the preceding six calendar days. «На сайте», «Раздел „Щенки“» and «Страницы помётов» each count unique browsers across the selected period. The last total deduplicates browsers across litter pages, so it need not equal the sum of individual litter counts. Each litter row shows «Посетители страницы» with the same period label. Russian and English versions of the same path share a count.
+
+The note displays the recorded collection start and the latest report time in Moscow time. Collection begins when this counter is initialized; earlier Metrika history is not imported. «История в Метрике» opens the separate existing history. A period wholly before collection began displays dashes, a clear explanation and «нет данных» in litter rows. A measured period without visits displays zero. A period spanning the collection start contains only the visits collected since that start.
+
+Changing the period or refreshing updates statistics without rebuilding the list, preserving its search and open puppy disclosures. Loading clears previous-period totals and litter counts, marks the live region busy and disables refresh. Only the latest connected request can fill the panel. A failed request displays a Russian alert and keeps «Обновить» available for retry; it does not turn failure into zero.
+
+Counts reuse the existing Manrope, cream/forest palette, separators and controls. Desktop totals form three columns with vertical rules; at 600px and below they become labelled rows with horizontal rules. Tabular numerals use the surface-specific (32px desktop / 26px mobile, weight 600) count variant. On mobile the heading stacks above the controls and the select uses 16px text. These are local surface measurements, not new shared design tokens.
+
+The public counter sends a random first-party browser identifier and page path; visitor records store an HMAC of that identifier, not raw identifiers or IP addresses. The authenticated report returns aggregates and litter references, never browser identifiers or IP addresses. Own views of the public site count; the admin does not. Blocked browser storage skips collection, and using another browser or clearing storage can count again. These figures describe measured browsers, not identified people.
+
+### Visitor extension verification
+
+The finish reviewer returned **SHIP: no material findings**. Evidence checked: `cms/public/admin.js`, `cms/public/admin.css`, `cms/visitors.mjs`, `dist/visitor-counter.js`, and the visitor endpoints in `cms/server.mjs`; visual evidence is `.impeccable/review/visitors/desktop.png`, `mobile.png` and `mobile-empty.png`. The screenshots use synthetic local QA data. The two mobile captures cover the relevant visitor panel and litter-row areas at 390px, including the period before collection began. No screenshot numbers or collection dates are production claims. This ordinary extension preserves the existing visual system; root `DESIGN.md` and `.impeccable/design.json` remain unchanged by this documentation pass.
+
 ## Purpose and sequence
 
 One owner manages a shared photo gallery, litters, and kennel dogs. The section navigation contains «Помёты и щенки», «Наши собаки», and «Галерея». Gallery opens directly into a photo grid with a multi-file uploader, earlier/later controls, removal, reset, and one Save changes button. There are no gallery posts, titles, dates, search, caption fields or archive controls. Photo caption and description fields are absent throughout the gallery, litter and dog editors. Existing alternative image descriptions remain in stored data; new dog and puppy uploads use the animal’s name automatically. Photo cards show the image, dimensions, crop preview and arrangement/removal controls. Litters and dogs follow section → record list → editor → save draft or publish. Archive remains a separate, reversible record action; the archive view returns to the current list. Keep these operations explicit and labelled in Russian.
