@@ -1,3 +1,4 @@
+import './visitor-counter.js';
 // Website counter owned by lifewithlabr@yandex.ru; the Maps counter is separate.
 export const METRIKA_COUNTER_ID = 113161968;
 const initialized = new WeakSet();

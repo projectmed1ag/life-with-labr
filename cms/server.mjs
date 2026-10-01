@@ -5,6 +5,7 @@ import {readFile,writeFile,stat,unlink} from 'node:fs/promises';
 import {createReadStream} from 'node:fs';
 import sharp from 'sharp';
 import {openStore} from './store.mjs';
+import {openVisitors, visitorPage, validVisitor} from './visitors.mjs';
 import {verifyPassword,token,digest,hashPassword} from './auth.mjs';
 import {HttpError,validId} from './validation.mjs';
 import {renderSite} from '../build.mjs';
@@ -16,6 +17,7 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
   const assetDirectory=path.join(ROOT,'dist/assets');
   seed??={litters:JSON.parse(await readFile(path.join(ROOT,'src/data/litters.json'))),gallery:JSON.parse(await readFile(path.join(ROOT,'src/data/gallery.json'))),dogs:JSON.parse(await readFile(path.join(ROOT,'src/data/dogs.json')))};
   const store=openStore(dataDir,{seed,assetDirectory});
+  const visitors=openVisitors(store.db),visitRate=new Map();
   let pages=await renderer(store.published()),queue=Promise.resolve(),hashing=0,uploading=false;
   const dummyPassword=await hashPassword(token());
   const cookieName=development?'lwl_session':'__Host-lwl_session';
@@ -43,6 +45,24 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
     try{
       const url=new URL(req.url,'http://localhost'),route=decodeURIComponent(url.pathname);
       if(route==='/healthz')return json(res,200,{ok:true});
+      if(route==='/visit'&&req.method==='POST'){
+        const allowedOrigin=development?adminOrigin:'https://lifewithlabr.ru';
+        const origin=req.headers.origin;
+        if((isAdmin&&!development)||!(origin===allowedOrigin||(!development&&origin==='https://www.lifewithlabr.ru')))fail(403,'Недоступно.');
+        if(!req.headers['content-type']?.startsWith('application/json'))fail(415,'Ожидается JSON.');
+        if(/bot|crawler|spider|headless|preview|facebookexternalhit/i.test(req.headers['user-agent']||'')){res.writeHead(204,{'Cache-Control':'no-store'});return res.end();}
+        const now=Date.now(),key=digest(String(development?req.socket.remoteAddress:req.headers['x-real-ip']||req.socket.remoteAddress));
+        if(visitRate.size>5000)for(const [key,entry] of visitRate)if(entry.until<now)visitRate.delete(key);
+        const rate=visitRate.get(key);
+        if(rate?.until>now&&rate.count>=60)fail(429,'Повторите позже.');
+        if(visitRate.size>=10000&&!rate)fail(429,'Повторите позже.');
+        visitRate.set(key,{count:rate?.until>now?rate.count+1:1,until:rate?.until>now?rate.until:now+60000});
+        let input;try{input=JSON.parse((await body(req,1024)).toString());}catch(error){if(error instanceof HttpError)throw error;fail(400,'Некорректные данные.');}
+        const page=visitorPage(input?.page);
+        if(!validVisitor(input?.visitor)||!page||!pages.has(input.page+'index.html'))fail(400,'Некорректная страница.');
+        visitors.record(input.visitor,page);
+        res.writeHead(204,{'Cache-Control':'no-store'});return res.end();
+      }
       if(route.startsWith('/api/')){
         if(!isAdmin)fail(404,'Страница не найдена.');
         if(!['GET','HEAD'].includes(req.method) && req.headers.origin!==adminOrigin)fail(403,'Обновите страницу и повторите действие.');
@@ -68,6 +88,12 @@ export async function createApplication({dataDir=path.join(ROOT,'.cms-data'),adm
         if(route==='/api/session'&&req.method==='GET')return json(res,200,{username:current.username,csrf:current.csrf});
         if(route==='/api/logout'&&req.method==='POST'){store.db.prepare('DELETE FROM sessions WHERE token=?').run(current.token);res.setHeader('Set-Cookie',cookie('',0));return json(res,200,{ok:true});}
         if(route==='/api/content'&&req.method==='GET')return json(res,200,{records:store.all()});
+        if(route==='/api/visitors'&&req.method==='GET'){
+          const period=url.searchParams.get('period')||'today';
+          if(!['today','yesterday','week'].includes(period))fail(400,'Выберите период.');
+          const litters=store.all().filter(r=>r.kind==='litters').map(r=>({id:r.id,title:r.data.title||'Без названия'}));
+          return json(res,200,visitors.report(period,litters));
+        }
         const statusRoute=/^\/api\/litters\/([a-z0-9-]+)\/puppy-status$/.exec(route);
         if(statusRoute&&req.method==='POST'){
           const input=await jsonBody(req),id=statusRoute[1];

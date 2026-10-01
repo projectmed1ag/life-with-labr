@@ -2,6 +2,7 @@ import {preparePhoto} from './photo-editor.js';
 import {editablePedigree, resolvePedigree} from '/pedigree-data.js';
 const app=document.querySelector('#app'),notice=document.querySelector('#notice');
 let csrf='',records=[],section='litters',current=null,dirty=false,busy=false,archived=false,pendingEdit=null;
+let visitorPeriod='today',visitorRequest=0;
 const e=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const id=prefix=>prefix+'-'+crypto.randomUUID().slice(0,8);
 const clone=value=>structuredClone(value);
@@ -51,6 +52,7 @@ async function changePuppyStatus(control){
     entry.outerHTML=litterListEntry(result.record,true);
     document.querySelector(`[data-litter="${litterId}"] [data-status-feedback]`).textContent='Сохранено на сайте';
     document.querySelector(`[data-litter-id="${litterId}"][data-puppy-id="${puppyId}"][data-quick-status]`)?.focus({preventScroll:true});
+    loadVisitors();
   }catch(error){
     if(error.status===409){
       try{await refresh();const latest=records.find(r=>r.kind==='litters'&&r.id===litterId);if(entry.isConnected&&latest)entry.outerHTML=litterListEntry(latest,true);}catch{}
@@ -63,8 +65,37 @@ function listing(){
   if(section==='gallery')return openGallery();
   if(section==='dogs')return dogListing();
   current=null;dirty=false;const items=records.filter(r=>r.kind==='litters'&&r.archived===archived);
-  chrome(`<div class="page-heading"><div><h1>Помёты и щенки</h1><p>Родители, фотографии малышей, цены и статусы.</p></div><button class="primary" data-action="new">Создать помёт</button></div><div class="list-toolbar"><label class="search-label">Поиск<input id="search" type="search" placeholder="Найти по названию"></label><button class="quiet" data-action="archive-list">${archived?'Показать текущие':'Архив'}</button></div><div class="record-list">${items.length?items.map(r=>litterListEntry(r)).join(''):`<div class="empty"><h2>${archived?'Архив пуст':'Здесь пока ничего нет'}</h2><p>${archived?'Сюда попадают помёты, которые вы убрали с сайта.':'Создайте помёт, добавьте родителей и щенков.'}</p></div>`}</div>`);
+  chrome(`<div class="page-heading"><div><h1>Помёты и щенки</h1><p>Родители, фотографии малышей, цены и статусы.</p></div><button class="primary" data-action="new">Создать помёт</button></div>${visitorPanel()}<div class="list-toolbar"><label class="search-label">Поиск<input id="search" type="search" placeholder="Найти по названию"></label><button class="quiet" data-action="archive-list">${archived?'Показать текущие':'Архив'}</button></div><div class="record-list">${items.length?items.map(r=>litterListEntry(r)).join(''):`<div class="empty"><h2>${archived?'Архив пуст':'Здесь пока ничего нет'}</h2><p>${archived?'Сюда попадают помёты, которые вы убрали с сайта.':'Создайте помёт, добавьте родителей и щенков.'}</p></div>`}</div>`);
+  loadVisitors();
 }
+function visitorPanel(){
+  return `<section class="visitor-panel" aria-labelledby="visitor-title"><div class="visitor-heading"><h2 id="visitor-title">Посетители</h2><div class="visitor-controls"><label>Период<select id="visitor-period">${[['today','Сегодня'],['yesterday','Вчера'],['week','7 дней']].map(([value,label])=>`<option value="${value}"${visitorPeriod===value?' selected':''}>${label}</option>`).join('')}</select></label><button type="button" id="visitor-refresh">Обновить</button></div></div><div id="visitor-data" aria-live="polite" aria-busy="true"><p class="help">Загружаем статистику…</p></div></section>`;
+}
+async function loadVisitors(){
+  const target=document.querySelector('#visitor-data');if(!target)return;
+  const request=++visitorRequest,period=visitorPeriod;
+  const refresh=document.querySelector('#visitor-refresh');refresh.disabled=true;
+  target.setAttribute('aria-busy','true');
+  // Do not display a previous period's numbers beneath a newly selected period.
+  target.innerHTML='<p class="help">Загружаем статистику…</p>';
+  document.querySelectorAll('.litter-visitors').forEach(node=>node.remove());
+  try{
+    const stats=await api('/api/visitors?period='+period);
+    if(request!==visitorRequest||!target.isConnected)return;
+    const number=value=>stats.collecting?Number(value).toLocaleString('ru-RU'):'—';
+    const since=new Date(stats.startedAt).toLocaleString('ru-RU',{timeZone:'Europe/Moscow',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'});
+    const updated=new Date(stats.updatedAt).toLocaleTimeString('ru-RU',{timeZone:'Europe/Moscow',hour:'2-digit',minute:'2-digit'});
+    target.innerHTML=`<dl class="visitor-totals">${[['На сайте',stats.site],['Раздел «Щенки»',stats.puppies],['Страницы помётов',stats.litters]].map(([label,count])=>`<div><dt>${label}</dt><dd>${number(count)}</dd></div>`).join('')}</dl><p class="help">Один браузер — один посетитель за период. Учёт с ${e(since)} · время московское.</p><p class="visitor-updated">${!stats.collecting?'За этот период данных нет: счётчик ещё не работал. ':stats.site===0?'За этот период посещений пока нет. ':''}Обновлено в ${e(updated)}. <a href="https://metrika.yandex.ru/overview?id=113161968" target="_blank" rel="noopener">История в Метрике</a></p>`;
+    for(const litter of stats.byLitter){
+      const entry=[...document.querySelectorAll('[data-litter]')].find(node=>node.dataset.litter===litter.id);
+      const info=entry?.querySelector('.record-info');
+      if(info){const line=document.createElement('span');line.className='litter-visitors';line.textContent=`Посетители страницы: ${stats.collecting?number(litter.visitors):'нет данных'} · ${period==='week'?'7 дней':period==='yesterday'?'вчера':'сегодня'}`;info.append(line);}
+    }
+  }catch(error){if(request===visitorRequest&&target.isConnected)target.innerHTML='<p class="error" role="alert">Не удалось загрузить статистику. Нажмите «Обновить», чтобы повторить.</p>';}
+  finally{if(request===visitorRequest&&target.isConnected){target.setAttribute('aria-busy','false');refresh.disabled=false;}}
+}
+app.addEventListener('change',event=>{if(event.target.id==='visitor-period'){visitorPeriod=event.target.value;loadVisitors();}});
+app.addEventListener('click',event=>{if(event.target.closest('#visitor-refresh'))loadVisitors();});
 const field=(label,key,value,type='text',extra='')=>`<label>${label}<input data-field="${key}" type="${type}" value="${e(value)}" ${extra}></label>`;
 const area=(label,key,value,max=3000)=>`<label>${label}<textarea data-field="${key}" rows="3" maxlength="${max}">${e(value)}</textarea></label>`;
 const select=(label,key,value,options)=>`<label>${label}<select data-field="${key}">${options.map(([v,label])=>`<option value="${v}"${String(value??'')===v?' selected':''}>${label}</option>`).join('')}</select></label>`;
